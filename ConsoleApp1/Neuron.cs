@@ -8,17 +8,27 @@ namespace ConsoleApp1
 {
     internal class Neuron
     {
-        public double[] weights;
+        public List<double> weights = new List<double>();
         private double[] input_data;
         private double bias;
         public Neuron(double[] weights)
         {
-            this.weights = weights;
+            for(int i=0; i< weights.Length; i++)
+            {
+                this.weights.Add(weights[i]);
+            }
+        }
+        public Neuron(List<double> weights)
+        {
+            for (int i = 0; i < weights.Count; i++)
+            {
+                this.weights.Add(weights[i]);
+            }
         }
         public void read_weights()
         {
             Console.WriteLine("Wagi: ");
-            for (int i = 0; i < weights.Length; i++)
+            for (int i = 0; i < weights.Count; i++)
             {
                 Console.Write(weights[i] + ",");
             }

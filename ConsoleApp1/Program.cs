@@ -18,7 +18,7 @@ for(int i =0; i<number_of_layers; i++)
         }
         mNeurons.Add(new Neuron(weights));
     }
-    siec_Testowa.setLayer(mNeurons.ToArray(), i);
+    siec_Testowa.setLayer(mNeurons, i);
     mNeurons.Clear();
 }
-siec_Testowa.get_structure();
+siec_Testowa.getWholeStructure();
