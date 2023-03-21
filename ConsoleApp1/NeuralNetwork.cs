@@ -11,6 +11,16 @@ namespace ConsoleApp1
     {
         private List<Neuron> neuronList = new List<Neuron>();
         private List<Layer> mLayers = new List<Layer>();
+
+
+        //
+        //
+        //  Tworzenie sieci
+        //
+        //
+
+
+
         public void removeNeuron(int layerNumber, int neuronNumber)
         {
             mLayers[layerNumber].removeNeuron(neuronNumber);
@@ -50,10 +60,34 @@ namespace ConsoleApp1
         }
         // Tutaj przekazujemy neurony oraz podajemy numer layeru (0 to pierwszy numer)
         // neurons to lista klasy Neuron  
-        public void setLayer(List<Neuron> neurons, int number_of_layer) 
+        public void setLayer(List<Neuron> neurons, int number_of_layer)
         {
             mLayers[number_of_layer] = new Layer(neurons);
         }
+
+
+
+        //
+        //
+        //  Nauczanie sieci
+        //
+        //
+
+
+
+
+
+
+
+        //
+        //
+        //      Konstruktory
+        //
+        //
+
+
+
+
         public NeuralNetwork(int number_of_layers)
         {
             for(int i=0; i<number_of_layers; i++)

@@ -32,7 +32,7 @@ namespace ConsoleApp1
             {
                 Console.Write(weights[i] + ",");
             }
-            Console.WriteLine();
+            Console.WriteLine("\n");
         }
 
     }
