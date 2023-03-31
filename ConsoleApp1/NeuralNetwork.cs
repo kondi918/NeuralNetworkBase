@@ -9,7 +9,7 @@ namespace ConsoleApp1
 {
     internal class NeuralNetwork
     {
-        private List<Neuron> neuronList = new List<Neuron>();
+        private List<List<double>> layersValues = new List<List<double>>();
         private List<Layer> mLayers = new List<Layer>();
 
 
@@ -69,10 +69,53 @@ namespace ConsoleApp1
 
         //
         //
-        //  Nauczanie sieci
+        //  Dzialania na sieci
         //
         //
-
+        private int finalNeuronNumber()
+        {
+            List<double> values = new List<double>();
+            for(int i=0; i< mLayers[mLayers.Count-1].mNeurons.Count; i++)
+            {
+                double resultValue = mLayers[mLayers.Count - 1].mNeurons[i].weights[0];
+                for (int j=1; j< mLayers[mLayers.Count - 1].mNeurons[i].weights.Count; j++)
+                {
+                    resultValue += mLayers[mLayers.Count - 1].mNeurons[i].weights[j] * mLayers[mLayers.Count - 1].mNeurons[i].inputData[j-1];
+                }
+                resultValue = activationFunctionSigmoid(resultValue);
+                values.Add(resultValue);
+            }
+            layersValues.Add(values);
+            return values.IndexOf(values.Max());
+        }
+        private double activationFunctionSigmoid(double x)
+        {
+            return 1.0 / (1.0 + Math.Exp((float)-x));
+        }
+        public int calculateNetworkResult()
+        {
+            List<double> neuronsResults = new List<double>();
+            for (int i = 0; i < mLayers.Count-1; i++)
+            {
+                neuronsResults.Clear();
+                for(int j=0; j < mLayers[i].mNeurons.Count; j++)
+                {
+                    double neuronResult = mLayers[i].mNeurons[j].weights[0];    //Dodajemy liczbe bias
+                    for (int k = 1; k < mLayers[i].mNeurons[j].weights.Count; k++)
+                    {
+                        neuronResult += mLayers[i].mNeurons[j].weights[k] * mLayers[i].mNeurons[j].inputData[k-1];
+                    }
+                    neuronResult = activationFunctionSigmoid(neuronResult);
+                    neuronsResults.Add(neuronResult);
+                }
+                for(int j=0; j< mLayers[i+1].mNeurons.Count; j++)
+                {
+                    mLayers[i + 1].mNeurons[j].setInputData(neuronsResults);
+                }
+                layersValues.Add(neuronsResults);
+            }
+            return finalNeuronNumber();
+        }
 
 
 

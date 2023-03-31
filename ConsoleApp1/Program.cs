@@ -7,7 +7,12 @@ void pobierzStrukture()
 {
     StreamReader sr = new("plikiTekstowe/przykladowaSiec.txt");             //Obsluga odczytywania struktury sieci z tekstu
     string linia = "";
-    List<double> weights = new List<double>();
+
+    //
+    //WAZNE!! W PLIKU TEKSTOWYM PIERWSZA WAGA KTORA PODAMY (w0) odpowiada za BIAS
+    //
+
+    List<double> weights = new List<double>(); 
     while(linia != null)
     {       
         linia = sr.ReadLine();                  
@@ -39,8 +44,17 @@ void pobierzStrukture()
 
     }
 }
+void readInput()
+{
+    double[] data = { 1, 2, 3 };
+    neuronList[0][0].setInputData(data);
+    neuronList[0][1].setInputData(data);
+}
 Console.WriteLine("Pobieramy strukture sieci z tekstu \n");
 pobierzStrukture();
+readInput();
 NeuralNetwork nowaSiec = new NeuralNetwork(numberOfLayers, neuronList);
 nowaSiec.getWholeStructure();
+
+Console.WriteLine(nowaSiec.calculateNetworkResult().ToString());
 

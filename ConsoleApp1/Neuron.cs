@@ -8,9 +8,8 @@ namespace ConsoleApp1
 {
     internal class Neuron
     {
-        public List<double> weights = new List<double>();
-        private double[] input_data;
-        private double bias;
+        public List<double> weights = new List<double>();       // w0 = bias
+        public List<double> inputData = new List<double>();
         public Neuron(double[] weights)
         {
             for(int i=0; i< weights.Length; i++)
@@ -24,6 +23,14 @@ namespace ConsoleApp1
             {
                 this.weights.Add(weights[i]);
             }
+        }
+        public void setInputData(List<double> inputData)
+        {
+            this.inputData.AddRange(inputData);
+        }
+        public void setInputData(double[] inputData)
+        {
+            this.inputData.AddRange(inputData);
         }
         public void read_weights()
         {
