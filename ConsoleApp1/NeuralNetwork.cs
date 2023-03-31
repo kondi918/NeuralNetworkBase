@@ -52,7 +52,7 @@ namespace ConsoleApp1
         {
             mLayers.Add(new Layer(neurons));
         }
-        // Tutaj przekazujemy neurony oraz podajemy numer layeru (0 to pierwszy numer) przekazujemy 
+        // Tutaj przekazujemy neurony oraz podajemy numer layeru (0 to pierwszy numer) 
         // neurons to tablica klasy Neuron
         public void setLayer(Neuron[] neurons, int number_of_layer) 
         {
@@ -92,6 +92,15 @@ namespace ConsoleApp1
         {
             return 1.0 / (1.0 + Math.Exp((float)-x));
         }
+        private double getNeuronResult(int layerIndex, int neuronIndex)
+        {
+            double neuronResult = mLayers[layerIndex].mNeurons[neuronIndex].weights[0]; //przypisujemy na starcie liczbie bias
+            for (int i = 1; i < mLayers[layerIndex].mNeurons[neuronIndex].weights.Count; i++)
+            {
+                neuronResult += mLayers[layerIndex].mNeurons[neuronIndex].weights[i] * mLayers[layerIndex].mNeurons[neuronIndex].inputData[i - 1];
+            }
+            return activationFunctionSigmoid(neuronResult);
+        }
         public int calculateNetworkResult()
         {
             List<double> neuronsResults = new List<double>();
@@ -100,13 +109,7 @@ namespace ConsoleApp1
                 neuronsResults.Clear();
                 for(int j=0; j < mLayers[i].mNeurons.Count; j++)
                 {
-                    double neuronResult = mLayers[i].mNeurons[j].weights[0];    //Dodajemy liczbe bias
-                    for (int k = 1; k < mLayers[i].mNeurons[j].weights.Count; k++)
-                    {
-                        neuronResult += mLayers[i].mNeurons[j].weights[k] * mLayers[i].mNeurons[j].inputData[k-1];
-                    }
-                    neuronResult = activationFunctionSigmoid(neuronResult);
-                    neuronsResults.Add(neuronResult);
+                    neuronsResults.Add(getNeuronResult(i,j));
                 }
                 for(int j=0; j< mLayers[i+1].mNeurons.Count; j++)
                 {
@@ -116,6 +119,21 @@ namespace ConsoleApp1
             }
             return finalNeuronNumber();
         }
+
+
+//                          UCZENIE SIECI                             // 
+
+        private void zeroOneLoss()
+        { 
+        }
+
+        public void teachingNetwork(int numberOfCorrectNeuron)
+        {
+
+        }
+
+
+
 
 
 
@@ -154,7 +172,7 @@ namespace ConsoleApp1
                 for(int j = 0; j < mLayers[i].mNeurons.Count; j++)
                 {
                     Console.WriteLine("Neuron nr: " + (j + 1));
-                    mLayers[i].mNeurons[j].read_weights();
+                    mLayers[i].mNeurons[j].readWeights();
                 }
             }
         }

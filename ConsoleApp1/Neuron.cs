@@ -32,7 +32,7 @@ namespace ConsoleApp1
         {
             this.inputData.AddRange(inputData);
         }
-        public void read_weights()
+        public void readWeights()
         {
             Console.WriteLine("Wagi: ");
             for (int i = 0; i < weights.Count; i++)
