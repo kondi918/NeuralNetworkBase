@@ -13,4 +13,7 @@
 <Neuron>
 1;2;200;
 </Neuron>
+<Neuron>
+1;2;-6;
+</Neuron>
 </Layer>
