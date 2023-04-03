@@ -26,10 +26,12 @@ namespace ConsoleApp1
         }
         public void setInputData(List<double> inputData)
         {
+            this.inputData.Clear();
             this.inputData.AddRange(inputData);
         }
         public void setInputData(double[] inputData)
         {
+            this.inputData.Clear();
             this.inputData.AddRange(inputData);
         }
 

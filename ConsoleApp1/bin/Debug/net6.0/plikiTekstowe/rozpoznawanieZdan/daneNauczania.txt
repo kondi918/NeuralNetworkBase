@@ -1,0 +1,616 @@
+Ala ma kota.
+1
+A,la ma kota.
+0
+Ala ma kota..
+0
+ala ma kota.
+0
+Ala Ma Kota.
+0
+Ale ja też mam kota.
+1
+Ala ma kota
+0
+Monika pisze wypracowanie.
+1
+Mama gotuje obiad w kuchni.
+1
+Dziecko bawi się zabawkami.
+1
+Babcia sadzi kwiatki w ogródku.
+1
+Mama wysyła list do babci.
+1
+Ciocia piecze wielkanocne ciasto.
+1
+Ania karmi białe, małe owieczki.
+1
+Gdyby kózka nie skakała to by nóżki nie złamała.
+1
+Pańskie oko konia tuczy.
+1
+Łaska pańska na pstrym koniu jeździ
+0
+w starym piecu diabeł pali.
+0
+cel uświęca środki.
+0
+czym skorupka za młodu nasiąknie, tym na starość trąci
+0
+J,ak pies je, to nie szczeka.
+0
+jkak cię widzą, tak cię piszą
+0
+Każda pliszka swój ogonek chwali
+0
+Każdy sobie rzepkę skrobie.
+1
+JJedna jaskółka wiosny nie czyni
+0
+Głupich nie sieją, sami się rodzą.
+1
+Kiedy ptaki w styczniu śpiewają, to im w maju dzioby zamarzają.
+1
+Ptak lata nad drzewami.
+1
+Czerwony samochód jedzie ulicą.
+1
+Kotek mruczy przytulając się do właściciela.
+1
+W parku dzieci bawią się na huśtawkach.
+1
+Kobieta szykuje pyszny obiad w kuchni.
+1
+Pies biegnie za piłką na trawie.
+1
+Słonko świeci na niebie, a ptaki śpiewają.
+1
+W bibliotece są ciche i spokojne.
+1
+Człowiek uczy się przez całe życie.
+1
+Wszystko ma swój czas i miejsce.
+1
+Dzisiaj jest piękna pogoda.
+1
+Czerwone wino pasuje do mięsa.
+1
+Wczoraj wieczorem padał deszcz.
+1
+W pracy jest dużo roboty.
+1
+Kot lubi się wylegiwać na słońcu.
+1
+Mama zawsze gotuje pyszne obiady.
+1
+Sąsiad ma dużego psa.
+1
+Na wakacjach lubię odpoczywać na plaży.
+1
+Nie lubię jeść sałatek.
+1
+Ostatnio zacząłem uprawiać jogę.
+1
+W piątek wieczorem idę na imprezę.
+1
+Mój przyjaciel mieszka w Nowym Jorku.
+1
+Wiosną kwitną piękne kwiaty.
+1
+Zawsze staram się być punktualny.
+1
+Lubię słuchać muzyki klasycznej.
+1
+Zimą lubię jeździć na nartach.
+1
+Uwielbiam smak świeżych owoców.
+1
+Często chodzę na basen.
+1
+Na święta zawsze jadę do rodziny.
+1
+Mój brat interesuje się fotografią.
+1
+Lubię oglądać filmy akcji.
+1
+Mama kupiła mi nowy rower.
+1
+Zawsze staram się być uprzejmy dla innych.
+1
+Na imieniny zawsze dostaję prezenty.
+1
+W weekendy lubię odpoczywać w domu.
+1
+Lubię gotować dla moich przyjaciół.
+1
+Często słucham podcastów.
+1
+Ostatnio zacząłem interesować się sztuką.
+1
+Na wakacjach lubię zwiedzać nowe miejsca.
+1
+Lubię pisać krótkie opowiadania.
+1
+Nauczyłem się grać na gitarze.
+1
+Ostatnio zacząłem biegać.
+1
+Uwielbiam pływać w morzu.
+1
+Mama wychodzi za mąż za nowego partnera.
+1
+W pracy mam nowego szefa.
+1
+Często jem na mieście z kolegami.
+1
+W weekendy lubię chodzić na imprezy.
+1
+Lubimy spędzać czas na świeżym powietrzu z rodziną.
+1
+Zawsze staram się pomagać potrzebującym.
+1
+Często uczę się nowych rzeczy.
+1
+Na wakacjach lubię relaksować się w spa.
+1
+Lubię czytać książki z różnych dziedzin.
+1
+Zimą lubię palić w kominku.
+1
+Ostatnio zacząłem interesować się modą.
+1
+Mama dostała awans w pracy.
+1
+W domu zawsze staram się być czysto.
+1
+Na imieniny zawsze kupuję prezenty dla moich przyjaciół.
+1
+W weekendy lubię grać w gry planszowe.
+1
+Lubię oglądać filmy dokumentalne.
+1
+Kotek mruga oczkiem
+0
+aLBo on tAk mOże MyśLeć
+0
+Jasiek lubi mieć rowery, komputery i psy
+0
+Jedząc dużo czekolady czuję się bardzo źle
+0
+pAtRz jAk sIę bIuŚcIkI kÓŁkUjĄ
+0
+Janek nauczył się programować w szkole
+0
+fajnie że wygrałeś w grze ale nikt na to nie patrzy
+0
+Piłka nożna jest popularnym sportem w Polsce
+0
+rÓżE są piĘkNe w KaŻdEj pOrze RoKu
+0
+Marysia lubi pisać wiersze o miłości
+0
+wÓdczE pIją w pOlScE tYlKo mĘŻczyŹni
+0
+Krzysiu zawsze spóźnia się na spotkania
+0
+lUdZiE z RóŻnYcH krAiN cHęTnIe oDwIeDzają pOLskĘ
+0
+Informatyka to bardzo interesująca dziedzina nauki
+0
+aMoR tO bOiMa SiĘ nIe PoZnAć
+0
+Każdy lubi się czasem zrelaksować
+0
+i w ten sposób kończymy ten rok szkolny
+0
+Mały Kuba zawsze chciał mieć psa
+0
+żAbA zJaDa OwOcE I lEkA w OdPoCiWaKu
+0
+Pani Irena mieszka w małym, czerwonym domku
+0
+Właściciel sklepu odważył się nie zapłacić podatków
+0
+jakiś losowy tekst
+0
+jestem robotem a ty?
+0
+stół krzesła łóżko
+0
+zielony czerwony niebieski
+0
+słońce księżyc gwiazdy
+0
+kot pies mysz
+0
+zdrowie szczęście miłość
+0
+polska niemcy francja
+0
+dom drzewo trawa
+0
+piłka siatkowa koszykówka
+0
+jedzenie picie spanie
+0
+butelka kubek szklanka
+0
+kwiaty trawy drzewa
+0
+woda herbata kawa
+0
+rower samochód motocykl
+0
+muzyka taniec śpiew
+0
+zegar telefon radio
+0
+lato jesień zima
+0
+pióro ołówek mazak
+0
+krowa owca koń
+0
+górą kot, dołem kura
+0
+nie biegaj z nożyczkami
+0
+szybko, bo ktoś zje twoje ciasto
+0
+mleko kup, jajka też
+0
+telefon wyłącz, bo wkurzasz sąsiadów
+0
+ciasto piecz bez babci
+0
+samochód czy rower? ciężki wybór
+0
+tylko nie zapomnij o kocie
+0
+trawa zielona, nie wiem o czym mówisz
+0
+cicha woda brzegi rwie, ale dlaczego?
+0
+lato w pełni, czas na plażę
+0
+podziel się swoim sernikiem
+0
+w pustyni i w puszczy, ale gdzie tam?
+0
+jedz owoce, a nie tylko słodycze
+0
+to co jest ciemne, w końcu wyjdzie na jaw
+0
+co robisz? - pyta krowa
+0
+woda sodowa czy gazowana? nie wiem, zapytaj znajomego
+0
+malowanie paznokci - moje ulubione hobby
+0
+pszczoły znikają, a co z nimi?
+0
+k,,,róliki to urocze stworzenia, prawda?
+0
+wakacje za pasem, ale gdzie jest mój bagaż?
+0
+czy to już koniec? mam nadzieję, że nie!
+0
+Słońce świeci na niebie.
+1
+Dzieci bawią się na placu zabaw.
+1
+Kotek mruczy przytulony do właściciela.
+1
+Deszcz pada z nieba.
+1
+Ptaki śpiewają w parku.
+1
+Woda w rzece jest zimna.
+1
+Trawa jest zielona na łące.
+1
+Mama gotuje obiad w kuchni.
+1
+Samochód jedzie szybko po autostradzie.
+1
+Psiak szczeka na przechodniów.
+1
+Kwiaty pachną w ogrodzie.
+1
+Ojciec przynosi dziecku prezent z wakacji.
+1
+Na niebie widać wiele gwiazd.
+1
+Mama czyta dziecku bajkę przed snem.
+1
+Sąsiedzi rozmawiają na podwórku.
+1
+Adam ma psa.
+1
+Maria lubi jeździć na rowerze.
+1
+Kraków jest pięknym miastem.
+1
+Dziecko biega po trawie.
+1
+Pies szczeka na spacerze.
+1
+Kot drapie drzwi.
+1
+Rowerzysta jedzie po ścieżce rowerowej.
+1
+Ola czyta książkę w parku.
+1
+Samochód staje na czerwonym świetle.
+1
+Zegar tyka w kuchni.
+1
+Drzewa tracą liście na jesieni.
+1
+Świerszczyk śpiewa w trawie.
+1
+Kawa parzy w ustach.
+1
+Kot śpi na kanapie.
+1
+Janek ma nowy rower.
+1
+Pies biegnie za frisbee na plaży.
+1
+Listonosz przynosi listy.
+1
+Tramwaj przemieszcza się po torach.
+1
+Ptak buduje gniazdo na drzewie.
+1
+Łódka dryfuje po morzu.
+1
+pani doktor idzie do pracy, kiedy wiatr hula przez miasto
+0
+bez wody, bez życia, bez nadziei
+0
+krwawy księżyc wspiął się na niebo, zwiastując nadejście nocy
+0
+koty nie są zainteresowane matematyką, ale lubią liczyć myszy
+0
+pies trzyma kość w pysku i wpatruje się w niebo
+0
+zielona trawa porusza się delikatnie na wietrze, a słońce świeci jasno na niebie
+0
+złota rybka pływa w kółko w swoim małym akwarium
+0
+słonecznik obraca się w stronę słońca, aby go uchwycić na zdjęciu
+0
+włosy dziewczyny falują na wietrze, kiedy idzie ulicą
+0
+długi korytarz prowadzi do wielkiej sali, gdzie rozbrzmiewa muzyka
+0
+truskawki są czerwone i słodkie, a banany są żółte i łatwo się obierają
+0
+strumień płynie cichutko wśród drzew, a ptaki śpiewają w pobliżu
+0
+samochody gonią po ulicach, a ludzie spieszą się do pracy
+0
+kamienie leżą na plaży, a fale uderzają w brzeg z siłą
+0
+księżyc rośnie, a gwiazdy błyszczą na nocnym niebie
+0
+drewniane drzwi stoją otworem, a wiatr zdmuchuje kurz z podłogi
+0
+na stole leżą jabłka i gruszki, a w oknach krążą muchy
+0
+chmury przesłaniają słońce, a liście spadają z drzew na ziemię
+0
+Agnieszka robi pyszne naleśniki
+0
+na wakacjach byłem w górach
+0
+Przeczytałam ciekawą książkę.
+1
+Wczoraj widziałem piękny zachód słońca.
+1
+Ostatnio słucham muzyki klasycznej.
+1
+codziennie rano piję kawę
+0
+Wczoraj zjadłem pyszną pizzę
+0
+lubię oglądać filmy akcji.
+1
+Mój ulubiony kolor to zielony.
+1
+Często jeżdżę rowerem
+0
+zawsze zaczynam dzień od gimnastyki
+0
+chciałbym się nauczyć grać na pianinie
+0
+często jem warzywa i owoce=
+0
+lubię spędzać czas z rodziną i przyjaciółmi
+0
+w wolnym czasie lubię malować obrazy
+0
+Kocham psy i marzę o posiadaniu swojego pupila
+0
+uwielbiam piłkę nożną i gram w nią regularnie
+0
+Nauczyłem się ostatnio grać w szachy
+0
+Często słucham podcastów o tematyce biznesowej
+0
+Wczoraj kupiłem nowe buty do biegania
+0
+W weekendy lubię wyjeżdżać poza miasto
+0
+chciałbym nauczyć się języka hiszpańskiego
+0
+To jest moja ulubiona piosenka.
+1
+Podoba mi się twój nowy sweter.
+1
+Najlepsze miejsce na piknik to nad rzeką.
+1
+Kupiłam dzisiaj piękne kwiaty do domu.
+1
+Wczoraj byłam u fryzjera i dostałam nową fryzurę.
+1
+Wszyscy moi znajomi lubią sport.
+1
+Dziś rano zapomniałam wziąć ze sobą parasola.
+1
+Lubię czytać książki przed snem.
+1
+Mój kot lubi jeść kawałki sera.
+1
+Chcę w przyszłości nauczyć się języka hiszpańskiego.
+1
+Mój brat właśnie kupił nowy samochód.
+1
+Kocham smaczne jedzenie, szczególnie pizzę.
+1
+Zawsze rano piję kawę z mlekiem.
+1
+W weekendy lubię spacerować po parku.
+1
+Wczoraj wieczorem oglądałam ciekawy film w telewizji.
+1
+Moja babcia codziennie gotuje obiad dla całej rodziny
+0
+Mój ulubiony kolor to niebieski
+0
+Właśnie skończyłam czytać książkę o kuchni wegańskiej
+0
+Moje ulubione zwierzę to wilk
+0
+Zawsze mam przy sobie notes, w którym zapisuję ważne rzeczy
+0
+Ostatnio zaczęłam uczyć się języka francuskiego
+0
+Uwielbiam słuchać muzyki lat 80-tych
+0
+Mam nadzieję, że wkrótce uda mi się wyjechać na wymarzone wakacje
+0
+Moja przyjaciółka właśnie kupiła sobie nowe mieszkanie
+0
+Często jeżdżę rowerem po okolicy
+0
+W tym roku planuję zmienić pracę
+0
+Moim ulubionym filmem jest "Pulp Fiction"
+0
+Lubię spędzać czas na czytaniu i edukacji finansowej
+0
+Moim ulubionym miejscem na wakacje jest górska sceneria
+0
+Uwielbiam piec ciasta i muffiny w wolnym czasie
+0
+Właśnie zaczęłam uczyć się gry na pianinie
+0
+Często spotykam się z przyjaciółmi na grach planszowych
+0
+Moja siostra właśnie dostała pracę w dużej korporacji
+0
+Wciąż szukam swojego ulubionego gatunku muzyki
+0
+Moim marzeniem jest wyjazd dookoła świata
+0
+Zawsze staram się zdrowo odżywiać i unikać fast foodów.
+1
+Moja mama jest nauczycielką języka angielskiego.
+1
+wolny czas lubię spędzać na czytaniu książek fantasy
+0
+nie lubię słuchać muzyki klasycznej
+0
+W tym tygodniu planuję odwiedzić muzeum sztuki nowoczesnej
+0
+moja ulubiona pora roku to jesień.
+0
+Nigdy nie próbowałam sushi.
+1
+Moim hobby jest fotografowanie krajobrazów.
+1
+lubię aktywnie spędzać czas na świeżym powietrzu.
+0
+W ogóle nie interesuję się sportem.
+1
+Mój przyjaciel jest zapalonym graczem komputerowym.
+1
+Wczoraj wieczorem oglądałam interesujący dokument o kosmosie.
+1
+Mieszkam w centrum miasta, ale marzę o przeprowadzce na wieś.
+1
+W wolnych chwilach uwielbiam robić zakupy online
+0
+Nie lubię zwierząt, więc nie mam żadnego pupila.
+1
+W przyszłym roku planuję zapisać się na kurs gotowania.
+1
+Lubię spędzać czas z rodziną i przyjaciółmi.
+1
+Wolę herbatę niż kawę
+0
+Nie lubię podróżować i zwiedzać nowych miejsc.
+1
+Mój brat interesuje się sztuką uliczną i robi graffiti.
+1
+W weekendy lubię wyjeżdżać poza miasto na wycieczki
+0
+Nie lubię żadnych form aktywności fizycznej.
+1
+Moim marzeniem jest nauczyć się pływać na desce surfingowej.
+1
+Właśnie skończyłam czytać powieść kryminalną
+0
+Nigdy nie próbowałam żadnych egzotycznych potraw.
+1
+W czasie pandemii nauczyłam się gotować potrawy kuchni azjatyckiej.
+1
+Mój przyjaciel jest bardzo utalentowanym muzykiem i gra na wielu instrumentach.
+1
+Lubię biegać rano, bo daje mi to energię na cały dzień
+0
+Nie cierpię żadnych sportów ekstremalnych.
+1
+W przyszłym miesiącu planuję odwiedzić Hiszpanię i doskonalić swój język hiszpański.
+1
+Moja ulubiona potrawa to spaghetti carbonara.
+1
+Lubię oglądać filmy animowane, zwłaszcza z serii Disneya.
+1
+w tym roku wakacje spędzę na wyjeździe rowerowym po Europie.
+0
+Nie interesuję się kulturą Japonii i jej tradycjami.
+1
+Mam zamiar wziąć udział w maratonie za rok.
+1
+Właśnie zaczęłam uczyć się języka niemieckiego.
+1
+Moim marzeniem jest nauczyć się grać na gitarze.
+1
+Wolny czas lubię spędzać na robieniu różnych rzeczy z własnymi rękami.
+1
+Mój brat jest lekarzem i pracuje w szpitalu.
+1
+Lubię czytać książki psychologiczne i filozoficzne.
+1
+W weekendy lubię chodzić na wycieczki do lasu i obserwować przyrodę.
+1
+moim hobby jest malowanie obrazów i tworzenie rzeźb.
+0
+Nie lubię jeździć na wakacje do egzotycznych krajów.
+1
+w ciągu dnia lubię słuchać podcastów i audiobooków.
+0
+w wolnych chwilach uwielbiam robić sobie domowe spa i pielęgnować swoją skórę.
+0
+nie interesuję się sztuką i nie chodzę na wystawy.
+0
+Mam zamiar założyć swój własny biznes w przyszłości.
+1
+Lubię grać w gry planszowe i karciane ze znajomymi.
+1
+wł,,aśnie skończyłam kurs tańca i chcę zacząć uczęszczać na regularne zajęcia
+0
