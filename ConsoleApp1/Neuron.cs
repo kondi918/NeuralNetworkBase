@@ -10,6 +10,7 @@ namespace ConsoleApp1
     {
         public List<double> weights = new List<double>();       // w0 = bias
         public List<double> inputData = new List<double>();
+        public double neuronResult { get; set; }
         public Neuron(double[] weights)
         {
             for(int i=0; i< weights.Length; i++)
