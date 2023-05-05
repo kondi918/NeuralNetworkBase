@@ -2,67 +2,66 @@
 using System.Text.RegularExpressions;
 using System;
 using System.Diagnostics.Tracing;
+using System.IO;
 
 
 StreamWriter logFile = new("plikiTekstowe/rozpoznawanieZdan/logiNauczania.txt", true);    // Tworzymy plik do logowania
 NeuralNetwork myNetwork = new NeuralNetwork("plikiTekstowe/dlugopisObraczka/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
-List<double[]> data = new List<double[]>();
-List<int> dataResult = new List<int>();
-/*
-void getData()
+List<double[]> trainingData = new List<double[]>();
+List<int> trainingResults = new List<int>();
+
+void GetTrainingData(string path)
 {
-    StreamReader sr = new("plikiTekstowe/TableTennis/daneNauczania.txt");
+    List<double> data = new List<double>();
+    StreamReader sr = new(path);
     string line = sr.ReadLine();
     line = sr.ReadLine();
-    while(line != null)
+    while (line != null)
     {
-        string[] lineSplit = line.Split(';');
-        double[] lineData = new double[3];
-        for(int i =0; i < lineSplit.Length-1; i++)
+
+        string[] dataString = line.Split(";");
+        for(int i=0; i< dataString.Length-1; i++)
         {
-            lineData[i] = double.Parse(lineSplit[i]);
+            data.Add(double.Parse(dataString[i]));
         }
-        data.Add(lineData);
-        dataResult.Add(Int32.Parse(lineSplit[3]));
+        trainingData.Add(data.ToArray());
+        trainingResults.Add(Int32.Parse(dataString[dataString.Length - 1]));
+        data.Clear();
         line = sr.ReadLine();
     }
+    sr.Close();
 }
-*/
 void TrainNetwork()
 {
-    logFile.WriteLine("\nData rozpoczęcia logow: " + DateTime.Now);
-    int minBledow = 100;
     int bledy = 100;
-    while (bledy >= 10)
+    while (bledy != 0)
     {
         bledy = 0;
-        for(int i= 0; i < data.Count; i++)
+        for(int i= 0; i < trainingData.Count; i++)
         {
-            if (!myNetwork.NetworkTraining(data[i], dataResult[i],0.1))
+            if (!myNetwork.NetworkTraining(trainingData[i], trainingResults[i],0.1))
             {
                 bledy++;
             }
         }
-        if(bledy < minBledow)
-        {
-            minBledow = bledy;
-            logFile.WriteLine("Nowa Struktura: ");
-            logFile.WriteLine(myNetwork.GetWholeStructure());
-            logFile.WriteLine("-----------------------------------------------------");
-        }
-        Console.WriteLine("Ilosc bledow: " + bledy);
-        Console.WriteLine(myNetwork.layersValues[myNetwork.layersValues.Count - 1][0]);
-        Console.WriteLine(myNetwork.layersValues[myNetwork.layersValues.Count - 1][1]);
-    }
-    foreach(var d in data) 
-    {
-        /*
-        Console.WriteLine("result");
-        Console.WriteLine(myNetwork.CalculateSmallNetworkResult(d));
-        Console.ReadLine();
-        */
-        Console.WriteLine(myNetwork.CalculateSmallNetworkResult(d));
+        Console.WriteLine(bledy);
     }
 }
-//TrainNetwork();
+GetTrainingData("plikiTekstowe/dlugopisObraczka/daneNauczania.txt");
+TrainNetwork();
+while(1==1)
+{
+    Console.WriteLine("Podaj dlugosc przedmiotu");
+    double[] dane = new double[2];
+    dane[0] = double.Parse(Console.ReadLine());
+    dane[1] = double.Parse(Console.ReadLine());
+    if(myNetwork.CalculateSmallNetworkResult(dane) > 0.5)
+    {
+        Console.WriteLine("To dlugopis");
+    }
+    else
+    {
+        Console.WriteLine("To obraczka");
+    }
+}
 
