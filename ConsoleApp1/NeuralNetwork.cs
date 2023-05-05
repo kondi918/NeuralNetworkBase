@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace ConsoleApp1
         //  Tworzenie sieci
         //
         //
-        public void readFromFile(string path)
+        public void ReadFromFile(string path)
         {
             mLayers.Clear();
             List<Neuron> neuronSet = new List<Neuron>();
@@ -48,16 +49,29 @@ namespace ConsoleApp1
                     }
                     else if (linia.Contains(';'))                //Zczytywanie wag do aktualnego neurona
                     {
+                        linia = linia.Trim();
                         string[] weightsString = linia.Split(';');
-                        for (int i = 0; i < weightsString.Length - 1; i++)
+                        for (int i = 0; i < weightsString.Length; i++)
                         {
+                            if (weightsString[i].Contains("."))
+                            {
+                                weightsString[i] = weightsString[i].Replace(".", ",");
+                            }
                             weights.Add(double.Parse(weightsString[i]));
                         }
                     }
                 }
 
             }
+
             sr.Close();
+        }
+        public List<double[]> ReadTrainingDataFromFile( string path )
+        {
+            List<double[]> trainingData = new List<double[]>();
+            StreamReader sr = new(path);
+            string line = sr.ReadLine();
+            return trainingData;
         }
         public void RemoveNeuron(int layerNumber, int neuronNumber)
         {
@@ -266,7 +280,7 @@ namespace ConsoleApp1
         }
         public NeuralNetwork(string path)
         {
-            readFromFile(path);
+            ReadFromFile(path);
         }
         public NeuralNetwork(int number_of_layers)
         {

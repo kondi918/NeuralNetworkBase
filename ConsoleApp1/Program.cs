@@ -5,8 +5,7 @@ using System.Diagnostics.Tracing;
 
 
 StreamWriter logFile = new("plikiTekstowe/rozpoznawanieZdan/logiNauczania.txt", true);    // Tworzymy plik do logowania
-NeuralNetwork myNetwork = new NeuralNetwork("plikiTekstowe//rozpoznawanieZdan/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
-NeuralNetwork goodNetwork = new NeuralNetwork("plikiTekstowe//rozpoznawanieZdan/dobraSiec.txt");
+NeuralNetwork myNetwork = new NeuralNetwork("plikiTekstowe/dlugopisObraczka/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
 List<double[]> data = new List<double[]>();
 List<int> dataResult = new List<int>();
 /*
@@ -39,7 +38,7 @@ void TrainNetwork()
         bledy = 0;
         for(int i= 0; i < data.Count; i++)
         {
-            if (!myNetwork.TrainingNetwork(data[i], dataResult[i],0.1))
+            if (!myNetwork.NetworkTraining(data[i], dataResult[i],0.1))
             {
                 bledy++;
             }
@@ -66,8 +65,4 @@ void TrainNetwork()
     }
 }
 //TrainNetwork();
-logFile.WriteLine("Nowa Struktura: ");
-logFile.WriteLine(goodNetwork.GetWholeStructure());
-logFile.WriteLine("-----------------------------------------------------");
-logFile.Close();
 
