@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Kulson\\Desktop\\NeuralNetwork\\NeuralNetworkBase\\ConsoleApp1\\ConsoleApp1.csproj": {}
+    "E:\\C#\\GitProjects\\NeuralNetworkBase\\ConsoleApp1\\ConsoleApp1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Kulson\\Desktop\\NeuralNetwork\\NeuralNetworkBase\\ConsoleApp1\\ConsoleApp1.csproj": {
+    "E:\\C#\\GitProjects\\NeuralNetworkBase\\ConsoleApp1\\ConsoleApp1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Kulson\\Desktop\\NeuralNetwork\\NeuralNetworkBase\\ConsoleApp1\\ConsoleApp1.csproj",
+        "projectUniqueName": "E:\\C#\\GitProjects\\NeuralNetworkBase\\ConsoleApp1\\ConsoleApp1.csproj",
         "projectName": "ConsoleApp1",
-        "projectPath": "C:\\Users\\Kulson\\Desktop\\NeuralNetwork\\NeuralNetworkBase\\ConsoleApp1\\ConsoleApp1.csproj",
-        "packagesPath": "C:\\Users\\Kulson\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Kulson\\Desktop\\NeuralNetwork\\NeuralNetworkBase\\ConsoleApp1\\obj\\",
+        "projectPath": "E:\\C#\\GitProjects\\NeuralNetworkBase\\ConsoleApp1\\ConsoleApp1.csproj",
+        "packagesPath": "C:\\Users\\Konrad\\.nuget\\packages\\",
+        "outputPath": "E:\\C#\\GitProjects\\NeuralNetworkBase\\ConsoleApp1\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Kulson\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Konrad\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -59,7 +55,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

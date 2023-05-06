@@ -4,7 +4,7 @@ using System;
 using System.Diagnostics.Tracing;
 using System.IO;
 
-
+CancellationTokenSource cancelTokenTraining = new CancellationTokenSource();
 StreamWriter logFile = new("plikiTekstowe/rozpoznawanieZdan/logiNauczania.txt", true);    // Tworzymy plik do logowania
 NeuralNetwork myNetwork = new NeuralNetwork("plikiTekstowe/dlugopisObraczka/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
 List<double[]> trainingData = new List<double[]>();
@@ -18,7 +18,6 @@ void GetTrainingData(string path)
     line = sr.ReadLine();
     while (line != null)
     {
-
         string[] dataString = line.Split(";");
         for(int i=0; i< dataString.Length-1; i++)
         {
@@ -51,9 +50,9 @@ void TrainNetwork()
         Timer(seconds);
     });
     setTimer.Start();
-    int mistakes = 100;
+    int mistakes = 0;
     Task ShowErrors = null;
-    while (mistakes != 0)
+    while (!cancelTokenTraining.IsCancellationRequested)
     {
         mistakes = 0;
         for (int i = 0; i < trainingData.Count; i++)
@@ -70,12 +69,18 @@ void TrainNetwork()
                 setWaiting(1);           
             });
             Console.WriteLine("Ilosc bledow:" + mistakes);
+            if(mistakes == 0)
+            {
+                cancelTokenTraining.Cancel();
+            }
         }
     }
-    Console.WriteLine("Ilosc bledow:" + mistakes);
     setTimer.Wait();
     Console.WriteLine("Zakonczono");
 }
+
+
+
 GetTrainingData("plikiTekstowe/dlugopisObraczka/daneNauczania.txt");
 Task trainingNetworkTask = new Task(() =>
 {
