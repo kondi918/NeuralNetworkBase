@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ncYE1ID4b56xrMn15UNoUkzOdyhPKbXD81MLM/herUyG5hl+hU3/a2h4W98M44p+g+fPfHpNyBDRSI5UvZ7UoA==",
+  "dgSpecHash": "WP5JG0avp4T2VAKzVvJKMuxH78ZtytSpQ1cEurykL1nx3f/loc3tR9jbVJJVWbcIGatilWJHL+X+++JEkIx6mg==",
   "success": true,
-  "projectFilePath": "E:\\C#\\GitProjects\\NeuralNetworkBase\\ConsoleApp1\\ConsoleApp1.csproj",
+  "projectFilePath": "C:\\Users\\Kulson\\Desktop\\NeuralNetwork\\NeuralNetworkBase\\ConsoleApp1\\ConsoleApp1.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

@@ -45,7 +45,9 @@
                 <MenuItem Header="Wybierz dane nauczania" Click="ChooseTrainingData_Click" />
                 <MenuItem Header="Wybierz sieć treningową" />
             </Menu>
+
             <TextBlock FontFamily="Tahoma" FontSize="36" Grid.ColumnSpan="6" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">Trenowanie sieci neuronowej</TextBlock>
+
             <TextBlock Grid.ColumnSpan="5" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" FontSize="36">Oczekiwanie na trening...</TextBlock>
 
             <Canvas Margin="10" Grid.ColumnSpan="5" Grid.RowSpan="2" Grid.Column="0" Grid.Row="3" Background="WhiteSmoke"></Canvas>
@@ -73,14 +75,10 @@
 
             <GroupBox Grid.Column="5" Grid.Row="4" Header="Czy chcesz logować nauczanie?">
                 <StackPanel>
-                    <RadioButton Content="Tak" GroupName="ActivationFunction" />
-                    <RadioButton Content="Nie" GroupName="ActivationFunction" IsChecked="True"/>
+                    <RadioButton Content="Tak" GroupName="Log" />
+                    <RadioButton Content="Nie" GroupName="Log" IsChecked="True"/>
                 </StackPanel>
             </GroupBox>
-
-
-            <!--<Button Name="StartTrainingButton" Content="Start" Grid.Column="0" Grid.Row="6" Click="StartTrainingButton_Click" />
-            <Button Name="StopTrainingButton" Content="Stop" Grid.Column="1" Grid.Row="7" /> -->
         </Grid>
     </Grid>
 </Window>
