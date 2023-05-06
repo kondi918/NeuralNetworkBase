@@ -24,6 +24,7 @@
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="1*" />
@@ -48,32 +49,37 @@
 
             <TextBlock FontFamily="Tahoma" FontSize="36" Grid.ColumnSpan="6" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">Trenowanie sieci neuronowej</TextBlock>
 
-            <TextBlock Grid.ColumnSpan="5" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" FontSize="36" Name="InformationStatus">Oczekiwanie na trening...</TextBlock>
+            <TextBlock Grid.ColumnSpan="5" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Bottom" Name="InformationStatus">Oczekiwanie na trening...</TextBlock>
 
-            <Canvas Margin="10" Grid.ColumnSpan="5" Grid.RowSpan="2" Grid.Column="0" Grid.Row="3" Background="WhiteSmoke"></Canvas>
+            <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="3" Margin="5">
+                <TextBlock HorizontalAlignment="Center">Oczekiwany czas treningu</TextBlock>
+                <TextBox HorizontalAlignment="Center" Padding="10 2" Margin="0 15" Name="ExpectedTrainingTime">10</TextBox>
+            </StackPanel>
+            
+            <Canvas Margin="5" Grid.ColumnSpan="5" Grid.RowSpan="2" Grid.Column="1" Grid.Row="3" Background="WhiteSmoke"></Canvas>
 
-            <StackPanel Orientation="Vertical" Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="5">
+            <StackPanel Orientation="Vertical" Grid.ColumnSpan="3" Grid.Column="2" Grid.Row="5">
                 <TextBlock HorizontalAlignment="Center">Ilość Błędów</TextBlock>
                 <TextBlock HorizontalAlignment="Center" Name="MistakesNumber">...</TextBlock>
             </StackPanel>
 
-            <StackPanel Orientation="Vertical" Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="6">
+            <StackPanel Orientation="Vertical" Grid.ColumnSpan="3" Grid.Column="2" Grid.Row="6">
                 <TextBlock HorizontalAlignment="Center">Postęp nauczania</TextBlock>
                 <ProgressBar Height="20" Name="TrainingProgressBar" />
             </StackPanel>
 
-            <Button Grid.Column="0" Grid.Row="7" Click="StartTrainingButton_Click">Start</Button>
-            <Button Grid.Column="2" Grid.Row="7">Stop</Button>
-            <Button Grid.Column="4" Grid.Row="7" Click="CancelButton_Click">Anuluj</Button>
+            <Button Grid.Column="1" Grid.Row="7" Click="StartTrainingButton_Click">Start</Button>
+            <Button Grid.Column="3" Grid.Row="7">Stop</Button>
+            <Button Grid.Column="5" Grid.Row="7" Click="CancelButton_Click">Anuluj</Button>
 
-            <GroupBox Grid.Column="5" Grid.Row="3" Header="Wybór Funkcji aktywacji">
+            <GroupBox Grid.Column="6" Grid.Row="3" Header="Wybór Funkcji aktywacji">
                 <StackPanel>
                     <RadioButton Content="Sigmoid" GroupName="ActivationFunction" />
                     <RadioButton Content="Relu" GroupName="ActivationFunction"/>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Grid.Column="5" Grid.Row="4" Header="Czy chcesz logować nauczanie?">
+            <GroupBox Grid.Column="6" Grid.Row="4" Header="Czy chcesz logować nauczanie?">
                 <StackPanel>
                     <RadioButton Content="Tak" GroupName="Log" />
                     <RadioButton Content="Nie" GroupName="Log" IsChecked="True"/>

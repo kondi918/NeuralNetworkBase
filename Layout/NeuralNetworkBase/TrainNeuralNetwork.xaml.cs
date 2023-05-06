@@ -99,7 +99,12 @@ namespace NeuralNetworkBase
         }
         private void TrainNetwork()
         {
-            int seconds = 5;                                                                // TUTAJ DODAC POBIERANIE OKRESLONEGO CZASU Z OKIENKA
+            int seconds = 5;                                                 // TUTAJ DODAC POBIERANIE OKRESLONEGO CZASU Z OKIENKA
+            ExpectedTrainingTime.Dispatcher.Invoke(() =>
+            {
+                 int.TryParse(ExpectedTrainingTime.Text, out seconds);
+            });
+
             Task setTimer = Task.Run(() => Timer(seconds));
             int mistakes = 1;
             Task ShowErrors = null;
@@ -132,7 +137,7 @@ namespace NeuralNetworkBase
             cancelTokenTraining = new CancellationTokenSource();
             isTrainingCompleted = true;
         }
-        private async void StartTrainingButton_Click(object sender, RoutedEventArgs e)
+        private void StartTrainingButton_Click(object sender, RoutedEventArgs e)
         {
             if (myNetwork != null)
             {
@@ -173,8 +178,14 @@ namespace NeuralNetworkBase
 
 
 // UWAHA KURWA UWAGA KURWA POWTARZAM UWAGA TUTAJ ZMIANY DO ZROBIENIA
-// 1. Zmienic w layoucie wielkosc tej jednej czcionki i wycentrowac calosc tak jak bylo na poczatku             //K
+// 1. Zmienic w layoucie wielkosc tej jednej czcionki i wycentrowac calosc tak jak bylo na poczatku             //K 
 // 2. Dodac sekundy i zczytywac do zmiennej
 // 3. Dodac checkboxa obsluge z wyborem funkcji aktywacji (pamietaj ENUM jest kurwa ENUM ENUM)
 // 4. Jak wystarczy czasu to dodac funkcje z progress barem ktora sprawi ze sie bedzie zapelnial
 // 4.1 Jak wystarczy czasu to dodac zczytywanie plikow z menu i zmienic wtedy na NULL kurwa NULL te na poczatku (patrz jebitny komentarz)
+
+
+// 1ans. Przecież duże jest piękne. A 16 to absolutne minimum xD                                                //S
+// 2ans. Okienko jest, zczytywanie ... Też jest w sumie, ale jest do poprawy                                   
+// 3ans. Ciebie z tymi enumami to popierdoliło. Teraz to się nie dziwię, że czasu nie wystarczyło na punkt 4.  
+// 5 Jak się wyłączy okno treningu i potem chce się do niego wrócić, to program się wypierdala na ryj           
