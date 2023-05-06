@@ -43,7 +43,7 @@ void Timer(int seconds)
         seconds--;
     }
 }
-async void TrainNetwork()
+void TrainNetwork()
 {
     int seconds = 60; // TUTAJ DODAC POBIERANIE OKRESLONEGO CZASU Z OKIENKA
     Task setTimer = new Task(() =>
