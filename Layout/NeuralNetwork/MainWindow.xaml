@@ -44,8 +44,8 @@
             </Menu>
             
             <TextBlock FontSize="36" FontFamily="Tahoma" FontWeight="Heavy" Grid.Row="1" TextAlignment="Center" VerticalAlignment="Center">Neural Network Base</TextBlock>
-            <Button Name="CreateNewNeuralNetworkButton" Content="Tworzenie sieci" Grid.Row="2" />
-            <Button Name="TrainNeuralNetworkButton" Content="Trenowanie sieci" Grid.Row="3" />
+            <Button Name="CreateNewNeuralNetworkButton" Content="Tworzenie sieci" Grid.Row="2" Click="CreateNewNeuralNetworkButton_Click" />
+            <Button Name="TrainNeuralNetworkButton" Content="Trenowanie sieci" Grid.Row="3" Click="TrainNeuralNetworkButton_Click" />
             <Button Name="TestNeuralNetworkButton" Content="Testowanie sieci" Grid.Row="4" />
             <Button Name="ExitApplicationButton" Content="Wyjście z aplikacji" Grid.Row="5" />
         </Grid>
