@@ -23,7 +23,7 @@ namespace NeuralNetworkBase
     public partial class TrainNeuralNetwork : Window
     {
         CancellationTokenSource cancelTokenTraining = new CancellationTokenSource();                           //TU ZMIANA NA NULLE UWAGA KURWA TU ZMIANA NA NULLE
-        StreamWriter logFile = new StreamWriter("plikiTekstowe/dlugopisObraczka/logiNauczania.txt", true);    // Tworzymy plik do logowania
+        //StreamWriter logFile = new StreamWriter("plikiTekstowe/dlugopisObraczka/logiNauczania.txt", true);    // Tworzymy plik do logowania
         NeuralNetwork myNetwork = new NeuralNetwork("plikiTekstowe/dlugopisObraczka/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
         List<double[]> trainingData = new List<double[]>();
         List<int> trainingResults = new List<int>();
@@ -71,10 +71,15 @@ namespace NeuralNetworkBase
         }
         void Timer(int seconds)
         {
-            while (seconds != 0 && !cancelTokenTraining.IsCancellationRequested)
+            int mSeconds = 0;
+            while (mSeconds != seconds && !cancelTokenTraining.IsCancellationRequested)
             {
                 Thread.Sleep(1000);
-                seconds--;
+                mSeconds++;
+                TrainingProgressBar.Dispatcher.Invoke(() =>
+                {
+                    TrainingProgressBar.Value = (double)mSeconds / (double)seconds * 100;
+                });
             }
         }
         
@@ -134,7 +139,6 @@ namespace NeuralNetworkBase
             {
                 SetTextOnTextBlock(InformationStatus, "Zakończono nauczanie");
             }
-            cancelTokenTraining = new CancellationTokenSource();
             isTrainingCompleted = true;
         }
         private void StartTrainingButton_Click(object sender, RoutedEventArgs e)
@@ -143,7 +147,9 @@ namespace NeuralNetworkBase
             {
                  if (trainingData.Count > 0 && myNetwork.mLayers[0].mNeurons[0].weights.Count-1 == trainingData[0].Length)
                  {
+                    cancelTokenTraining = new CancellationTokenSource();
                     InformationStatus.Text = "Rozpoczęto Nauczanie";
+                    TrainingProgressBar.Value = 0;
                     Task trainingNetworkTask = new Task(() =>
                         {
                             TrainNetwork();
@@ -171,21 +177,9 @@ namespace NeuralNetworkBase
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            cancelTokenTraining.Cancel();
+            cancelTokenTraining.Cancel();          
         }
     }
 }
 
-
-// UWAHA KURWA UWAGA KURWA POWTARZAM UWAGA TUTAJ ZMIANY DO ZROBIENIA
-// 1. Zmienic w layoucie wielkosc tej jednej czcionki i wycentrowac calosc tak jak bylo na poczatku             //K 
-// 2. Dodac sekundy i zczytywac do zmiennej
-// 3. Dodac checkboxa obsluge z wyborem funkcji aktywacji (pamietaj ENUM jest kurwa ENUM ENUM)
-// 4. Jak wystarczy czasu to dodac funkcje z progress barem ktora sprawi ze sie bedzie zapelnial
-// 4.1 Jak wystarczy czasu to dodac zczytywanie plikow z menu i zmienic wtedy na NULL kurwa NULL te na poczatku (patrz jebitny komentarz)
-
-
-// 1ans. Przecież duże jest piękne. A 16 to absolutne minimum xD                                                //S
-// 2ans. Okienko jest, zczytywanie ... Też jest w sumie, ale jest do poprawy                                   
-// 3ans. Ciebie z tymi enumami to popierdoliło. Teraz to się nie dziwię, że czasu nie wystarczyło na punkt 4.  
-// 5 Jak się wyłączy okno treningu i potem chce się do niego wrócić, to program się wypierdala na ryj           
+//myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.relu;

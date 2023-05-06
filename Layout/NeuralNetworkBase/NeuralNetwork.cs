@@ -11,12 +11,12 @@ namespace NeuralNetworkBase
 {
     internal class NeuralNetwork
     {
-        enum WhatActivationFunction
+        public enum WhatActivationFunction
         {
             relu,
             sigmoid
         }
-        WhatActivationFunction whatActivationFunction = WhatActivationFunction.relu;
+        public WhatActivationFunction whatActivationFunction = WhatActivationFunction.relu;
         public List<Layer> mLayers = new List<Layer>();
 
         //
