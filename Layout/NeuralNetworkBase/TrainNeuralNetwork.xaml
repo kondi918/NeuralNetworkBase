@@ -52,7 +52,7 @@
 
             <StackPanel Orientation="Vertical" Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="5">
                 <TextBlock HorizontalAlignment="Center">Ilość Błędów</TextBlock>
-                <TextBlock HorizontalAlignment="Center">...</TextBlock>
+                <TextBlock HorizontalAlignment="Center" Name="MistakesNumber">...</TextBlock>
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="6">
