@@ -35,5 +35,6 @@ namespace NeuralNetworkBase
             this.inputData.Clear();
             this.inputData.AddRange(inputData);
         }
+
     }
 }

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using NeuralNetworkBase;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,14 +11,19 @@ namespace NeuralNetworkBase
 {
     internal class NeuralNetwork
     {
-        // public List<List<double>> layersValues = new List<List<double>>();
+        enum WhatActivationFunction
+        {
+            relu,
+            sigmoid
+        }
+        WhatActivationFunction whatActivationFunction = WhatActivationFunction.relu;
         public List<Layer> mLayers = new List<Layer>();
 
         //
         //
         //  Tworzenie sieci
         //
-        //
+        //z
         public void ReadFromFile(string path)
         {
             mLayers.Clear();
@@ -25,7 +32,7 @@ namespace NeuralNetworkBase
             //WAZNE!! W PLIKU TEKSTOWYM PIERWSZA WAGA KTORA PODAMY (w0) odpowiada za BIAS
             //
 
-            StreamReader sr = new StreamReader(path);             //Obsluga odczytywania struktury sieci z tekstu
+            StreamReader sr = new StreamReader(path);           //Obsluga odczytywania struktury sieci z tekstu
             string line = "";
             List<double> weights = new List<double>();
             while (line != null)
@@ -135,13 +142,14 @@ namespace NeuralNetworkBase
             double result = neuron.weights[0];      //Przypisuje liczbe bias
             for (int i = 1; i < neuron.weights.Count; i++)
             {
-                //Console.WriteLine("Waga: " + neuron.weights[i]);
-                //Console.WriteLine("Input: " + neuron.inputData[i - 1]);
-                // Console.ReadLine();
                 result += neuron.weights[i] * neuron.inputData[i - 1];  // input data ma indeks o 1 mniejszy, poniewaz w wagach waga o indeksie 0 to bias
             }
             neuron.neuronResult = result;
-            return ActivationFunctionRelu(result);
+            if(whatActivationFunction == WhatActivationFunction.relu)
+            {
+                return ActivationFunctionRelu(result);
+            }
+            return ActivationFunctionSigmoid(result);
         }
         private void AddNextLayerInputs(List<double> neuronResults, int index)
         {
@@ -184,12 +192,10 @@ namespace NeuralNetworkBase
         }
         public double CalculateSmallNetworkResult(double[] inputData)
         {
-            //layersValues.Clear();
             SetInputs(inputData);
             int nextLayerIndex = 1;
             foreach (var layer in mLayers)
             {
-                //layersValues.Add(new List<double>(CalculateNeuronsResults(layer, nextLayerIndex)));
                 CalculateNeuronsResults(layer, nextLayerIndex);
                 nextLayerIndex++;
             }
