@@ -22,7 +22,7 @@ namespace NeuralNetworkBase
     /// </summary>
     public partial class TrainNeuralNetwork : Window
     {
-        CancellationTokenSource cancelTokenTraining = new CancellationTokenSource();
+        CancellationTokenSource cancelTokenTraining = new CancellationTokenSource();                           //TU ZMIANA NA NULLE UWAGA KURWA TU ZMIANA NA NULLE
         StreamWriter logFile = new StreamWriter("plikiTekstowe/dlugopisObraczka/logiNauczania.txt", true);    // Tworzymy plik do logowania
         NeuralNetwork myNetwork = new NeuralNetwork("plikiTekstowe/dlugopisObraczka/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
         List<double[]> trainingData = new List<double[]>();
@@ -71,63 +71,66 @@ namespace NeuralNetworkBase
         }
         void Timer(int seconds)
         {
-            while (seconds != 0)
+            while (seconds != 0 && !cancelTokenTraining.IsCancellationRequested)
             {
                 Thread.Sleep(1000);
                 seconds--;
             }
         }
-  
+        
+        private int Training()
+        {
+            int mistakes = 0;
+            for (int i = 0; i < trainingData.Count; i++)
+            {
+                if (!myNetwork.NetworkTraining(trainingData[i], trainingResults[i], 0.1))
+                {
+                    mistakes++;
+                }
+            }
+            return mistakes;
+        }
+        private void SetTextOnTextBlock(TextBlock textBlock, string text)
+        {
+            textBlock.Dispatcher.Invoke(() =>
+            {
+                textBlock.Text = text;
+            });
+        }
         private void TrainNetwork()
         {
-            int seconds = 5; // TUTAJ DODAC POBIERANIE OKRESLONEGO CZASU Z OKIENKA
+            int seconds = 5;                                                                // TUTAJ DODAC POBIERANIE OKRESLONEGO CZASU Z OKIENKA
             Task setTimer = Task.Run(() => Timer(seconds));
             int mistakes = 1;
             Task ShowErrors = null;
             while (mistakes != 0 || cancelTokenTraining.IsCancellationRequested)
             {
-                mistakes = 0;
-                for (int i = 0; i < trainingData.Count; i++)
-                {
-                    if (!myNetwork.NetworkTraining(trainingData[i], trainingResults[i], 0.1))
-                    {
-                        mistakes++;
-                    }
-                }
+                mistakes = Training();
                 if (ShowErrors == null || ShowErrors.IsCompleted)
                 {
                     ShowErrors = Task.Run(() =>
                     {
                         Thread.Sleep(1000);
                     });
-                    MistakesNumber.Dispatcher.Invoke(() =>
-                    {
-                        MistakesNumber.Text = "Ilosc bledow " + mistakes;
-                    });
+                    SetTextOnTextBlock(MistakesNumber, mistakes.ToString());
                 }
             }
             ShowErrors.Wait();
-            MistakesNumber.Dispatcher.Invoke(() =>
-            {
-                MistakesNumber.Text = "Ilosc bledow " + mistakes;
-            });
+            SetTextOnTextBlock(MistakesNumber, mistakes.ToString());
             if (!cancelTokenTraining.IsCancellationRequested)
             {
                 setTimer.Wait();
-                InformationStatus.Dispatcher.Invoke(() =>
-                {
-                    InformationStatus.Text = "Zakończono nauczanie";
-                });
             }
-            else if(cancelTokenTraining.IsCancellationRequested)
+            if(cancelTokenTraining.IsCancellationRequested)
             {
-                InformationStatus.Dispatcher.Invoke(() =>
-                {
-                    InformationStatus.Text = "Przerwano nauczanie";
-                });
+                SetTextOnTextBlock(InformationStatus, "Przerwano nauczanie");
             }
-            isTrainingCompleted = true;
+            else
+            {
+                SetTextOnTextBlock(InformationStatus, "Zakończono nauczanie");
+            }
             cancelTokenTraining = new CancellationTokenSource();
+            isTrainingCompleted = true;
         }
         private async void StartTrainingButton_Click(object sender, RoutedEventArgs e)
         {
@@ -161,9 +164,17 @@ namespace NeuralNetworkBase
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-
+            cancelTokenTraining.Cancel();
         }
     }
 }
+
+
+// UWAHA KURWA UWAGA KURWA POWTARZAM UWAGA TUTAJ ZMIANY DO ZROBIENIA
+// 1. Zmienic w layoucie wielkosc tej jednej czcionki i wycentrowac calosc tak jak bylo na poczatku             //K
+// 2. Dodac sekundy i zczytywac do zmiennej
+// 3. Dodac checkboxa obsluge z wyborem funkcji aktywacji (pamietaj ENUM jest kurwa ENUM ENUM)
+// 4. Jak wystarczy czasu to dodac funkcje z progress barem ktora sprawi ze sie bedzie zapelnial
+// 4.1 Jak wystarczy czasu to dodac zczytywanie plikow z menu i zmienic wtedy na NULL kurwa NULL te na poczatku (patrz jebitny komentarz)
