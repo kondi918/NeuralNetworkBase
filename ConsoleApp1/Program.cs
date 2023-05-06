@@ -31,24 +31,58 @@ void GetTrainingData(string path)
     }
     sr.Close();
 }
-void TrainNetwork()
+void setWaiting(int seconds)
 {
-    int bledy = 100;
-    while (bledy != 0)
+    Thread.Sleep(seconds * 1000);
+}
+void Timer(int seconds)
+{
+    while(seconds != 0 )
     {
-        bledy = 0;
-        for(int i= 0; i < trainingData.Count; i++)
-        {
-            if (!myNetwork.NetworkTraining(trainingData[i], trainingResults[i],0.1))
-            {
-                bledy++;
-            }
-        }
-        Console.WriteLine(bledy);
+        Thread.Sleep(1000);
+        seconds--;
     }
 }
+async void TrainNetwork()
+{
+    int seconds = 60; // TUTAJ DODAC POBIERANIE OKRESLONEGO CZASU Z OKIENKA
+    Task setTimer = new Task(() =>
+    {
+        Timer(seconds);
+    });
+    setTimer.Start();
+    int mistakes = 100;
+    Task ShowErrors = null;
+    while (mistakes != 0)
+    {
+        mistakes = 0;
+        for (int i = 0; i < trainingData.Count; i++)
+        {
+            if (!myNetwork.NetworkTraining(trainingData[i], trainingResults[i], 0.1))
+            {
+                mistakes++;
+            }
+        }
+        if (ShowErrors == null || ShowErrors.IsCompleted)
+        {
+            ShowErrors = Task.Run(() =>
+            {
+                setWaiting(1);           
+            });
+            Console.WriteLine("Ilosc bledow:" + mistakes);
+        }
+    }
+    Console.WriteLine("Ilosc bledow:" + mistakes);
+    setTimer.Wait();
+    Console.WriteLine("Zakonczono");
+}
 GetTrainingData("plikiTekstowe/dlugopisObraczka/daneNauczania.txt");
-TrainNetwork();
+Task trainingNetworkTask = new Task(() =>
+{
+    TrainNetwork();
+});
+trainingNetworkTask.Start();
+
 while(1==1)
 {
     Console.WriteLine("Podaj dlugosc przedmiotu");

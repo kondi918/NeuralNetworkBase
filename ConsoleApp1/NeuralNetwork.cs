@@ -142,7 +142,7 @@ namespace ConsoleApp1
                 result += neuron.weights[i] * neuron.inputData[i - 1];  // input data ma indeks o 1 mniejszy, poniewaz w wagach waga o indeksie 0 to bias
             }
             neuron.neuronResult = result;
-            return ActivationFunctionRelu(result);
+            return ActivationFunctionSigmoid(result);
         }
         private void AddNextLayerInputs(List<double> neuronResults, int index)
         {
