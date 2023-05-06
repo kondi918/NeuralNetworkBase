@@ -13,8 +13,9 @@
             <Setter Property="FontFamily" Value="Tahoma" />
             <Setter Property="FontSize" Value="20" />
             <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Width" Value="250" />
+            <Setter Property="Width" Value="125" />
             <Setter Property="Height" Value="40" />
+            <Setter Property="Margin" Value="5" />
         </Style>
     </Window.Resources>
 
@@ -22,30 +23,64 @@
     <Grid>
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition />
                 <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="2*" />
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6">
                 <MenuItem Header="Wybierz dane nauczania" Click="ChooseTrainingData_Click" />
                 <MenuItem Header="Wybierz sieć treningową" />
             </Menu>
+            <TextBlock FontFamily="Tahoma" FontSize="36" Grid.ColumnSpan="6" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">Trenowanie sieci neuronowej</TextBlock>
+            <TextBlock Grid.ColumnSpan="5" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" FontSize="36">Oczekiwanie na trening...</TextBlock>
 
-            <TextBlock FontFamily="Tahoma" FontSize="36" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">Trenowanie sieci neuronowej</TextBlock>
+            <Canvas Margin="10" Grid.ColumnSpan="5" Grid.RowSpan="2" Grid.Column="0" Grid.Row="3" Background="WhiteSmoke"></Canvas>
 
-            <TextBlock FontFamily="Tahoma" FontSize="72" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Name="MistakesNumber" Text="100" />
+            <StackPanel Orientation="Vertical" Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="5">
+                <TextBlock HorizontalAlignment="Center">Ilość Błędów</TextBlock>
+                <TextBlock HorizontalAlignment="Center">...</TextBlock>
+            </StackPanel>
 
-            <Button Name="StartTrainingButton" Content="Start" Grid.Column="0" Grid.Row="6" Click="StartTrainingButton_Click" />
-            <Button Name="StopTrainingButton" Content="Stop" Grid.Column="1" Grid.Row="7" />
+            <StackPanel Orientation="Vertical" Grid.ColumnSpan="3" Grid.Column="1" Grid.Row="6">
+                <TextBlock HorizontalAlignment="Center">Postęp nauczania</TextBlock>
+                <ProgressBar Height="20" />
+            </StackPanel>
+
+            <Button Grid.Column="0" Grid.Row="7">Start</Button>
+            <Button Grid.Column="2" Grid.Row="7">Stop</Button>
+            <Button Grid.Column="4" Grid.Row="7">Anuluj</Button>
+
+            <GroupBox Grid.Column="5" Grid.Row="3" Header="Wybór Funkcji aktywacji">
+                <StackPanel>
+                    <RadioButton Content="Sigmoid" GroupName="ActivationFunction" />
+                    <RadioButton Content="Relu" GroupName="ActivationFunction"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Grid.Column="5" Grid.Row="4" Header="Czy chcesz logować nauczanie?">
+                <StackPanel>
+                    <RadioButton Content="Tak" GroupName="ActivationFunction" />
+                    <RadioButton Content="Nie" GroupName="ActivationFunction" IsChecked="True"/>
+                </StackPanel>
+            </GroupBox>
+
+
+            <!--<Button Name="StartTrainingButton" Content="Start" Grid.Column="0" Grid.Row="6" Click="StartTrainingButton_Click" />
+            <Button Name="StopTrainingButton" Content="Stop" Grid.Column="1" Grid.Row="7" /> -->
         </Grid>
     </Grid>
 </Window>

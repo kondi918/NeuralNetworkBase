@@ -55,7 +55,7 @@ namespace NeuralNetworkBase
             }
         }
 
-            private void StartTrainingButton_Click(object sender, RoutedEventArgs e)
+        private void StartTrainingButton_Click(object sender, RoutedEventArgs e)
         {
             if (myNetwork != null)
             {
