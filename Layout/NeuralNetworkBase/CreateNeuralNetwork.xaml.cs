@@ -93,6 +93,7 @@ namespace NeuralNetworkBase
         private void AddLayerButton_Click(object sender, RoutedEventArgs e)
         {
             myNetwork.AddLayer();
+            LayerCount.Text = myNetwork.mLayers.Count.ToString();
         }
 
         private void DeleteLayerButton_Click(object sender, RoutedEventArgs e)
@@ -102,6 +103,8 @@ namespace NeuralNetworkBase
                 if(isInLayersRange(Int32.Parse(LayerNumber.Text)))
                 {
                     myNetwork.RemoveLayer(Int32.Parse(LayerNumber.Text));
+                    LayerCount.Text = myNetwork.mLayers.Count.ToString();
+                    NeuronCount.Text = "0";
                 }
                 else
                 {
@@ -122,6 +125,7 @@ namespace NeuralNetworkBase
                 if (isInLayersRange(Int32.Parse(LayerNumber.Text)))
                 {
                     myNetwork.AddNeuron(Int32.Parse(LayerNumber.Text));
+                    NeuronCount.Text = myNetwork.mLayers[Int32.Parse(LayerNumber.Text)].mNeurons.Count.ToString();
                 }
                 else
                 {
@@ -143,6 +147,7 @@ namespace NeuralNetworkBase
                     if(isInNeuronsRange(Int32.Parse(LayerNumber.Text),Int32.Parse(NeuronNumber.Text)))
                     {
                         myNetwork.RemoveNeuron(Int32.Parse(LayerNumber.Text), Int32.Parse(NeuronNumber.Text));
+                        NeuronCount.Text = myNetwork.mLayers[Int32.Parse(LayerNumber.Text)].mNeurons.Count.ToString();
                     }
                     else
                     {
@@ -259,10 +264,13 @@ namespace NeuralNetworkBase
         }
         private void LayerNumber_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //if (NeuronNumber != null)
-            //{
-                //NeuronNumber.Text = "XD";
-            //}
+            if(isNumber(LayerNumber.Text) && LayerNumber.Text.Length > 0)
+            {
+                if(isInLayersRange(Int32.Parse(LayerNumber.Text)))
+                {
+                    NeuronCount.Text = myNetwork.mLayers[Int32.Parse(LayerNumber.Text)].mNeurons.Count.ToString();
+                }
+            }
         }
         private void NeuralNetworkDraw()
         {
