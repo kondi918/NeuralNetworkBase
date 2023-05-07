@@ -23,17 +23,30 @@ namespace NeuralNetworkBase
     public partial class TrainNeuralNetwork : Window
     {
         CancellationTokenSource cancelTokenTraining = new CancellationTokenSource();                           //TU ZMIANA NA NULLE UWAGA KURWA TU ZMIANA NA NULLE
-        //StreamWriter logFile = new StreamWriter("plikiTekstowe/dlugopisObraczka/logiNauczania.txt", true);    // Tworzymy plik do logowania
+        StreamWriter logFile = null;    // Tworzymy plik do logowania
+        StreamWriter savingFile = null;   // Tworzymy plik do zapisu
         NeuralNetwork myNetwork = new NeuralNetwork("plikiTekstowe/dlugopisObraczka/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
         List<double[]> trainingData = new List<double[]>();
         List<int> trainingResults = new List<int>();
         bool isTrainingCompleted = true;
-
+        private ManualResetEventSlim pauseEvent = new ManualResetEventSlim(true);
+        private readonly object mLayersLock = new object();
         public TrainNeuralNetwork()
         {
             InitializeComponent();
+            Closing += TrainNeuralNetwork_Closing;
         }
-
+        private void TrainNeuralNetwork_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (logFile != null)
+            {
+                logFile.Close();
+            }
+            if(savingFile != null)
+            {
+                savingFile.Close();
+            }
+        }
         void GetTrainingData(string path)
         {
             List<double> data = new List<double>();
@@ -69,6 +82,17 @@ namespace NeuralNetworkBase
             }
             */
         }
+        // Wstrzymaj zadanie
+        private void Pause()
+        {
+            pauseEvent.Reset();
+            StopBtn.Content = "Wznów";
+        }
+        private void Resume()
+        {
+            pauseEvent.Set();
+            StopBtn.Content = "Stop";
+        }
         void Timer(int seconds)
         {
             int mSeconds = 0;
@@ -80,9 +104,42 @@ namespace NeuralNetworkBase
                 {
                     TrainingProgressBar.Value = (double)mSeconds / (double)seconds * 100;
                 });
+                pauseEvent.Wait();
             }
         }
-        
+        private bool isSigmoidChecked()
+        {
+            bool isSigmoidChecked = false;
+            if (Sigmoid.IsChecked == true)
+            {
+                isSigmoidChecked = true;
+            }
+            return isSigmoidChecked;
+        }
+
+        private bool isReluChecked()
+        {
+            bool isReluChecked = false;
+            if (Relu.IsChecked == true)
+            {
+                isReluChecked = true;
+            }
+            return isReluChecked;
+        }
+
+        private void SetActivationFunction()
+        {
+            isSigmoidChecked();
+            if (isSigmoidChecked())
+            {
+                myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.sigmoid;
+            }
+            else if (isReluChecked())
+            {
+                myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.relu;
+            }
+        }
+
         private int Training()
         {
             int mistakes = 0;
@@ -103,45 +160,6 @@ namespace NeuralNetworkBase
             });
         }
 
-        private bool isSigmoidChecked()
-        {
-            bool isSigmoidChecked = false;
-            Sigmoid.Dispatcher.Invoke(() =>
-            {
-                if (Sigmoid.IsChecked == true)
-                {
-                    isSigmoidChecked = true;
-                }
-            });
-            return isSigmoidChecked;
-        }
-
-        private bool isReluChecked()
-        {
-            bool isReluChecked = false;
-            Relu.Dispatcher.Invoke(() =>
-            {
-                if(Relu.IsChecked == true)
-                {
-                    isReluChecked = true;
-                }
-            });
-            return isReluChecked;
-        }
-
-        private void SetActivationFunction()
-        {
-            isSigmoidChecked();
-            if (isSigmoidChecked())
-            {
-                myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.sigmoid;
-            } 
-            else if(isReluChecked())
-            {
-                myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.relu;
-            }
-        }
-
         private void TrainNetwork()
         {
             int seconds = 5;                                                 // TUTAJ DODAC POBIERANIE OKRESLONEGO CZASU Z OKIENKA
@@ -149,15 +167,16 @@ namespace NeuralNetworkBase
             {
                  int.TryParse(ExpectedTrainingTime.Text, out seconds);
             });
-
-            SetActivationFunction();
-
             Task setTimer = Task.Run(() => Timer(seconds));
             int mistakes = 1;
             Task ShowErrors = null;
             while (mistakes != 0 || cancelTokenTraining.IsCancellationRequested)
             {
-                mistakes = Training();
+                pauseEvent.Wait();
+                lock (mLayersLock)
+                {
+                    mistakes = Training();
+                }
                 if (ShowErrors == null || ShowErrors.IsCompleted)
                 {
                     ShowErrors = Task.Run(() =>
@@ -183,23 +202,40 @@ namespace NeuralNetworkBase
             }
             isTrainingCompleted = true;
         }
+
+        private void setSettings()
+        {
+            isTrainingCompleted = false;
+            Resume();
+            cancelTokenTraining = new CancellationTokenSource();
+            InformationStatus.Text = "Rozpoczęto Nauczanie";
+            SetActivationFunction();
+            TrainingProgressBar.Value = 0;
+        }
         private void StartTrainingButton_Click(object sender, RoutedEventArgs e)
         {
             if (myNetwork != null)
             {
                  if (trainingData.Count > 0 && myNetwork.mLayers[0].mNeurons[0].weights.Count-1 == trainingData[0].Length)
                  {
-                    cancelTokenTraining = new CancellationTokenSource();
-                    InformationStatus.Text = "Rozpoczęto Nauczanie";
-                    TrainingProgressBar.Value = 0;
                     Task trainingNetworkTask = new Task(() =>
                         {
                             TrainNetwork();
                         });
                     if(isTrainingCompleted)
                     {
-                        isTrainingCompleted = false;
-                        trainingNetworkTask.Start();
+                        setSettings();
+                        try
+                        {
+                            trainingNetworkTask.Start();
+                        }
+                        catch(AggregateException ae)
+                        {
+                            foreach(var element in ae.InnerExceptions)
+                            {
+                                MessageBox.Show(element.ToString());
+                            }
+                        }
                     }
                     else
                     {
@@ -219,7 +255,32 @@ namespace NeuralNetworkBase
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            cancelTokenTraining.Cancel();          
+            cancelTokenTraining.Cancel();
+            Resume();
+        }
+        private void StopResumeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(pauseEvent.IsSet)
+            {
+                Pause();
+            }
+            else
+            {
+                Resume();
+            }
+
+        }
+        private void SaveToFile()
+        {
+            try
+            {
+                savingFile.Write(myNetwork.GetWholeStructure());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            
         }
     }
 }
