@@ -102,6 +102,46 @@ namespace NeuralNetworkBase
                 textBlock.Text = text;
             });
         }
+
+        private bool isSigmoidChecked()
+        {
+            bool isSigmoidChecked = false;
+            Sigmoid.Dispatcher.Invoke(() =>
+            {
+                if (Sigmoid.IsChecked == true)
+                {
+                    isSigmoidChecked = true;
+                }
+            });
+            return isSigmoidChecked;
+        }
+
+        private bool isReluChecked()
+        {
+            bool isReluChecked = false;
+            Relu.Dispatcher.Invoke(() =>
+            {
+                if(Relu.IsChecked == true)
+                {
+                    isReluChecked = true;
+                }
+            });
+            return isReluChecked;
+        }
+
+        private void SetActivationFunction()
+        {
+            isSigmoidChecked();
+            if (isSigmoidChecked())
+            {
+                myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.sigmoid;
+            } 
+            else if(isReluChecked())
+            {
+                myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.relu;
+            }
+        }
+
         private void TrainNetwork()
         {
             int seconds = 5;                                                 // TUTAJ DODAC POBIERANIE OKRESLONEGO CZASU Z OKIENKA
@@ -109,6 +149,8 @@ namespace NeuralNetworkBase
             {
                  int.TryParse(ExpectedTrainingTime.Text, out seconds);
             });
+
+            SetActivationFunction();
 
             Task setTimer = Task.Run(() => Timer(seconds));
             int mistakes = 1;
