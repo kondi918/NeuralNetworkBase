@@ -74,6 +74,7 @@ namespace NeuralNetworkBase
             try
             {
                 OpenFileDialog selectingTxtFile = new OpenFileDialog();
+                selectingTxtFile.InitialDirectory = Directory.GetCurrentDirectory();
                 selectingTxtFile.Filter = "Text files (*.txt)|*.txt";
                 selectingTxtFile.Title = typeOfSelectingFile;
 
@@ -89,22 +90,9 @@ namespace NeuralNetworkBase
         }
 
 
-        private void ChooseTrainingData_Click(object sender, RoutedEventArgs e)     // TU DO POPRAWY UWAGA KURWA TU DO POPRAWY
+        private void ChooseTrainingData_Click(object sender, RoutedEventArgs e)  
         {
             GetTrainingData(SelectTxtFile("Dane treningowe"));
-
-            //GetTrainingData("plikiTekstowe/dlugopisObraczka/daneNauczania.txt");              //TO WSZYSTKO JUŻ DO WYJEBANIA, DZIAŁA PIĘKNIE POPRAWIONE
-            /*
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.Title = "Select a file";
-            openFileDialog1.Filter = "All files (*.*)|*.*";
-            bool? result = openFileDialog1.ShowDialog();
-            if (result == true)
-            {
-                string filePath = openFileDialog1.FileName;
-                myNetwork = new NeuralNetwork(filePath);
-            }
-            */
         }
 
         private void SelectTrainedNeuralNetwork_Click(object sender, RoutedEventArgs e)
@@ -303,13 +291,15 @@ namespace NeuralNetworkBase
             {
                 Resume();
             }
-
         }
         private void SaveToFile_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-               savingFile.Write(myNetwork.GetWholeStructure());
+                lock (mLayersLock)
+                {
+                    savingFile.Write(myNetwork.GetWholeStructure());
+                }
             }
             catch (Exception ex)
             {
