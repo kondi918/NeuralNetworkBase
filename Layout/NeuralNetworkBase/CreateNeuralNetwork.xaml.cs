@@ -172,7 +172,7 @@ namespace NeuralNetworkBase
             {
                 if (Int32.Parse(WeightNumber.Text) >= 2)
                 {
-                    if(Int32.Parse(LayerNumber.Text) > 0 && Int32.Parse(WeightNumber.Text) == myNetwork.mLayers[Int32.Parse(LayerNumber.Text) - 1].mNeurons.Count+1)
+                    if(Int32.Parse(LayerNumber.Text) > 0 && Int32.Parse(WeightNumber.Text) == myNetwork.mLayers[Int32.Parse(LayerNumber.Text) - 1].mNeurons.Count+1 || Int32.Parse(LayerNumber.Text) == 0)
                     {
                         for (int i = 0; i < Int32.Parse(WeightNumber.Text); i++)
                         {
