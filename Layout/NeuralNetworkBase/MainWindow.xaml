@@ -34,12 +34,6 @@
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
-            <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                <MenuItem Header="Otwórz" />
-                <MenuItem Header="Zapisz" />
-                <MenuItem Header="Zapisz Jako..." />
-            </Menu>
-
             <TextBlock FontSize="36" FontFamily="Tahoma" FontWeight="Heavy" Grid.Row="1" TextAlignment="Center" VerticalAlignment="Center">Neural Network Base</TextBlock>
             <Button Name="CreateNewNeuralNetworkButton" Content="Tworzenie sieci" Grid.Row="2" Click="CreateNewNeuralNetworkButton_Click" />
             <Button Name="TrainNeuralNetworkButton" Content="Trenowanie sieci" Grid.Row="3" Click="TrainNeuralNetworkButton_Click" />
