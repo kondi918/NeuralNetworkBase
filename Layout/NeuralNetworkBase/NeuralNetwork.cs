@@ -31,46 +31,47 @@ namespace NeuralNetworkBase
             //
             //WAZNE!! W PLIKU TEKSTOWYM PIERWSZA WAGA KTORA PODAMY (w0) odpowiada za BIAS
             //
-
-            StreamReader sr = new StreamReader(path);           //Obsluga odczytywania struktury sieci z tekstu
-            string line = "";
-            List<double> weights = new List<double>();
-            while (line != null)
+            if (path != null)
             {
-                line = sr.ReadLine();
-                if (line != null)
+                StreamReader sr = new StreamReader(path);           //Obsluga odczytywania struktury sieci z tekstu
+                string line = "";
+                List<double> weights = new List<double>();
+                while (line != null)
                 {
-                    if (line.Contains("/Layer"))               //Znajduje koniec Layeru i dodaje nowy set Neuronow do Listy oraz zwieksza sie numberofLayers
+                    line = sr.ReadLine();
+                    if (line != null)
                     {
-                        mLayers.Add(new Layer(neuronSet));
-                        neuronSet.Clear();
-                    }
-                    else if (line.Contains("/Neuron"))              //Znajduje koniec neurona i dodaje go do aktualnego setu
-                    {
-                        neuronSet.Add(new Neuron(weights));
-                    }
-                    else if (line.Contains("Neuron"))
-                    {
-                        weights.Clear();
-                    }
-                    else if (line.Contains(';'))                //Zczytywanie wag do aktualnego neurona
-                    {
-                        line = line.Trim();
-                        string[] weightsString = line.Split(';');
-                        for (int i = 0; i < weightsString.Length; i++)
+                        if (line.Contains("/Layer"))               //Znajduje koniec Layeru i dodaje nowy set Neuronow do Listy oraz zwieksza sie numberofLayers
                         {
-                            if (weightsString[i].Contains("."))
+                            mLayers.Add(new Layer(neuronSet));
+                            neuronSet.Clear();
+                        }
+                        else if (line.Contains("/Neuron"))              //Znajduje koniec neurona i dodaje go do aktualnego setu
+                        {
+                            neuronSet.Add(new Neuron(weights));
+                        }
+                        else if (line.Contains("Neuron"))
+                        {
+                            weights.Clear();
+                        }
+                        else if (line.Contains(';'))                //Zczytywanie wag do aktualnego neurona
+                        {
+                            line = line.Trim();
+                            string[] weightsString = line.Split(';');
+                            for (int i = 0; i < weightsString.Length; i++)
                             {
-                                weightsString[i] = weightsString[i].Replace(".", ",");
+                                if (weightsString[i].Contains("."))
+                                {
+                                    weightsString[i] = weightsString[i].Replace(".", ",");
+                                }
+                                weights.Add(double.Parse(weightsString[i]));
                             }
-                            weights.Add(double.Parse(weightsString[i]));
                         }
                     }
+
                 }
-
+                sr.Close();
             }
-
-            sr.Close();
         }
         public void RemoveWeightsFromNeuron(int layerNumber, int neuronNumber)
         {

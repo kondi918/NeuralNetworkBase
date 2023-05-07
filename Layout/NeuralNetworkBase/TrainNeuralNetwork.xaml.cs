@@ -50,22 +50,26 @@ namespace NeuralNetworkBase
         void GetTrainingData(string path)
         {
             List<double> data = new List<double>();
-            StreamReader sr = new StreamReader(path);
-            string line = sr.ReadLine();
-            line = sr.ReadLine();
-            while (line != null)
+            if (path != null)
             {
-                string[] dataString = line.Split(';');
-                for (int i = 0; i < dataString.Length - 1; i++)
-                {
-                    data.Add(double.Parse(dataString[i]));
-                }
-                trainingData.Add(data.ToArray());
-                trainingResults.Add(Int32.Parse(dataString[dataString.Length - 1]));
-                data.Clear();
+                StreamReader sr = new StreamReader(path);
+
+                string line = sr.ReadLine();
                 line = sr.ReadLine();
+                while (line != null)
+                {
+                    string[] dataString = line.Split(';');
+                    for (int i = 0; i < dataString.Length - 1; i++)
+                    {
+                        data.Add(double.Parse(dataString[i]));
+                    }
+                    trainingData.Add(data.ToArray());
+                    trainingResults.Add(Int32.Parse(dataString[dataString.Length - 1]));
+                    data.Clear();
+                    line = sr.ReadLine();
+                }
+                sr.Close();
             }
-            sr.Close();
         }
 
         private string SelectTxtFile(string typeOfSelectingFile)
@@ -105,14 +109,40 @@ namespace NeuralNetworkBase
 
         private void SelectFileToSaveTrainedNeuralNetwork_Click(object sender, RoutedEventArgs e)
         {
-            savingFile = new StreamWriter(SelectTxtFile("Plik zapisu do sieci"));
+            string path = SelectTxtFile("Plik zapisu do sieci");
+            if (path != null)
+            {
+                savingFile = new StreamWriter(path);
+            }
         }
 
         private void DrawNeuralNetwork()
         {
-            NeuralNetworkDrawer.GenerateSchemaStructure(myNetwork);
-            NeuralNetworkDrawer.CreateNeuronsDrawings(NeuralNetworkStructure);
-            NeuralNetworkDrawer.DrawNeuralNetworkSchema(NeuralNetworkStructure);
+            if (myNetwork.mLayers.Count > 0)
+            {
+                bool isNetworkEmpty = false;
+                foreach (var layer in myNetwork.mLayers)
+                {
+                    if (layer.mNeurons.Count == 0)
+                    {
+                        isNetworkEmpty = true;
+                    }
+                }
+                if (!isNetworkEmpty)
+                {
+                    NeuralNetworkDrawer.GenerateSchemaStructure(myNetwork);
+                    NeuralNetworkDrawer.CreateNeuronsDrawings(NeuralNetworkStructure);
+                    NeuralNetworkDrawer.DrawNeuralNetworkSchema(NeuralNetworkStructure);
+                }
+                else
+                {
+                    MessageBox.Show("Nie mozna wczytac sieci. Upewnij sie czy plik ktory wybrales zawiera poprawna strukture");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Nie mozna wczytac sieci. Upewnij sie czy plik ktory wybrales zawiera poprawna strukture");
+            }
         }
 
         // Wstrzymaj zadanie
@@ -308,13 +338,28 @@ namespace NeuralNetworkBase
             {
                 lock (mLayersLock)
                 {
-                    savingFile.Write(myNetwork.GetWholeStructure());
+                    if (savingFile != null)
+                    {
+                        savingFile.Write(myNetwork.GetWholeStructure());
+                    }
+                    else
+                    {
+                        MessageBox.Show("Aby moc zapisac siec musisz najpierw wybrac plik w ktorym ma zostac zapisana");
+                    }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }            
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (myNetwork != null)
+            {
+                DrawNeuralNetwork();
+            }
         }
     }
 }

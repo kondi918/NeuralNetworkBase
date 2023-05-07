@@ -84,7 +84,11 @@ namespace NeuralNetworkBase
         }
         private void ChooseTrainingData_Click(object sender, RoutedEventArgs e)
         {
-            savingFile = new StreamWriter(SelectTxtFile("Plik zapisu do sieci"));
+            string path = SelectTxtFile("Plik zapisu do sieci");
+            if(path != null)
+            {
+                savingFile = new StreamWriter(path);
+            }
         }
         private void AddLayerButton_Click(object sender, RoutedEventArgs e)
         {
@@ -260,17 +264,47 @@ namespace NeuralNetworkBase
                 //NeuronNumber.Text = "XD";
             //}
         }
+        private void NeuralNetworkDraw()
+        {
+            if (myNetwork.mLayers.Count > 0)
+            {
+                bool isNetworkEmpty = false;
+                foreach (var layer in myNetwork.mLayers)
+                {
+                    if (layer.mNeurons.Count == 0)
+                    {
+                        isNetworkEmpty = true;
+                    }
+                }
+                if (!isNetworkEmpty)
+                {
+                    NeuralNetworkDrawer.GenerateSchemaStructure(myNetwork);
+                    NeuralNetworkDrawer.CreateNeuronsDrawings(NeuralNetworkStructure);
+                    NeuralNetworkDrawer.DrawNeuralNetworkSchema(NeuralNetworkStructure);
+                }
+                else
+                {
+                    MessageBox.Show("Nie mozna narysowac sieci z pustymi layerami");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Aby moc narysowac siec najpierw musisz ja stworzyc");
+            }
+        }
 
         private void NeuralNetworkCheckout_Click(object sender, RoutedEventArgs e)
         {
-            //Tu by się przydał warunek, czy sieć nie jest pusta
+            NeuralNetworkDraw();
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if(myNetwork.mLayers.Count > 0)
             {
-                NeuralNetworkDrawer.GenerateSchemaStructure(myNetwork);
-                NeuralNetworkDrawer.CreateNeuronsDrawings(NeuralNetworkStructure);
-                NeuralNetworkDrawer.DrawNeuralNetworkSchema(NeuralNetworkStructure);
+                NeuralNetworkDraw();
             }
         }
     }
 }
 
-//double randomValue = Math.Round(2 * random.NextDouble() - 1, 5);
