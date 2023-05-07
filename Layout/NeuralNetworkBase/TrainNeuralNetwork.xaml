@@ -75,7 +75,7 @@
             <GroupBox Grid.Column="6" Grid.Row="3" Header="Wybór Funkcji aktywacji">
                 <StackPanel>
                     <RadioButton Content="Sigmoid" GroupName="ActivationFunction" Name="Sigmoid" />
-                    <RadioButton Content="Relu" GroupName="ActivationFunction" Name="Relu" />
+                    <RadioButton Content="Relu" GroupName="ActivationFunction" Name="Relu" IsChecked="True" />
                 </StackPanel>
             </GroupBox>
 
