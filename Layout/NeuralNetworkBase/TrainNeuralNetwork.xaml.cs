@@ -97,12 +97,22 @@ namespace NeuralNetworkBase
 
         private void SelectTrainedNeuralNetwork_Click(object sender, RoutedEventArgs e)
         {
-            myNetwork = new NeuralNetwork(SelectTxtFile("Plik z siecią początkową"));
+            Task selectmyNetworkFile = Task.Run(() => myNetwork = new NeuralNetwork(SelectTxtFile("Plik z siecią początkową")));
+            selectmyNetworkFile.ContinueWith(task => {
+                NeuralNetworkStructure.Dispatcher.Invoke(() => DrawNeuralNetwork());
+            });
         }
 
         private void SelectFileToSaveTrainedNeuralNetwork_Click(object sender, RoutedEventArgs e)
         {
             savingFile = new StreamWriter(SelectTxtFile("Plik zapisu do sieci"));
+        }
+
+        private void DrawNeuralNetwork()
+        {
+            NeuralNetworkDrawer.GenerateSchemaStructure(myNetwork);
+            NeuralNetworkDrawer.CreateNeuronsDrawings(NeuralNetworkStructure);
+            NeuralNetworkDrawer.DrawNeuralNetworkSchema(NeuralNetworkStructure);
         }
 
         // Wstrzymaj zadanie

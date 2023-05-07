@@ -64,6 +64,7 @@
     </Compile>
     <Compile Include="Layer.cs" />
     <Compile Include="NeuralNetwork.cs" />
+    <Compile Include="NeuralNetworkDrawer.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="TrainNeuralNetwork.xaml.cs">
       <DependentUpon>TrainNeuralNetwork.xaml</DependentUpon>

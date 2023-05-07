@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NeuralNetworkBase"
         mc:Ignorable="d"
-        Title="CreateNeuralNetwork" Height="450" Width="800">
+        Title="CreateNeuralNetwork" Height="650" Width="800">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="Background" Value="Black" />
@@ -15,6 +15,7 @@
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Width" Value="250" />
             <Setter Property="Height" Value="40" />
+            <Setter Property="Margin" Value="0 5" />
         </Style>
     </Window.Resources>
     <Grid>
@@ -25,15 +26,19 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto"  />
+                <RowDefinition Height="auto"  />
+                <RowDefinition Height="auto"  />
+                <RowDefinition Height="auto"  />
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
+
+            <Canvas Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="8" Background="WhiteSmoke" MinHeight="200" Name="NeuralNetworkStructure"></Canvas>
+            
             <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                 <MenuItem Header="Wybierz plik do zapisu sieci" Click="ChooseTrainingData_Click" />
             </Menu>
@@ -59,7 +64,7 @@
                     <TextBox Margin="5" Width="50" Name="WeightNumber"></TextBox>
                 </StackPanel>
             </StackPanel>
-            <Button Name="NeuralNetworkCheckout" Content="Przegląd sieci" Grid.Column="0" Grid.Row="7" />
+            <Button Name="NeuralNetworkCheckout" Content="Przegląd sieci" Grid.Column="0" Grid.Row="7" Click="NeuralNetworkCheckout_Click" />
 
             <Button Name="DeleteLayerButton" Content="Usuń layer" Grid.Column="1" Grid.Row="4" Click="DeleteLayerButton_Click" />
             <Button Name="DeleteNeuronButton" Content="Usuń neuron" Grid.Column="1" Grid.Row="5" Click="DeleteNeuronButton_Click" />

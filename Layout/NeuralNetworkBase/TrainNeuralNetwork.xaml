@@ -60,7 +60,7 @@
 
             <Button Grid.Column="0" Grid.Row="4" Background="BlanchedAlmond" Foreground="Black" Height="30" FontSize="16" VerticalAlignment="Top" Click="SaveToFile_Click">Zapisz sieć</Button>
 
-            <Canvas Margin="5" Grid.ColumnSpan="5" Grid.RowSpan="2" Grid.Column="1" Grid.Row="3" Background="WhiteSmoke"></Canvas>
+            <Canvas Margin="5" Grid.ColumnSpan="5" Grid.RowSpan="2" Grid.Column="1" Grid.Row="3" Background="WhiteSmoke" Name="NeuralNetworkStructure"></Canvas>
 
             <StackPanel Orientation="Vertical" Grid.ColumnSpan="3" Grid.Column="2" Grid.Row="5">
                 <TextBlock HorizontalAlignment="Center">Ilość Błędów</TextBlock>

@@ -29,6 +29,7 @@ namespace NeuralNetworkBase
             InitializeComponent();
             Closing += CreateNeuralNetwork_Closing; //JEBANE DELEGATY KUARW
         }
+
         private void CreateNeuralNetwork_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if(savingFile != null)
@@ -258,6 +259,16 @@ namespace NeuralNetworkBase
             //{
                 //NeuronNumber.Text = "XD";
             //}
+        }
+
+        private void NeuralNetworkCheckout_Click(object sender, RoutedEventArgs e)
+        {
+            //Tu by się przydał warunek, czy sieć nie jest pusta
+            {
+                NeuralNetworkDrawer.GenerateSchemaStructure(myNetwork);
+                NeuralNetworkDrawer.CreateNeuronsDrawings(NeuralNetworkStructure);
+                NeuralNetworkDrawer.DrawNeuralNetworkSchema(NeuralNetworkStructure);
+            }
         }
     }
 }
