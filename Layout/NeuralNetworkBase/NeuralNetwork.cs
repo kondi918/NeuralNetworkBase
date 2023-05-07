@@ -72,19 +72,31 @@ namespace NeuralNetworkBase
 
             sr.Close();
         }
+        public void RemoveWeightsFromNeuron(int layerNumber, int neuronNumber)
+        {
+            mLayers[layerNumber].mNeurons[neuronNumber].RemoveWeights();
+        }
+        public void SetNeuronWeights(int layerNumber, int neuronNumber, double[] weights)
+        {
+            mLayers[layerNumber].mNeurons[neuronNumber].setWeights(weights);
+        }
         public void RemoveNeuron(int layerNumber, int neuronNumber)
         {
-            mLayers[layerNumber].removeNeuron(neuronNumber);
+            mLayers[layerNumber].RemoveNeuron(neuronNumber);
         }
 
         //Dodawanie pojedycznego neuronu do Layera
         public void AddNeuron(List<double> weights, int layerNumber)
         {
-            mLayers[layerNumber].addNeuron(new Neuron(weights));
+            mLayers[layerNumber].AddNeuron(new Neuron(weights));
         }
         public void AddNeuron(double[] weights, int layerNumber)
         {
-            mLayers[layerNumber].addNeuron(new Neuron(weights));
+            mLayers[layerNumber].AddNeuron(new Neuron(weights));
+        }
+        public void AddNeuron(int layerNumber)
+        {
+            mLayers[layerNumber].AddNeuron(new Neuron());
         }
         public void RemoveLayer(int layerNumber)
         {

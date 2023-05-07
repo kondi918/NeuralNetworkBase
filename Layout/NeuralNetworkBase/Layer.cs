@@ -10,11 +10,11 @@ namespace NeuralNetworkBase
     internal class Layer
     {
         public List<Neuron> mNeurons = new List<Neuron>();
-        public void addNeuron(Neuron neuron)
+        public void AddNeuron(Neuron neuron)
         {
             mNeurons.Add(neuron);
         }
-        public void removeNeuron(int neuronNumber)
+        public void RemoveNeuron(int neuronNumber)
         {
             mNeurons.RemoveAt(neuronNumber);
         }

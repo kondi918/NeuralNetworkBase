@@ -35,36 +35,36 @@
             </Grid.RowDefinitions>
 
             <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                <MenuItem Header="Wybierz plik do zapisu sieci" />
+                <MenuItem Header="Wybierz plik do zapisu sieci" Click="ChooseTrainingData_Click" />
             </Menu>
 
             <TextBlock FontFamily="Tahoma" FontSize="36" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">Tworzenie sieci neuronowej</TextBlock>
             
             <StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock FontFamily="Tahoma" FontSize="24" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20 0">Wybrany layer</TextBlock>
-                <TextBox FontFamily="Tahoma" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10">0</TextBox>
+                <TextBox FontFamily="Tahoma" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10" Name="LayerNumber" TextChanged="LayerNumber_TextChanged">0</TextBox>
             </StackPanel>
             
             <StackPanel Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock FontFamily="Tahoma" FontSize="24" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20 0">Wybrany neuron</TextBlock>
-                <TextBox FontFamily="Tahoma" FontSize="24" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10">0</TextBox>
+                <TextBox FontFamily="Tahoma" FontSize="24" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10" Name="NeuronNumber">0</TextBox>
             </StackPanel>
 
-            <Button Name="AddLayerButton" Content="Dodaj layer" Grid.Column="0" Grid.Row="4" />
-            <Button Name="AddNeuronButton" Content="Dodaj neuron" Grid.Column="0" Grid.Row="5" />
+            <Button Name="AddLayerButton" Content="Dodaj layer" Grid.Column="0" Grid.Row="4" Click="AddLayerButton_Click" />
+            <Button Name="AddNeuronButton" Content="Dodaj neuron" Grid.Column="0" Grid.Row="5" Click="AddNeuronButton_Click" />
             <StackPanel Grid.Column="0" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Button Name="AddNeuronWeightButton" Content="Dodaj wagę" />
+                <Button Name="AddNeuronWeightButton" Content="Dodaj wagi" Click="AddNeuronWeightButton_Click" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Margin="5">Ilość wag</TextBlock>
-                    <TextBox Margin="5" Width="50"></TextBox>
+                    <TextBox Margin="5" Width="50" Name="WeightNumber"></TextBox>
                 </StackPanel>
             </StackPanel>
             <Button Name="NeuralNetworkCheckout" Content="Przegląd sieci" Grid.Column="0" Grid.Row="7" />
 
-            <Button Name="DeleteLayerButton" Content="Usuń layer" Grid.Column="1" Grid.Row="4" />
-            <Button Name="DeleteNeuronButton" Content="Usuń neuron" Grid.Column="1" Grid.Row="5" />
-            <Button Name="DeleteNeuronWeightButton" Content="Usuń Wagę" Grid.Column="1" Grid.Row="6" />
-            <Button Name="SaveNeuralNetworkButton" Content="Zapisz" Grid.Column="1" Grid.Row="7" />
+            <Button Name="DeleteLayerButton" Content="Usuń layer" Grid.Column="1" Grid.Row="4" Click="DeleteLayerButton_Click" />
+            <Button Name="DeleteNeuronButton" Content="Usuń neuron" Grid.Column="1" Grid.Row="5" Click="DeleteNeuronButton_Click" />
+            <Button Name="DeleteNeuronWeightButton" Content="Usuń Wagi" Grid.Column="1" Grid.Row="6" Click="DeleteNeuronWeightButton_Click" />
+            <Button Name="SaveNeuralNetworkButton" Content="Zapisz" Grid.Column="1" Grid.Row="7" Click="SaveNeuralNetworkButton_Click" />
         </Grid>
     </Grid>
 </Window>

@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\Kulson\Desktop\NeuralNetwork\NeuralNetworkBase\Layout\NeuralNetworkBase\obj\Debug\
+E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\obj\Debug\
 NeuralNetworkBase
 none
 false
 DEBUG;TRACE
-C:\Users\Kulson\Desktop\NeuralNetwork\NeuralNetworkBase\Layout\NeuralNetworkBase\App.xaml
+E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\App.xaml
 3-615237573
 
-11-2074495931
+10298693244
 13-38814620
 CreateNeuralNetwork.xaml;MainWindow.xaml;TrainNeuralNetwork.xaml;
 
-True
+False
 
