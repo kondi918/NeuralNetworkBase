@@ -25,7 +25,7 @@ namespace NeuralNetworkBase
         CancellationTokenSource cancelTokenTraining = new CancellationTokenSource();                           //TU ZMIANA NA NULLE UWAGA KURWA TU ZMIANA NA NULLE
         StreamWriter logFile = null;    // Tworzymy plik do logowania
         StreamWriter savingFile = null;   // Tworzymy plik do zapisu
-        NeuralNetwork myNetwork = new NeuralNetwork("plikiTekstowe/dlugopisObraczka/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
+        NeuralNetwork myNetwork = null;             //NULL BO WYBIERAM SAM PLIK Z SIECIĄ POCZĄTKOWĄ  // new NeuralNetwork("plikiTekstowe/dlugopisObraczka/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
         List<double[]> trainingData = new List<double[]>();
         List<int> trainingResults = new List<int>();
         bool isTrainingCompleted = true;
@@ -67,9 +67,33 @@ namespace NeuralNetworkBase
             }
             sr.Close();
         }
+
+        private string SelectTxtFile(string typeOfSelectingFile)
+        {
+            string path = null;
+            try
+            {
+                OpenFileDialog selectingTxtFile = new OpenFileDialog();
+                selectingTxtFile.Filter = "Text files (*.txt)|*.txt";
+                selectingTxtFile.Title = typeOfSelectingFile;
+
+                if (selectingTxtFile.ShowDialog() == true)
+                {
+                    path = selectingTxtFile.FileName;
+                }
+            } 
+            catch(Exception ex){
+                MessageBox.Show(ex.ToString());
+            }
+            return path;
+        }
+
+
         private void ChooseTrainingData_Click(object sender, RoutedEventArgs e)     // TU DO POPRAWY UWAGA KURWA TU DO POPRAWY
         {
-            GetTrainingData("plikiTekstowe/dlugopisObraczka/daneNauczania.txt");
+            GetTrainingData(SelectTxtFile("Dane treningowe"));
+
+            //GetTrainingData("plikiTekstowe/dlugopisObraczka/daneNauczania.txt");              //TO WSZYSTKO JUŻ DO WYJEBANIA, DZIAŁA PIĘKNIE POPRAWIONE
             /*
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             openFileDialog1.Title = "Select a file";
@@ -82,6 +106,17 @@ namespace NeuralNetworkBase
             }
             */
         }
+
+        private void SelectTrainedNeuralNetwork_Click(object sender, RoutedEventArgs e)
+        {
+            myNetwork = new NeuralNetwork(SelectTxtFile("Plik z siecią początkową"));
+        }
+
+        private void SelectFileToSaveTrainedNeuralNetwork_Click(object sender, RoutedEventArgs e)
+        {
+            savingFile = new StreamWriter(SelectTxtFile("Plik zapisu do sieci"));
+        }
+
         // Wstrzymaj zadanie
         private void Pause()
         {
@@ -270,17 +305,16 @@ namespace NeuralNetworkBase
             }
 
         }
-        private void SaveToFile()
+        private void SaveToFile_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                savingFile.Write(myNetwork.GetWholeStructure());
+               savingFile.Write(myNetwork.GetWholeStructure());
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
-            }
-            
+            }            
         }
     }
 }

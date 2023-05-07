@@ -103,4 +103,3 @@ while(1==1)
         Console.WriteLine("To obraczka");
     }
 }
-

@@ -44,7 +44,8 @@
 
             <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6">
                 <MenuItem Header="Wybierz dane nauczania" Click="ChooseTrainingData_Click" />
-                <MenuItem Header="Wybierz sieć treningową" />
+                <MenuItem Header="Wybierz sieć treningową" Click="SelectTrainedNeuralNetwork_Click" />
+                <MenuItem Header="Wybierz plik do zapisu sieci" Click="SelectFileToSaveTrainedNeuralNetwork_Click" />
             </Menu>
 
             <TextBlock FontFamily="Tahoma" FontSize="36" Grid.ColumnSpan="6" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">Trenowanie sieci neuronowej</TextBlock>
@@ -53,9 +54,12 @@
 
             <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="3" Margin="5">
                 <TextBlock HorizontalAlignment="Center">Oczekiwany czas treningu</TextBlock>
+                <TextBlock HorizontalAlignment="Center" FontSize="9">(W sekundach)</TextBlock>
                 <TextBox HorizontalAlignment="Center" Padding="10 2" Margin="0 15" Name="ExpectedTrainingTime">10</TextBox>
             </StackPanel>
-            
+
+            <Button Grid.Column="0" Grid.Row="4" Background="BlanchedAlmond" Foreground="Black" Height="30" FontSize="16" VerticalAlignment="Top" Click="SaveToFile_Click">Zapisz sieć</Button>
+
             <Canvas Margin="5" Grid.ColumnSpan="5" Grid.RowSpan="2" Grid.Column="1" Grid.Row="3" Background="WhiteSmoke"></Canvas>
 
             <StackPanel Orientation="Vertical" Grid.ColumnSpan="3" Grid.Column="2" Grid.Row="5">
