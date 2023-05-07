@@ -35,20 +35,30 @@
             </Grid.RowDefinitions>
 
             <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                <MenuItem Header="Otwórz" />
-                <MenuItem Header="Zapisz" />
-                <MenuItem Header="Zapisz Jako..." />
+                <MenuItem Header="Wybierz plik do zapisu sieci" />
             </Menu>
 
             <TextBlock FontFamily="Tahoma" FontSize="36" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">Tworzenie sieci neuronowej</TextBlock>
-            <TextBlock FontFamily="Tahoma" FontSize="24" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center">Wybrany layer</TextBlock>
-            <TextBlock FontFamily="Tahoma" FontSize="24" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10">1</TextBlock>
-            <TextBlock FontFamily="Tahoma" FontSize="24" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center">Wybrany neuron</TextBlock>
-            <TextBlock FontFamily="Tahoma" FontSize="24" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10">4</TextBlock>
+            
+            <StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock FontFamily="Tahoma" FontSize="24" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20 0">Wybrany layer</TextBlock>
+                <TextBox FontFamily="Tahoma" FontSize="24" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10">0</TextBox>
+            </StackPanel>
+            
+            <StackPanel Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock FontFamily="Tahoma" FontSize="24" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20 0">Wybrany neuron</TextBlock>
+                <TextBox FontFamily="Tahoma" FontSize="24" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="10">0</TextBox>
+            </StackPanel>
 
             <Button Name="AddLayerButton" Content="Dodaj layer" Grid.Column="0" Grid.Row="4" />
             <Button Name="AddNeuronButton" Content="Dodaj neuron" Grid.Column="0" Grid.Row="5" />
-            <Button Name="AddNeuronWeightButton" Content="Dodaj wagę" Grid.Column="0" Grid.Row="6" />
+            <StackPanel Grid.Column="0" Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button Name="AddNeuronWeightButton" Content="Dodaj wagę" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Margin="5">Ilość wag</TextBlock>
+                    <TextBox Margin="5" Width="50"></TextBox>
+                </StackPanel>
+            </StackPanel>
             <Button Name="NeuralNetworkCheckout" Content="Przegląd sieci" Grid.Column="0" Grid.Row="7" />
 
             <Button Name="DeleteLayerButton" Content="Usuń layer" Grid.Column="1" Grid.Row="4" />
