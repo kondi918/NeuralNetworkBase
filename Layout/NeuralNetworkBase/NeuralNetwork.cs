@@ -334,6 +334,7 @@ namespace NeuralNetworkBase
                     {
                         result += weight + ";";
                     }
+                    result = result.Remove(result.Length - 1);
                     result += "\n</Neuron>\n";
                 }
                 result += "</Layer>\n";
