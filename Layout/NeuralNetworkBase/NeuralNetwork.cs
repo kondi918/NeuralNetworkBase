@@ -137,11 +137,11 @@ namespace NeuralNetworkBase
 
         private double ActivationFunctionRelu(double x)
         {
-            return Math.Max(0, x);
+            return Math.Round(Math.Max(0, x),5);
         }
         private double ActivationFunctionSigmoid(double x)
         {
-            return 1.0 / (1.0 + Math.Exp((float)-x));
+            return Math.Round(1.0 / (1.0 + Math.Exp((float)-x)),5);
         }
         private void SetInputs(double[] inputData)
         {
