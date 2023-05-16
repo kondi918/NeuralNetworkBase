@@ -24,6 +24,7 @@ namespace NeuralNetworkBase
     {
         StreamWriter savingFile = null;
         NeuralNetwork myNetwork = new NeuralNetwork();
+        Random random = new Random();
         public CreateNeuralNetwork()
         {
             InitializeComponent();
@@ -167,36 +168,47 @@ namespace NeuralNetworkBase
         private double[] GenerateRandomWeights()
         {
             List<double> weights = new List<double>();
-            Random random = new Random();
+      
+            for (int i = 0; i < Int32.Parse(WeightNumber.Text); i++)
+            {
+                weights.Add(Math.Round(2 * random.NextDouble() - 1, 5));
+            }
+            return weights.ToArray();
+        }
+        private bool isCorrectWeightAmount()
+        {
+            int weightCount = 0;
             if (isNumber(WeightNumber.Text))
             {
-                if (Int32.Parse(WeightNumber.Text) >= 2)
-                {
-                    if(Int32.Parse(LayerNumber.Text) > 0 && Int32.Parse(WeightNumber.Text) == myNetwork.mLayers[Int32.Parse(LayerNumber.Text) - 1].mNeurons.Count+1 || Int32.Parse(LayerNumber.Text) == 0)
-                    {
-                        for (int i = 0; i < Int32.Parse(WeightNumber.Text); i++)
-                        {
-                            weights.Add(Math.Round(2 * random.NextDouble() - 1, 5));
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Ilosc wag w danym Neuronie musi być o 1 wieksza niz ilosc neuronow w poprzednim layerze (uwzgledniajac, ze waga nr. 0 to BIAS) ");
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Podana ilosc wag musi być wieksza od 1. Pamietaj, że pierwsza waga to liczba BIAS");
-                }
+                weightCount = Int32.Parse(WeightNumber.Text);
             }
             else
             {
                 MessageBox.Show("Podana ilosc wag nie jest liczba!");
+                return false;
             }
-            return weights.ToArray();
+            if(weightCount >= 2)
+            {
+                if (Int32.Parse(LayerNumber.Text) > 0 && weightCount == myNetwork.mLayers[Int32.Parse(LayerNumber.Text) - 1].mNeurons.Count + 1 || Int32.Parse(LayerNumber.Text) == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show("Ilosc wag w danym Neuronie musi być o 1 wieksza niz ilosc neuronow w poprzednim layerze (uwzgledniajac, ze waga nr. 0 to BIAS) ");
+                    return false;
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("Podana ilosc wag musi być wieksza od 1. Pamietaj, że pierwsza waga to liczba BIAS");
+                return false;
+            }
         }
         private void AddNeuronWeightButton_Click(object sender, RoutedEventArgs e)
         {
+            /*
             if (isNumber(LayerNumber.Text) && isNumber(NeuronNumber.Text))
             {
                 if (isInLayersRange(Int32.Parse(LayerNumber.Text)))
@@ -222,6 +234,28 @@ namespace NeuralNetworkBase
             else
             {
                 MessageBox.Show("Wybrany Layer lub Neuron nie jest liczba!");
+            }
+            */
+            if(isNumber(LayerNumber.Text))
+            {
+                if (isInLayersRange(Int32.Parse(LayerNumber.Text)))
+                {
+                    if (isCorrectWeightAmount())
+                    {
+                        foreach (var neuron in myNetwork.mLayers[Int32.Parse(LayerNumber.Text)].mNeurons)
+                        {
+                           neuron.setWeights(GenerateRandomWeights().ToList());
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Wybrany Layer znajduje się poza zakresem Layerów sieci");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Wybrany Layer nie jest liczba!");
             }
         }
 

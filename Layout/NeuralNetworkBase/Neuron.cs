@@ -13,6 +13,7 @@ namespace NeuralNetworkBase
         public double neuronResult { get; set; }
         public Neuron(double[] weights)
         {
+            this.weights.Clear();
             for (int i = 0; i < weights.Length; i++)
             {
                 this.weights.Add(weights[i]);
@@ -20,6 +21,7 @@ namespace NeuralNetworkBase
         }
         public Neuron(List<double> weights)
         {
+            this.weights.Clear();
             for (int i = 0; i < weights.Count; i++)
             {
                 this.weights.Add(weights[i]);
@@ -39,10 +41,13 @@ namespace NeuralNetworkBase
             this.inputData.Clear();
             this.inputData.AddRange(inputData);
         }
-        public void setWeights(double[] weights)
+        public void setWeights(List <double> weights)
         {
             this.weights.Clear();
-            this.weights.AddRange(weights);
+            foreach(var weight in weights)
+            {
+                this.weights.Add(weight);
+            }
         }
         public void RemoveWeights()
         {

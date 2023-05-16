@@ -233,7 +233,7 @@ namespace NeuralNetworkBase
             Task setTimer = Task.Run(() => Timer(seconds));
             int mistakes = 1;
             Task ShowErrors = null;
-            while (mistakes != 0 || cancelTokenTraining.IsCancellationRequested)
+            while (mistakes != 0 && !cancelTokenTraining.IsCancellationRequested)
             {
                 pauseEvent.Wait();
                 lock (mLayersLock)

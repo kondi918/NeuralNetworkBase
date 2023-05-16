@@ -77,7 +77,7 @@ namespace NeuralNetworkBase
         {
             mLayers[layerNumber].mNeurons[neuronNumber].RemoveWeights();
         }
-        public void SetNeuronWeights(int layerNumber, int neuronNumber, double[] weights)
+        public void SetNeuronWeights(int layerNumber, int neuronNumber, List<double> weights)
         {
             mLayers[layerNumber].mNeurons[neuronNumber].setWeights(weights);
         }
@@ -137,11 +137,11 @@ namespace NeuralNetworkBase
 
         private double ActivationFunctionRelu(double x)
         {
-            return Math.Round(Math.Max(0, x),5);
+            return Math.Max(0, x);
         }
         private double ActivationFunctionSigmoid(double x)
         {
-            return Math.Round(1.0 / (1.0 + Math.Exp((float)-x)),5);
+            return 1.0 / (1.0 + Math.Exp((float)-x));
         }
         private void SetInputs(double[] inputData)
         {
@@ -239,7 +239,11 @@ namespace NeuralNetworkBase
                 double weight = Math.Abs(neuron.weights[i]);
                 double gradient = learningSpeed * loss * input;
                 double delta = weight * gradient;
-                neuron.weights[i] += Math.Sign(neuron.weights[i]) * delta;
+                double newWeight = neuron.weights[i] + Math.Sign(neuron.weights[i]) * delta;
+                if (!double.IsNaN(newWeight) && !double.IsInfinity(newWeight))
+                {
+                    neuron.weights[i] = newWeight;
+                }
             }
             neuron.weights[0] += loss * learningSpeed;
         }
@@ -251,7 +255,11 @@ namespace NeuralNetworkBase
                 double weight = Math.Abs(neuron.weights[i]);
                 double gradient = learningSpeed * loss * input;
                 double delta = weight * gradient;
-                neuron.weights[i] -= Math.Sign(neuron.weights[i]) * delta;
+                double newWeight = neuron.weights[i] - Math.Sign(neuron.weights[i]) * delta;
+                if (!double.IsNaN(newWeight) && !double.IsInfinity(newWeight))
+                {
+                    neuron.weights[i] = newWeight;
+                }
             }
             neuron.weights[0] -= loss * learningSpeed;
         }
