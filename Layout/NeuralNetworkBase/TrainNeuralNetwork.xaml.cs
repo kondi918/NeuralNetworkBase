@@ -253,12 +253,13 @@ namespace NeuralNetworkBase
                 {
                     ShowErrors = Task.Run(async () =>
                     {
-                        await Task.Delay(1000);
                         SetTextOnTextBlock(MistakesNumber, mistakes.ToString());
+                        await Task.Delay(1000);
                     });
                 }
             }
             ShowErrors.Wait();
+            SetTextOnTextBlock(MistakesNumber, mistakes.ToString());
             SetInformation();
         }
 

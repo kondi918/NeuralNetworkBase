@@ -19,7 +19,7 @@ namespace NeuralNetworkBase
         //
         //  Tworzenie sieci
         //
-        //z
+        //
         public void ReadFromFile(string path)
         {
             mLayers.Clear();
@@ -227,15 +227,18 @@ namespace NeuralNetworkBase
                 return predictedResult == 0 ? 0 : 1;
             }
         }
+        private double CalculateDelta(Neuron neuron, double loss, double learningSpeed, int index)
+        {
+            double input = neuron.inputData[index - 1];
+            double weight = Math.Abs(neuron.weights[index]);
+            double gradient = learningSpeed * loss * input;
+            return weight * gradient;
+        }
         private void IncreaseWeights(Neuron neuron, double loss, double learningSpeed)
         {
             for (int i = 1; i < neuron.weights.Count; i++)
             {
-                double input = neuron.inputData[i - 1];
-                double weight = Math.Abs(neuron.weights[i]);
-                double gradient = learningSpeed * loss * input;
-                double delta = weight * gradient;
-                double newWeight = neuron.weights[i] + Math.Sign(neuron.weights[i]) * delta;
+                double newWeight = neuron.weights[i] + Math.Sign(neuron.weights[i]) * CalculateDelta(neuron,loss,learningSpeed,i);
                 if (!double.IsNaN(newWeight) && !double.IsInfinity(newWeight))
                 {
                     neuron.weights[i] = newWeight;
@@ -247,11 +250,7 @@ namespace NeuralNetworkBase
         {
             for (int i = 1; i < neuron.weights.Count; i++)
             {
-                double input = neuron.inputData[i - 1];
-                double weight = Math.Abs(neuron.weights[i]);
-                double gradient = learningSpeed * loss * input;
-                double delta = weight * gradient;
-                double newWeight = neuron.weights[i] - Math.Sign(neuron.weights[i]) * delta;
+                double newWeight = neuron.weights[i] - Math.Sign(neuron.weights[i]) * CalculateDelta(neuron, loss, learningSpeed, i);
                 if (!double.IsNaN(newWeight) && !double.IsInfinity(newWeight))
                 {
                     neuron.weights[i] = newWeight;
