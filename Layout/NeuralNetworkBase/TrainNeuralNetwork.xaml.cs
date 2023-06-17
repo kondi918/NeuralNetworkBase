@@ -2,18 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace NeuralNetworkBase
 {
@@ -156,20 +148,6 @@ namespace NeuralNetworkBase
             pauseEvent.Set();
             StopBtn.Content = "Stop";
         }
-        void Timer(int seconds)
-        {
-            int mSeconds = 0;
-            while (mSeconds != seconds && !cancelTokenTraining.IsCancellationRequested)
-            {
-                Thread.Sleep(1000);
-                mSeconds++;
-                TrainingProgressBar.Dispatcher.Invoke(() =>
-                {
-                    TrainingProgressBar.Value = (double)mSeconds / (double)seconds * 100;
-                });
-                pauseEvent.Wait();
-            }
-        }
         private bool isSigmoidChecked()
         {
             bool isSigmoidChecked = false;
@@ -188,6 +166,30 @@ namespace NeuralNetworkBase
                 isReluChecked = true;
             }
             return isReluChecked;
+        }
+        void Timer(int totalSeconds,int actualSeconds)
+        {
+                TrainingProgressBar.Dispatcher.Invoke(() =>
+                {
+                    TrainingProgressBar.Value = (double)actualSeconds / (double)totalSeconds * 100;
+                });
+        }
+        private void StartTimer()
+        {
+            int timerSeconds = 0;
+            int totalSeconds = 0;
+            ExpectedTrainingTime.Dispatcher.Invoke(() => { int.TryParse(ExpectedTrainingTime.Text, out totalSeconds); });
+            Task setTimer = Task.Run(async () =>
+            {
+                while (timerSeconds < totalSeconds && !cancelTokenTraining.IsCancellationRequested)
+                {
+                    Timer(totalSeconds, timerSeconds);
+                    timerSeconds++;
+                    await Task.Delay(1000);
+                }
+                Timer(1, 1);
+                cancelTokenTraining.Cancel();
+            });
         }
 
         private void SetActivationFunction()
@@ -222,15 +224,22 @@ namespace NeuralNetworkBase
                 textBlock.Text = text;
             });
         }
-
-        private void TrainNetwork()
+        private void SetInformation()
         {
-            int seconds = 5;                                                 // TUTAJ DODAC POBIERANIE OKRESLONEGO CZASU Z OKIENKA
-            ExpectedTrainingTime.Dispatcher.Invoke(() =>
+            if (cancelTokenTraining.IsCancellationRequested)
             {
-                 int.TryParse(ExpectedTrainingTime.Text, out seconds);
-            });
-            Task setTimer = Task.Run(() => Timer(seconds));
+                SetTextOnTextBlock(InformationStatus, "Przerwano nauczanie");
+            }
+            else
+            {
+                SetTextOnTextBlock(InformationStatus, "Zakończono nauczanie");
+                cancelTokenTraining.Cancel();
+            }
+            isTrainingCompleted = true;
+        }
+        private void TrainNetwork(int totalSeconds)
+        {
+            StartTimer();
             int mistakes = 1;
             Task ShowErrors = null;
             while (mistakes != 0 && !cancelTokenTraining.IsCancellationRequested)
@@ -242,28 +251,15 @@ namespace NeuralNetworkBase
                 }
                 if (ShowErrors == null || ShowErrors.IsCompleted)
                 {
-                    ShowErrors = Task.Run(() =>
+                    ShowErrors = Task.Run(async () =>
                     {
-                        Thread.Sleep(1000);
+                        await Task.Delay(1000);
+                        SetTextOnTextBlock(MistakesNumber, mistakes.ToString());
                     });
-                    SetTextOnTextBlock(MistakesNumber, mistakes.ToString());
                 }
             }
             ShowErrors.Wait();
-            SetTextOnTextBlock(MistakesNumber, mistakes.ToString());
-            if (!cancelTokenTraining.IsCancellationRequested)
-            {
-                setTimer.Wait();
-            }
-            if(cancelTokenTraining.IsCancellationRequested)
-            {
-                SetTextOnTextBlock(InformationStatus, "Przerwano nauczanie");
-            }
-            else
-            {
-                SetTextOnTextBlock(InformationStatus, "Zakończono nauczanie");
-            }
-            isTrainingCompleted = true;
+            SetInformation();
         }
 
         private void setSettings()
@@ -275,40 +271,55 @@ namespace NeuralNetworkBase
             SetActivationFunction();
             TrainingProgressBar.Value = 0;
         }
-        private void StartTrainingButton_Click(object sender, RoutedEventArgs e)
+        private bool isSetCorrectly()
         {
             if (myNetwork != null)
             {
-                 if (trainingData.Count > 0 && myNetwork.mLayers[0].mNeurons[0].weights.Count-1 == trainingData[0].Length)
-                 {
-                    Task trainingNetworkTask = new Task(() =>
-                        {
-                            TrainNetwork();
-                        });
-                    if(isTrainingCompleted)
+                if (trainingData.Count > 0 && myNetwork.mLayers[0].mNeurons[0].weights.Count - 1 == trainingData[0].Length)
+                {
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show("Aby rozpoczac trenowanie sieci musisz poczekać aż aktualne trenowanie zostanie zakończone. Możesz również anulować aktualny trening");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Najpierw musisz wybrać odpowiednie pliki z danymi nauczania i strukturą sieci");
+            }
+            return false;
+        }
+        private int getSecondTimer()
+        {
+            int totalSeconds = 0;
+            int.TryParse(ExpectedTrainingTime.Text, out totalSeconds);
+            return totalSeconds;
+        }
+        private void StartTrainingButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (isSetCorrectly())
+            {
+                int totalSeconds = getSecondTimer();
+                Task trainingNetworkTask = new Task(() =>
                     {
-                        setSettings();
-                        try
+                        TrainNetwork(totalSeconds);
+                    });
+                if(isTrainingCompleted)
+                {
+                    setSettings();
+                    try
+                    {
+                        trainingNetworkTask.Start();
+                    }
+                    catch(AggregateException ae)
+                    {
+                        foreach(var element in ae.InnerExceptions)
                         {
-                            trainingNetworkTask.Start();
-                        }
-                        catch(AggregateException ae)
-                        {
-                            foreach(var element in ae.InnerExceptions)
-                            {
-                                MessageBox.Show(element.ToString());
-                            }
+                            MessageBox.Show(element.ToString());
                         }
                     }
-                    else
-                    {
-                        MessageBox.Show("Aby rozpoczac trenowanie sieci musisz poczekać aż aktualne trenowanie zostanie zakończone. Możesz również anulować aktualny trening");
-                    }
-                 }
-                 else
-                 {
-                    MessageBox.Show("Dane nauczania nie zostały wybrane lub nie są zgodne ze strukturą sieci");
-                 }
+                }
             }
             else
             {
