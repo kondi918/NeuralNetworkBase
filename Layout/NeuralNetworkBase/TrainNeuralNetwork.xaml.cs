@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,8 +19,8 @@ namespace NeuralNetworkBase
         StreamWriter logFile = null;    // Tworzymy plik do logowania
         StreamWriter savingFile = null;   // Tworzymy plik do zapisu
         NeuralNetwork myNetwork = null;             //NULL BO WYBIERAM SAM PLIK Z SIECIĄ POCZĄTKOWĄ  // new NeuralNetwork("plikiTekstowe/dlugopisObraczka/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
-        List<double[]> trainingData = new List<double[]>();
-        List<int> trainingResults = new List<int>();
+        FileManager fileManager = new FileManager();
+        NeuralNetworkInputData trainingData;
         bool isTrainingCompleted = true;
         private ManualResetEventSlim pauseEvent = new ManualResetEventSlim(true);
         private readonly object mLayersLock = new object();
@@ -38,32 +39,7 @@ namespace NeuralNetworkBase
             {
                 savingFile.Close();
             }
-        }
-        void GetTrainingData(string path)
-        {
-            List<double> data = new List<double>();
-            if (path != null)
-            {
-                StreamReader sr = new StreamReader(path);
-
-                string line = sr.ReadLine();
-                line = sr.ReadLine();
-                while (line != null)
-                {
-                    string[] dataString = line.Split(';');
-                    for (int i = 0; i < dataString.Length - 1; i++)
-                    {
-                        data.Add(double.Parse(dataString[i]));
-                    }
-                    trainingData.Add(data.ToArray());
-                    trainingResults.Add(Int32.Parse(dataString[dataString.Length - 1]));
-                    data.Clear();
-                    line = sr.ReadLine();
-                }
-                sr.Close();
-            }
-        }
-
+        }      
         private string SelectTxtFile(string typeOfSelectingFile)
         {
             string path = null;
@@ -88,7 +64,14 @@ namespace NeuralNetworkBase
 
         private void ChooseTrainingData_Click(object sender, RoutedEventArgs e)  
         {
-            GetTrainingData(SelectTxtFile("Dane treningowe"));
+            try
+            {
+                trainingData = fileManager.GetInputData(SelectTxtFile("Dane treningowe"));
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message,ex.GetType().ToString());
+            }
         }
 
         private void SelectTrainedNeuralNetwork_Click(object sender, RoutedEventArgs e)
@@ -208,9 +191,9 @@ namespace NeuralNetworkBase
         private int Training()
         {
             int mistakes = 0;
-            for (int i = 0; i < trainingData.Count; i++)
+            for (int i = 0; i < trainingData.inputData.Count; i++)
             {
-                if (!myNetwork.NetworkTraining(trainingData[i], trainingResults[i], 0.1))
+                if (!myNetwork.NetworkTraining(trainingData.inputData[i], trainingData.trainingResults[i], 0.1))
                 {
                     mistakes++;
                 }
@@ -276,7 +259,7 @@ namespace NeuralNetworkBase
         {
             if (myNetwork != null)
             {
-                if (trainingData.Count > 0 && myNetwork.mLayers[0].mNeurons[0].weights.Count - 1 == trainingData[0].Length)
+                if (trainingData.inputData != null && trainingData.trainingResults!= null && trainingData.inputData.Count > 0 && myNetwork.mLayers[0].mNeurons[0].getWeights().Count - 1 == trainingData.inputData[0].Length && trainingData.inputData.Count == trainingData.trainingResults.Count)
                 {
                     return true;
                 }

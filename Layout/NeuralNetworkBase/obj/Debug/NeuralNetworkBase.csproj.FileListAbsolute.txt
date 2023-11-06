@@ -62,7 +62,6 @@ E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\NeuralNet
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\NeuralNetworkBase.exe
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\NeuralNetworkBase.pdb
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\obj\Debug\NeuralNetworkBase.csproj.AssemblyReference.cache
-E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\obj\Debug\NeuralNetworkBase.csproj.SuggestedBindingRedirects.cache
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\obj\Debug\CreateNeuralNetwork.g.cs
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\obj\Debug\MainWindow.g.cs
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\obj\Debug\TrainNeuralNetwork.g.cs

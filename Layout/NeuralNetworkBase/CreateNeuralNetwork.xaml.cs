@@ -171,7 +171,7 @@ namespace NeuralNetworkBase
       
             for (int i = 0; i < Int32.Parse(WeightNumber.Text); i++)
             {
-                weights.Add(Math.Round(2 * random.NextDouble() - 1, 5));
+                weights.Add(Math.Round(0.001 * random.NextDouble(), 5));
             }
             return weights.ToArray();
         }
