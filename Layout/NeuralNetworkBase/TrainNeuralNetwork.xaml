@@ -37,8 +37,8 @@
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition Height="2*" />
-                <RowDefinition Height="2*" />
-                <RowDefinition />
+                <RowDefinition Height="1.5*" />
+                <RowDefinition Height="1.5*"/>
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
@@ -54,12 +54,18 @@
             <TextBlock Grid.ColumnSpan="5" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Bottom" Name="InformationStatus">Oczekiwanie na trening...</TextBlock>
 
             <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="3" Margin="5">
-                <TextBlock HorizontalAlignment="Center">Oczekiwany czas treningu</TextBlock>
-                <TextBlock HorizontalAlignment="Center" FontSize="9">(W sekundach)</TextBlock>
+                <TextBlock HorizontalAlignment="Center" Name="TBCondition">Oczekiwany czas treningu (s)</TextBlock>
                 <TextBox HorizontalAlignment="Center" Padding="10 2" Margin="0 15" Name="ExpectedTrainingTime">10</TextBox>
             </StackPanel>
 
             <Button Grid.Column="0" Grid.Row="4" Background="BlanchedAlmond" Foreground="Black" Height="30" FontSize="16" VerticalAlignment="Top" Click="SaveToFile_Click">Zapisz sieć</Button>
+            <GroupBox Grid.Column="0" Grid.Row="5" Header="Warunek zakończenia nauczania">
+                <StackPanel>
+                    <RadioButton Content="Timer" GroupName="Learning" Name="TimerCondition" IsChecked="True" Click="EndingConditionClick" />
+                    <RadioButton Content="Mistakes" GroupName="Learning" Name="MistakesCondition" Click="EndingConditionClick"/>
+                    <RadioButton Content="Epoch" GroupName="Learning" Name="EpochCondition" Click="EndingConditionClick"></RadioButton>
+                </StackPanel>
+            </GroupBox>
 
             <Canvas Margin="5" Grid.ColumnSpan="5" Grid.RowSpan="2" Grid.Column="1" Grid.Row="3" Background="WhiteSmoke" Name="NeuralNetworkStructure"></Canvas>
 
@@ -79,8 +85,9 @@
 
             <GroupBox Grid.Column="6" Grid.Row="3" Header="Wybór Funkcji aktywacji">
                 <StackPanel>
-                    <RadioButton Content="Sigmoid" GroupName="ActivationFunction" Name="Sigmoid" />
-                    <RadioButton Content="Relu" GroupName="ActivationFunction" Name="Relu" IsChecked="True" />
+                    <RadioButton Content="Sigmoid" GroupName="ActivationFunction" Name="Sigmoid" IsChecked="True" />
+                    <RadioButton Content="Relu" GroupName="ActivationFunction" Name="Relu" />
+                    <RadioButton Content="ZeroOne" GroupName="ActivationFunction" Name="ZeroOne"></RadioButton>
                 </StackPanel>
             </GroupBox>
 

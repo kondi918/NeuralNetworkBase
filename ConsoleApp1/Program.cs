@@ -6,7 +6,7 @@ using System.IO;
 
 CancellationTokenSource cancelTokenTraining = new CancellationTokenSource();
 StreamWriter logFile = new("plikiTekstowe/rozpoznawanieZdan/logiNauczania.txt", true);    // Tworzymy plik do logowania
-NeuralNetwork myNetwork = new NeuralNetwork("plikiTekstowe/BINARY/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
+NeuralNetwork myNetwork = new NeuralNetwork("plikiTekstowe/dlugopisObraczka/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
 List<double[]> trainingData = new List<double[]>();
 List<int> trainingResults = new List<int>();
 
@@ -95,12 +95,6 @@ while (1==1)
     dane[0] = double.Parse(Console.ReadLine());
     Console.WriteLine("Podaj Y");
     dane[1] = double.Parse(Console.ReadLine());
-    if(myNetwork.CalculateSmallNetworkResult(dane) > 0.5)
-    {
-        Console.WriteLine("TO 1");
-    }
-    else
-    {
-        Console.WriteLine("TO 0");
-    }
+    Console.WriteLine("Result to: " + myNetwork.CalculateSmallNetworkResult(dane));
+
 }

@@ -24,6 +24,13 @@ namespace NeuralNetworkBase
         bool isTrainingCompleted = true;
         private ManualResetEventSlim pauseEvent = new ManualResetEventSlim(true);
         private readonly object mLayersLock = new object();
+        private enum WhatEndingCondition
+        {
+            timer,
+            mistakes,
+            epoch
+        }
+        WhatEndingCondition endingCondition = WhatEndingCondition.timer;
         public TrainNeuralNetwork()
         {
             InitializeComponent();
@@ -90,7 +97,21 @@ namespace NeuralNetworkBase
                 savingFile = new StreamWriter(path);
             }
         }
-
+        private void EndingConditionClick(object sender, RoutedEventArgs e)
+        {
+            if(TimerCondition.IsChecked == true)
+            {
+                TBCondition.Text = "Oczekiwany czas treningu (s)";
+            }
+            else if(MistakesCondition.IsChecked == true)
+            {
+                TBCondition.Text = "Oczekiwany prog bledow";
+            }
+            else if(EpochCondition.IsChecked == true)
+            {
+                TBCondition.Text = "Liczba epoch";
+            }
+        }
         private void DrawNeuralNetwork()
         {
             if (myNetwork.mLayers.Count > 0)
@@ -133,22 +154,28 @@ namespace NeuralNetworkBase
         }
         private bool isSigmoidChecked()
         {
-            bool isSigmoidChecked = false;
             if (Sigmoid.IsChecked == true)
             {
-                isSigmoidChecked = true;
+                return true;
             }
-            return isSigmoidChecked;
+            return false;
         }
 
         private bool isReluChecked()
         {
-            bool isReluChecked = false;
             if (Relu.IsChecked == true)
             {
-                isReluChecked = true;
+                return true;
             }
-            return isReluChecked;
+            return false;
+        }
+        private bool IsZeroOneChecked()
+        {
+            if(ZeroOne.IsChecked == true)
+            {
+                return true;
+            }
+            return false;
         }
         void Timer(int totalSeconds,int actualSeconds)
         {
@@ -186,6 +213,10 @@ namespace NeuralNetworkBase
             {
                 myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.relu;
             }
+            else if(IsZeroOneChecked())
+            {
+                myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.zeroOne;
+            }
         }
 
         private int Training()
@@ -220,9 +251,16 @@ namespace NeuralNetworkBase
             }
             isTrainingCompleted = true;
         }
+        private void StartProgressBar()
+        {
+            if(endingCondition == WhatEndingCondition.timer)
+            {
+                StartTimer();
+            }
+        }
         private void TrainNetwork(int totalSeconds)
         {
-            StartTimer();
+            StartProgressBar();
             int mistakes = 1;
             Task ShowErrors = null;
             while (mistakes != 0 && !cancelTokenTraining.IsCancellationRequested)
@@ -246,7 +284,7 @@ namespace NeuralNetworkBase
             SetInformation();
         }
 
-        private void setSettings()
+        private void SetSettings()
         {
             isTrainingCompleted = false;
             Resume();
@@ -255,7 +293,7 @@ namespace NeuralNetworkBase
             SetActivationFunction();
             TrainingProgressBar.Value = 0;
         }
-        private bool isSetCorrectly()
+        private bool IsSetCorrectly()
         {
             if (myNetwork != null)
             {
@@ -282,7 +320,7 @@ namespace NeuralNetworkBase
         }
         private void StartTrainingButton_Click(object sender, RoutedEventArgs e)
         {
-            if (isSetCorrectly())
+            if (IsSetCorrectly())
             {
                 int totalSeconds = getSecondTimer();
                 Task trainingNetworkTask = new Task(() =>
@@ -291,7 +329,7 @@ namespace NeuralNetworkBase
                     });
                 if(isTrainingCompleted)
                 {
-                    setSettings();
+                    SetSettings();
                     try
                     {
                         trainingNetworkTask.Start();
@@ -356,6 +394,7 @@ namespace NeuralNetworkBase
                 DrawNeuralNetwork();
             }
         }
+
     }
 }
 

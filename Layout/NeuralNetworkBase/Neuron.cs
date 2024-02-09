@@ -9,6 +9,8 @@ namespace NeuralNetworkBase
         public List<double> weightsChanges = new List<double>();
         public double treshold;
         public double neuronResult { get; set; }
+        public double predictedResult {  get; set; }
+        public double mistake { get; set; }
         public bool shouldBeIncreased { get; set; }
         public Neuron(double[] weights)
         {

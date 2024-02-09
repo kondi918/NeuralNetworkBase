@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Controls;
 
 namespace NeuralNetworkBase
 {
@@ -10,7 +11,8 @@ namespace NeuralNetworkBase
         public enum WhatActivationFunction
         {
             relu,
-            sigmoid
+            sigmoid,
+            zeroOne
         }
         public WhatActivationFunction whatActivationFunction = WhatActivationFunction.relu;
         public List<Layer> mLayers = new List<Layer>();
@@ -22,8 +24,6 @@ namespace NeuralNetworkBase
         //
         public void ReadFromFile(string path)
         {
-            string liczba = "100";
-            int pierwszaCyfra;
             mLayers.Clear();
             List<Neuron> neuronSet = new List<Neuron>();
             //
@@ -139,7 +139,15 @@ namespace NeuralNetworkBase
         }
         private double ActivationFunctionSigmoid(double x)
         {
-            return 1.0 / (1.0 + Math.Exp((float)-x));
+            return 1 / (1 + Math.Exp(-x));
+        }
+        private double ActivationFunctionZeroOne(double x)
+        {
+            if(x > 0)
+            {
+                return 1;
+            }
+            return 0;
         }
         private void SetInputs(double[] inputData)
         {
@@ -155,12 +163,18 @@ namespace NeuralNetworkBase
             {
                 result += neuron.weights[i] * neuron.inputData[i - 1];  // input data ma indeks o 1 mniejszy, poniewaz w wagach waga o indeksie 0 to bias
             }
-            if(whatActivationFunction == WhatActivationFunction.relu)
+            if (whatActivationFunction == WhatActivationFunction.relu)
             {
                 neuron.neuronResult = ActivationFunctionRelu(result);
-                return neuron.neuronResult;
             }
-            neuron.neuronResult = ActivationFunctionSigmoid(result);
+            else if (whatActivationFunction == WhatActivationFunction.sigmoid)
+            {
+                neuron.neuronResult = ActivationFunctionSigmoid(result);
+            }
+            else if(whatActivationFunction == WhatActivationFunction.zeroOne)
+            {
+                neuron.neuronResult = ActivationFunctionZeroOne(result);
+            }
             return neuron.neuronResult;
         }
         private void AddNextLayerInputs(List<double> neuronResults, int index)
@@ -192,11 +206,12 @@ namespace NeuralNetworkBase
             else
             {
                 int index = 0;
-                for (int i = 0; i < mLayers[mLayers.Count - 1].mNeurons.Count - 1; i++)
+                double max = double.Parse(mLayers[mLayers.Count - 1].mNeurons[0].neuronResult.ToString("N0"));
+                for (int i = 0; i < mLayers[mLayers.Count - 1].mNeurons.Count; i++)
                 {
-                    if (mLayers[mLayers.Count - 1].mNeurons[i].neuronResult < mLayers[mLayers.Count - 1].mNeurons[i + 1].neuronResult)
+                    if (max < double.Parse(mLayers[mLayers.Count - 1].mNeurons[i].neuronResult.ToString("N0")))
                     {
-                        index = i + 1;
+                        index = i;
                     }
                 }
                 return index;
@@ -216,27 +231,59 @@ namespace NeuralNetworkBase
 
 
         //                          UCZENIE SIECI                             // 
-
-
-
-        private double getZeroOneLoss(double neuronResult, int predictedResult)
+        private double GetDerivativeSigmoid(double sum, double output)
         {
-            double threshold = 0.5;
-            if (neuronResult >= threshold)
+            return sum * output * (1 - output);
+        }
+        private void SetOutputMistakes(List<Neuron> neurons)
+        {
+            foreach(var neuron in neurons)
             {
-                return predictedResult == 1 ? 0 : 1;
-            }
-            else
-            {
-                return predictedResult == 0 ? 0 : 1;
+               neuron.mistake = neuron.neuronResult - neuron.predictedResult;
             }
         }
-        private double CalculateDelta(Neuron neuron, double loss, double learningSpeed, int index)
+        private void SetHiddenLayersMistakes()
         {
-            double input = neuron.inputData[index - 1];
-            double weight = Math.Abs(neuron.weights[index]);
-            double gradient = learningSpeed * loss * input;
-            return weight * gradient;
+            for (int layers = mLayers.Count - 1; layers > 0; layers --)
+            {
+                for(int i =0; i < mLayers[layers-1].mNeurons.Count; i++)
+                {
+                    double sum = 0;
+                    foreach(var neuron in mLayers[layers].mNeurons)
+                    {
+                        sum += neuron.mistake * neuron.weights[i+1];        // +1 bo bias ma index 0
+                    }
+                    mLayers[layers - 1].mNeurons[i].mistake = GetDerivativeSigmoid(sum, mLayers[layers - 1].mNeurons[i].neuronResult);
+                }
+            }
+        }
+        private void SetMistakes()
+        {
+            SetOutputMistakes(mLayers[mLayers.Count - 1].mNeurons);
+            SetHiddenLayersMistakes();
+        }
+        private void ChangeWeightsLargeNetwork(Neuron neuron, double learningSpeed)
+        {
+            for (int i = 1; i < neuron.weights.Count; i++)
+            {
+                double newWeight = neuron.weights[i] - learningSpeed * neuron.inputData[i - 1] * neuron.mistake;
+                if (!double.IsNaN(newWeight) && !double.IsInfinity(newWeight))
+                {
+                    neuron.weights[i] = newWeight;
+                }
+            }
+            neuron.weights[0] += neuron.mistake * learningSpeed;
+        }
+        private void BackpropagationMultiNeuronOutput(double learningSpeed)
+        {
+            SetMistakes();
+            for(int i= mLayers.Count-1; i >= 0; i--)
+            {
+                foreach (var neuron in mLayers[i].mNeurons)
+                {
+                    ChangeWeightsLargeNetwork(neuron, learningSpeed);
+                }
+            }
         }
         private void ChangeWeight(Neuron neuron, double mistake, double learningSpeed)
         {
@@ -250,19 +297,7 @@ namespace NeuralNetworkBase
             }
             neuron.weights[0] += mistake * learningSpeed;
         }
-        private void ReduceWeights(Neuron neuron, double loss, double learningSpeed)
-        {
-            for (int i = 1; i < neuron.weights.Count; i++)
-            {
-                double newWeight = neuron.weights[i] - Math.Sign(neuron.weights[i]) * CalculateDelta(neuron, loss, learningSpeed, i);
-                if (!double.IsNaN(newWeight) && !double.IsInfinity(newWeight))
-                {
-                    neuron.weights[i] = newWeight;
-                }
-            }
-            neuron.weights[0] -= loss * learningSpeed;
-        }
-        private void Backpropagation(Neuron neuron, int predictedResult, double learningSpeed)
+        private void BackpropagationSingleOutput(Neuron neuron, int predictedResult, double learningSpeed)
         {
             double mistake = neuron.neuronResult - predictedResult;
             ChangeWeight(neuron, mistake, learningSpeed);
@@ -276,74 +311,36 @@ namespace NeuralNetworkBase
                 {
                     return true;
                 }
-            }
-            else
-            {
-                if (predictedResult == networkResult)
+                for (int i = mLayers.Count - 1; i >= 0; i--)
                 {
-                    return true;
-                }
-            }
-            for (int i = mLayers.Count - 1; i >= 0; i--)
-            {
-                foreach (var neuron in mLayers[i].mNeurons)
-                {
-                    Backpropagation(neuron, predictedResult, learningSpeed);
-                }
-            }
-            return false;
-        }
-
-
-
-        // Testy
-        private double GetMSELost(double neuronResult, int predictedResult)
-        {
-            return Math.Pow(predictedResult - neuronResult,2);
-        }
-        /*
-        private List<double> GetWeightsChanges(Neuron neuron, int predictedResult, double learningSpeed)
-        {
-            List<double> weightsChanges = new List<double>();
-            foreach
-        }
-        public bool NetworkTrainingMSE(double[] trainingData, int predictedResult, double learningSpeed)
-        {
-            double networkResult = CalculateSmallNetworkResult(trainingData);
-            if (mLayers[mLayers.Count - 1].mNeurons.Count == 1)
-            {
-                if (predictedResult == 1 && networkResult > 0.5 || predictedResult == 0 && networkResult <= 0.5)
-                {
-                    return true;
+                    foreach (var neuron in mLayers[i].mNeurons)
+                    {
+                        BackpropagationSingleOutput(neuron, predictedResult, learningSpeed);
+                    }
                 }
             }
             else
             {
-                if (predictedResult == networkResult)
+                foreach (var neuron in mLayers[mLayers.Count - 1].mNeurons)          //przekazywany parametr predicted result to index tego neuronu na ostatniej warstwie, ktory powinien wyjsc
+                {
+                    neuron.predictedResult = 0;
+                }
+                mLayers[mLayers.Count-1].mNeurons[predictedResult].predictedResult = 1;
+                BackpropagationMultiNeuronOutput(learningSpeed);
+                if(predictedResult == networkResult)
                 {
                     return true;
                 }
             }
-            for (int i = mLayers.Count - 1; i >= 0; i--)
-            {
-                List<List<double>> weightsChangesContainer = new List<List<double>>();
-                foreach (var neuron in mLayers[i].mNeurons)
-                {
-                    Backpropagation(neuron, predictedResult, learningSpeed, weightsChanges);
-                }
-            }
             return false;
         }
-        */
 
         //
         //
         //      Konstruktory
         //
         //
-        public NeuralNetwork()
-        {
-        }
+        public NeuralNetwork(){}
         public NeuralNetwork(string path)
         {
             ReadFromFile(path);
