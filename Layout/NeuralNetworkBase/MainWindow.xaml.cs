@@ -36,10 +36,15 @@ namespace NeuralNetworkBase
             var TrainNeuralNetworkWindow = new TrainNeuralNetwork();
             TrainNeuralNetworkWindow.Show();
         }
-
         private void ExitApplicationButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void TestNeuralNetworkButton_Click(object sender, RoutedEventArgs e)
+        {
+            var TestNeuralNetworkWindow = new TestNetworkWindow();
+            TestNeuralNetworkWindow.Show();
         }
     }
 }

@@ -1,0 +1,32 @@
+﻿<Window x:Class="NeuralNetworkBase.TestNetworkWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NeuralNetworkBase"
+        mc:Ignorable="d"
+        Title="TestNetworkWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.25*"> </RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <MenuItem Header="Wybierz plik do zapisu sieci" Click="ChooseTrainingData_Click" />
+        </Menu>
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Grid.Column="1" Margin="5" Grid.RowSpan="3">
+            <Canvas Background="White" Name="mCanvas" MouseMove="Drawing" MouseLeftButtonDown="StartDraw" MouseLeave="EndDraw" MouseLeftButtonUp="EndDraw"></Canvas>
+        </Border>
+        <Button Grid.Column="0" Grid.Row="2" Click="Button_Click" Name="TestBtn"> TEST </Button>
+        <TextBlock Grid.Row="3" Grid.Column="0" FontSize="30" Name="TestTextBox"> test </TextBlock>
+    </Grid>
+</Window>

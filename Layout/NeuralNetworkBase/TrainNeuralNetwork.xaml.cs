@@ -1,12 +1,13 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml;
+using Newtonsoft.Json;
+using System.Runtime.Remoting.Messaging;
 
 namespace NeuralNetworkBase
 {
@@ -17,7 +18,7 @@ namespace NeuralNetworkBase
     {
         CancellationTokenSource cancelTokenTraining = new CancellationTokenSource();                           //TU ZMIANA NA NULLE UWAGA KURWA TU ZMIANA NA NULLE
         StreamWriter logFile = null;    // Tworzymy plik do logowania
-        StreamWriter savingFile = null;   // Tworzymy plik do zapisu
+        string savingFilePath = "";  // Tworzymy plik do zapisu
         NeuralNetwork myNetwork = null;             //NULL BO WYBIERAM SAM PLIK Z SIECIĄ POCZĄTKOWĄ  // new NeuralNetwork("plikiTekstowe/dlugopisObraczka/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
         FileManager fileManager = new FileManager();
         NeuralNetworkInputData trainingData;
@@ -42,19 +43,16 @@ namespace NeuralNetworkBase
             {
                 logFile.Close();
             }
-            if(savingFile != null)
-            {
-                savingFile.Close();
-            }
         }      
         private string SelectTxtFile(string typeOfSelectingFile)
         {
+            cancelTokenTraining.Cancel();
             string path = null;
             try
             {
                 OpenFileDialog selectingTxtFile = new OpenFileDialog();
                 selectingTxtFile.InitialDirectory = Directory.GetCurrentDirectory();
-                selectingTxtFile.Filter = "Text files (*.txt)|*.txt";
+                selectingTxtFile.Filter = "Text files (*.txt)|*.txt|JSON files (*.json)|*.json|All Files (*)|*.*";
                 selectingTxtFile.Title = typeOfSelectingFile;
 
                 if (selectingTxtFile.ShowDialog() == true)
@@ -81,21 +79,37 @@ namespace NeuralNetworkBase
             }
         }
 
-        private void SelectTrainedNeuralNetwork_Click(object sender, RoutedEventArgs e)
+        private async void SelectTrainedNeuralNetwork_Click(object sender, RoutedEventArgs e)
         {
-            Task selectmyNetworkFile = Task.Run(() => myNetwork = new NeuralNetwork(SelectTxtFile("Plik z siecią początkową")));
-            selectmyNetworkFile.ContinueWith(task => {
+            string path = SelectTxtFile("Plik z siecią początkową");
+            try
+            {
+                if (Path.GetExtension(path) == ".txt")
+                {
+                    myNetwork = new NeuralNetwork(path);
+                }
+                else if(Path.GetExtension(path) == ".json")
+                {
+                    StreamReader sr = new StreamReader(path);
+                    string json = sr.ReadToEnd();
+                    myNetwork = JsonConvert.DeserializeObject<NeuralNetwork>(json);
+                    sr.Close();
+                }
+                else
+                {
+                    throw new Exception("Cannot read Network from file");
+                }
                 NeuralNetworkStructure.Dispatcher.Invoke(() => DrawNeuralNetwork());
-            });
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void SelectFileToSaveTrainedNeuralNetwork_Click(object sender, RoutedEventArgs e)
         {
-            string path = SelectTxtFile("Plik zapisu do sieci");
-            if (path != null)
-            {
-                savingFile = new StreamWriter(path);
-            }
+            savingFilePath = SelectTxtFile("Plik zapisu do sieci");
         }
         private void EndingConditionClick(object sender, RoutedEventArgs e)
         {
@@ -152,7 +166,7 @@ namespace NeuralNetworkBase
             pauseEvent.Set();
             StopBtn.Content = "Stop";
         }
-        private bool isSigmoidChecked()
+        private bool IsSigmoidChecked()
         {
             if (Sigmoid.IsChecked == true)
             {
@@ -161,7 +175,7 @@ namespace NeuralNetworkBase
             return false;
         }
 
-        private bool isReluChecked()
+        private bool IsReluChecked()
         {
             if (Relu.IsChecked == true)
             {
@@ -193,6 +207,7 @@ namespace NeuralNetworkBase
             {
                 while (timerSeconds < totalSeconds && !cancelTokenTraining.IsCancellationRequested)
                 {
+                    pauseEvent.Wait();
                     Timer(totalSeconds, timerSeconds);
                     timerSeconds++;
                     await Task.Delay(1000);
@@ -204,12 +219,12 @@ namespace NeuralNetworkBase
 
         private void SetActivationFunction()
         {
-            isSigmoidChecked();
-            if (isSigmoidChecked())
+            IsSigmoidChecked();
+            if (IsSigmoidChecked())
             {
                 myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.sigmoid;
             }
-            else if (isReluChecked())
+            else if (IsReluChecked())
             {
                 myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.relu;
             }
@@ -295,24 +310,17 @@ namespace NeuralNetworkBase
         }
         private bool IsSetCorrectly()
         {
-            if (myNetwork != null)
+            if (myNetwork != null && trainingData!=null)
             {
                 if (trainingData.inputData != null && trainingData.trainingResults!= null && trainingData.inputData.Count > 0 && myNetwork.mLayers[0].mNeurons[0].getWeights().Count - 1 == trainingData.inputData[0].Length && trainingData.inputData.Count == trainingData.trainingResults.Count)
                 {
                     return true;
                 }
-                else
-                {
-                    MessageBox.Show("Aby rozpoczac trenowanie sieci musisz poczekać aż aktualne trenowanie zostanie zakończone. Możesz również anulować aktualny trening");
-                }
             }
-            else
-            {
-                MessageBox.Show("Najpierw musisz wybrać odpowiednie pliki z danymi nauczania i strukturą sieci");
-            }
+
             return false;
         }
-        private int getSecondTimer()
+        private int GetSecondTimer()
         {
             int totalSeconds = 0;
             int.TryParse(ExpectedTrainingTime.Text, out totalSeconds);
@@ -322,7 +330,7 @@ namespace NeuralNetworkBase
         {
             if (IsSetCorrectly())
             {
-                int totalSeconds = getSecondTimer();
+                int totalSeconds = GetSecondTimer();
                 Task trainingNetworkTask = new Task(() =>
                     {
                         TrainNetwork(totalSeconds);
@@ -371,20 +379,35 @@ namespace NeuralNetworkBase
             {
                 lock (mLayersLock)
                 {
-                    if (savingFile != null)
+                    if (savingFilePath != "")
                     {
-                        savingFile.Write(myNetwork.GetWholeStructure());
+                        StreamWriter savingFile = new StreamWriter(savingFilePath);
+                        if (Path.GetExtension(savingFilePath) == ".txt")
+                        {
+                            savingFile.Write(myNetwork.GetWholeStructure());
+                        }
+                        else if(Path.GetExtension(savingFilePath) == ".json")
+                        {
+                            string json = JsonConvert.SerializeObject(myNetwork, Newtonsoft.Json.Formatting.Indented);
+                            savingFile.Write(json);
+                        }
+                        else
+                        {
+                            throw new Exception("Bledne rozszerzenie pliku");
+                        }
+                        savingFile.Close();
                     }
                     else
                     {
-                        MessageBox.Show("Aby moc zapisac siec musisz najpierw wybrac plik w ktorym ma zostac zapisana");
+                        throw new Exception("Aby moc zapisac siec musisz najpierw wybrac plik w ktorym ma zostac zapisana");
                     }
+
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
-            }            
+            }      
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -397,5 +420,3 @@ namespace NeuralNetworkBase
 
     }
 }
-
-//myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.relu;

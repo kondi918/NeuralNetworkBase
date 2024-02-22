@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Controls;
 
 namespace NeuralNetworkBase
 {
@@ -22,13 +21,9 @@ namespace NeuralNetworkBase
         //  Tworzenie sieci
         //
         //
-        public void ReadFromFile(string path)
+        private void ReadFromTxt(string path)
         {
-            mLayers.Clear();
             List<Neuron> neuronSet = new List<Neuron>();
-            //
-            //WAZNE!! W PLIKU TEKSTOWYM PIERWSZA WAGA KTORA PODAMY (w0) odpowiada za BIAS
-            //
             if (path != null)
             {
                 StreamReader sr = new StreamReader(path);           //Obsluga odczytywania struktury sieci z tekstu
@@ -70,6 +65,14 @@ namespace NeuralNetworkBase
                 }
                 sr.Close();
             }
+        }
+        public void ReadFromFile(string path)
+        {
+            mLayers.Clear();
+            //
+            //WAZNE!! W PLIKU TEKSTOWYM PIERWSZA WAGA KTORA PODAMY (w0) odpowiada za BIAS
+            //
+            ReadFromTxt(path);
         }
         public void RemoveWeightsFromNeuron(int layerNumber, int neuronNumber)
         {

@@ -10,10 +10,10 @@ namespace NeuralNetworkBase
     {
         public List<double[]> inputData { get; set; }
         public List<int> trainingResults { get; set; }
-        public NeuralNetworkInputData(List<double[]> inputData, List<int> trainingResult)
+        public NeuralNetworkInputData(List<double[]> inputData, List<int> trainingResults)
         {
             this.inputData = inputData;
-            this.trainingResults = trainingResult;
+            this.trainingResults = trainingResults;
         }
     }
 }

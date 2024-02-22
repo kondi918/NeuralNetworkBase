@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Shapes;
 
 namespace NeuralNetworkBase
 {
@@ -45,10 +46,8 @@ namespace NeuralNetworkBase
             }
             return trainingData;
         }
-        public NeuralNetworkInputData GetInputData(string path)
+        private void ReadFromTxtFile(string path, List<double[]> trainingData, List<int> trainingResults)
         {
-            List<double[]> trainingData = new List<double[]>();
-            List<int> trainingResults = new List<int>();
             List<double> data = new List<double>();
             if (path != null)
             {
@@ -67,6 +66,25 @@ namespace NeuralNetworkBase
                     data.Clear();
                     line = sr.ReadLine();
                 }
+            }
+        }
+        private void ReadFromJSON(string path)
+        {
+            StreamReader sr = new StreamReader(path);
+            string json = sr.ReadToEnd();
+
+        }
+        public NeuralNetworkInputData GetInputData(string path)
+        {
+            List<double[]> trainingData = new List<double[]>();
+            List<int> trainingResults = new List<int>();
+            if (System.IO.Path.GetExtension(path) == ".txt")
+            {
+                ReadFromTxtFile(path, trainingData, trainingResults);
+            }
+            else if(System.IO.Path.GetExtension(path) == ".json")
+            {
+                //ReadFromJSON(trainingData, trainingResults, path);
             }
               return new NeuralNetworkInputData(NormalizeData(trainingData), trainingResults);
         }
