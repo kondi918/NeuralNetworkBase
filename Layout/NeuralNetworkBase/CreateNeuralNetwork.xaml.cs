@@ -165,45 +165,38 @@ namespace NeuralNetworkBase
                 MessageBox.Show("Wybrany Layer lub Neuron nie jest liczba!");
             }
         }
-        private double[] GenerateRandomWeights()
+        private List<double> GenerateWeightsForSingleNeuron(int numberOfWeights)
         {
             List<double> weights = new List<double>();
-      
-            for (int i = 0; i < Int32.Parse(WeightNumber.Text); i++)
+            for (int i = 0; i <= numberOfWeights; i++)
             {
-                weights.Add(Math.Round(2 * random.NextDouble() - 1, 5));
-            }
-            return weights.ToArray();
-        }
-        private bool isCorrectWeightAmount()
-        {
-            int weightCount = 0;
-            if (isNumber(WeightNumber.Text))
-            {
-                weightCount = Int32.Parse(WeightNumber.Text);
-            }
-            else
-            {
-                MessageBox.Show("Podana ilosc wag nie jest liczba!");
-                return false;
-            }
-            if(weightCount >= 2)
-            {
-                if (Int32.Parse(LayerNumber.Text) > 0 && weightCount == myNetwork.mLayers[Int32.Parse(LayerNumber.Text) - 1].mNeurons.Count + 1 || Int32.Parse(LayerNumber.Text) == 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    MessageBox.Show("Ilosc wag w danym Neuronie musi być o 1 wieksza niz ilosc neuronow w poprzednim layerze (uwzgledniajac, ze waga nr. 0 to BIAS) ");
-                    return false;
-                }
+                weights.Add(Math.Round(0.001 * random.NextDouble(), 5));
 
             }
-            else
+            return weights;
+
+        }
+        private void GenerateRandomWeights()
+        {
+            try
             {
-                MessageBox.Show("Podana ilosc wag musi być wieksza od 1. Pamietaj, że pierwsza waga to liczba BIAS");
-                return false;
+                List<double> weights = new List<double>();
+                int inputNumber = Int32.Parse(InputNumber.Text);
+                foreach(var neuron in myNetwork.mLayers[0].mNeurons)
+                {
+                    neuron.setWeights(GenerateWeightsForSingleNeuron(inputNumber));
+                }
+                for (int i = 1; i < myNetwork.mLayers.Count; i++)
+                {
+                    foreach(var neuron in myNetwork.mLayers[i].mNeurons)
+                    {
+                        neuron.setWeights(GenerateWeightsForSingleNeuron(myNetwork.mLayers[i - 1].mNeurons.Count));
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
             }
         }
         private void AddNeuronWeightButton_Click(object sender, RoutedEventArgs e)
@@ -236,27 +229,13 @@ namespace NeuralNetworkBase
                 MessageBox.Show("Wybrany Layer lub Neuron nie jest liczba!");
             }
             */
-            if(isNumber(LayerNumber.Text))
+            if (isNumber(InputNumber.Text))
             {
-                if (isInLayersRange(Int32.Parse(LayerNumber.Text)))
+                foreach (var neuron in myNetwork.mLayers[Int32.Parse(LayerNumber.Text)].mNeurons)
                 {
-                    if (isCorrectWeightAmount())
-                    {
-                        foreach (var neuron in myNetwork.mLayers[Int32.Parse(LayerNumber.Text)].mNeurons)
-                        {
-                           neuron.setWeights(GenerateRandomWeights().ToList());
-                        }
-                    }
+                    GenerateRandomWeights();
                 }
-                else
-                {
-                    MessageBox.Show("Wybrany Layer znajduje się poza zakresem Layerów sieci");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Wybrany Layer nie jest liczba!");
-            }
+            }             
         }
 
         private void DeleteNeuronWeightButton_Click(object sender, RoutedEventArgs e)

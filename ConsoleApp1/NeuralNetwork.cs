@@ -8,9 +8,17 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
+   
     internal class NeuralNetwork
     {
-       // public List<List<double>> layersValues = new List<List<double>>();
+        public enum WhatActivationFunction
+        {
+            sigmoid,
+            relu,
+            zeroOne
+        }
+        WhatActivationFunction whatActivationFunction = WhatActivationFunction.sigmoid;
+        // public List<List<double>> layersValues = new List<List<double>>();
         public List<Layer> mLayers = new List<Layer>();
 
         //
@@ -115,38 +123,54 @@ namespace ConsoleApp1
         //  Dzialania na sieci
         //
         //
-       
+
         private double ActivationFunctionRelu(double x)
         {
             return Math.Max(0, x);
         }
         private double ActivationFunctionSigmoid(double x)
         {
-            return 1.0 / (1.0 + Math.Exp((float)-x));
+            return 1 / (1 + Math.Exp(-x));
+        }
+        private double ActivationFunctionZeroOne(double x)
+        {
+            if (x > 0)
+            {
+                return 1;
+            }
+            return 0;
         }
         private void SetInputs(double[] inputData)
         {
-            foreach(var neuron in mLayers[0].mNeurons)
+            foreach (var neuron in mLayers[0].mNeurons)
             {
                 neuron.setInputData(inputData);
             }
         }
         private double CalculateSingleNeuronResult(Neuron neuron)
         {
-            double result = neuron.weights[0];      //Przypisuje liczbe bias
-            for(int i=1; i<neuron.weights.Count; i++)
+            double result = -neuron.weights[0];      //Przypisuje liczbe bias
+            for (int i = 1; i < neuron.weights.Count; i++)
             {
-                //Console.WriteLine("Waga: " + neuron.weights[i]);
-                //Console.WriteLine("Input: " + neuron.inputData[i - 1]);
-               // Console.ReadLine();
                 result += neuron.weights[i] * neuron.inputData[i - 1];  // input data ma indeks o 1 mniejszy, poniewaz w wagach waga o indeksie 0 to bias
             }
-            neuron.neuronResult = result;
-            return ActivationFunctionSigmoid(result);
+            if (whatActivationFunction == WhatActivationFunction.relu)
+            {
+                neuron.neuronResult = ActivationFunctionRelu(result);
+            }
+            else if (whatActivationFunction == WhatActivationFunction.sigmoid)
+            {
+                neuron.neuronResult = ActivationFunctionSigmoid(result);
+            }
+            else if (whatActivationFunction == WhatActivationFunction.zeroOne)
+            {
+                neuron.neuronResult = ActivationFunctionZeroOne(result);
+            }
+            return neuron.neuronResult;
         }
         private void AddNextLayerInputs(List<double> neuronResults, int index)
         {
-            foreach(var neuron in mLayers[index].mNeurons)
+            foreach (var neuron in mLayers[index].mNeurons)
             {
                 neuron.setInputData(neuronResults);
             }
@@ -158,46 +182,45 @@ namespace ConsoleApp1
             {
                 neuronsResults.Add(CalculateSingleNeuronResult(neuron));
             }
-            if(nextLayerIndex != mLayers.Count)
+            if (nextLayerIndex < mLayers.Count)
             {
                 AddNextLayerInputs(neuronsResults, nextLayerIndex);
             }
             return neuronsResults;
         }
-        private double getNetworkResult()
+        private double GetNetworkResult()
         {
-            if (mLayers[mLayers.Count-1].mNeurons.Count == 1)
+            if (mLayers[mLayers.Count - 1].mNeurons.Count == 1)
             {
                 return mLayers[mLayers.Count - 1].mNeurons[0].neuronResult;
             }
             else
             {
                 int index = 0;
-                for(int i =0; i < mLayers[mLayers.Count-1].mNeurons.Count-1; i++)
+                double max = double.Parse(mLayers[mLayers.Count - 1].mNeurons[0].neuronResult.ToString("N0"));
+                for (int i = 0; i < mLayers[mLayers.Count - 1].mNeurons.Count; i++)
                 {
-                    if (mLayers[mLayers.Count - 1].mNeurons[i].neuronResult < mLayers[mLayers.Count - 1].mNeurons[i+1].neuronResult)
+                    if (max < double.Parse(mLayers[mLayers.Count - 1].mNeurons[i].neuronResult.ToString("N0")))
                     {
-                        index = i + 1;
+                        index = i;
                     }
                 }
-               return index;
+                return index;
             }
         }
         public double CalculateSmallNetworkResult(double[] inputData)
         {
-            //layersValues.Clear();
             SetInputs(inputData);
             int nextLayerIndex = 1;
-            foreach(var layer in mLayers)
+            foreach (var layer in mLayers)
             {
-                //layersValues.Add(new List<double>(CalculateNeuronsResults(layer, nextLayerIndex)));
                 CalculateNeuronsResults(layer, nextLayerIndex);
                 nextLayerIndex++;
             }
-            return getNetworkResult();
+            return GetNetworkResult();
         }
 
-//                          UCZENIE SIECI                             // 
+        //                          UCZENIE SIECI                             // 
 
 
 

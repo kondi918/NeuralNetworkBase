@@ -37,7 +37,7 @@ namespace NeuralNetworkBase
                 foreach (var neuron in element.mNeurons)
                 {
                     NeuralNetworkSchemaStructure[NeuralNetworkSchemaStructure.Count - 1]++;
-                    foreach (var weight in neuron.weights)
+                    foreach (var weight in neuron.getWeights())
                     {
 
                         //result += weight + ";";

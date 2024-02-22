@@ -81,25 +81,20 @@ void TrainNetwork()
 
 
 
-GetTrainingData("plikiTekstowe/dlugopisObraczka/daneNauczania.txt");
+/*GetTrainingData("plikiTekstowe/BINARY/inputData.txt");
 Task trainingNetworkTask = new Task(() =>
 {
     TrainNetwork();
 });
 trainingNetworkTask.Start();
-
-while(1==1)
+*/
+while (1==1)
 {
-    Console.WriteLine("Podaj dlugosc przedmiotu");
+    Console.WriteLine("Podaj X");
     double[] dane = new double[2];
     dane[0] = double.Parse(Console.ReadLine());
+    Console.WriteLine("Podaj Y");
     dane[1] = double.Parse(Console.ReadLine());
-    if(myNetwork.CalculateSmallNetworkResult(dane) > 0.5)
-    {
-        Console.WriteLine("To dlugopis");
-    }
-    else
-    {
-        Console.WriteLine("To obraczka");
-    }
+    Console.WriteLine("Result to: " + myNetwork.CalculateSmallNetworkResult(dane));
+
 }

@@ -1,19 +1,13 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Xml;
+using Newtonsoft.Json;
+using System.Runtime.Remoting.Messaging;
 
 namespace NeuralNetworkBase
 {
@@ -24,13 +18,20 @@ namespace NeuralNetworkBase
     {
         CancellationTokenSource cancelTokenTraining = new CancellationTokenSource();                           //TU ZMIANA NA NULLE UWAGA KURWA TU ZMIANA NA NULLE
         StreamWriter logFile = null;    // Tworzymy plik do logowania
-        StreamWriter savingFile = null;   // Tworzymy plik do zapisu
+        string savingFilePath = "";  // Tworzymy plik do zapisu
         NeuralNetwork myNetwork = null;             //NULL BO WYBIERAM SAM PLIK Z SIECIĄ POCZĄTKOWĄ  // new NeuralNetwork("plikiTekstowe/dlugopisObraczka/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
-        List<double[]> trainingData = new List<double[]>();
-        List<int> trainingResults = new List<int>();
+        FileManager fileManager = new FileManager();
+        NeuralNetworkInputData trainingData;
         bool isTrainingCompleted = true;
         private ManualResetEventSlim pauseEvent = new ManualResetEventSlim(true);
         private readonly object mLayersLock = new object();
+        private enum WhatEndingCondition
+        {
+            timer,
+            mistakes,
+            epoch
+        }
+        WhatEndingCondition endingCondition = WhatEndingCondition.timer;
         public TrainNeuralNetwork()
         {
             InitializeComponent();
@@ -42,44 +43,16 @@ namespace NeuralNetworkBase
             {
                 logFile.Close();
             }
-            if(savingFile != null)
-            {
-                savingFile.Close();
-            }
-        }
-        void GetTrainingData(string path)
-        {
-            List<double> data = new List<double>();
-            if (path != null)
-            {
-                StreamReader sr = new StreamReader(path);
-
-                string line = sr.ReadLine();
-                line = sr.ReadLine();
-                while (line != null)
-                {
-                    string[] dataString = line.Split(';');
-                    for (int i = 0; i < dataString.Length - 1; i++)
-                    {
-                        data.Add(double.Parse(dataString[i]));
-                    }
-                    trainingData.Add(data.ToArray());
-                    trainingResults.Add(Int32.Parse(dataString[dataString.Length - 1]));
-                    data.Clear();
-                    line = sr.ReadLine();
-                }
-                sr.Close();
-            }
-        }
-
+        }      
         private string SelectTxtFile(string typeOfSelectingFile)
         {
+            cancelTokenTraining.Cancel();
             string path = null;
             try
             {
                 OpenFileDialog selectingTxtFile = new OpenFileDialog();
                 selectingTxtFile.InitialDirectory = Directory.GetCurrentDirectory();
-                selectingTxtFile.Filter = "Text files (*.txt)|*.txt";
+                selectingTxtFile.Filter = "Text files (*.txt)|*.txt|JSON files (*.json)|*.json|All Files (*)|*.*";
                 selectingTxtFile.Title = typeOfSelectingFile;
 
                 if (selectingTxtFile.ShowDialog() == true)
@@ -96,26 +69,63 @@ namespace NeuralNetworkBase
 
         private void ChooseTrainingData_Click(object sender, RoutedEventArgs e)  
         {
-            GetTrainingData(SelectTxtFile("Dane treningowe"));
+            try
+            {
+                trainingData = fileManager.GetInputData(SelectTxtFile("Dane treningowe"));
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message,ex.GetType().ToString());
+            }
         }
 
-        private void SelectTrainedNeuralNetwork_Click(object sender, RoutedEventArgs e)
+        private async void SelectTrainedNeuralNetwork_Click(object sender, RoutedEventArgs e)
         {
-            Task selectmyNetworkFile = Task.Run(() => myNetwork = new NeuralNetwork(SelectTxtFile("Plik z siecią początkową")));
-            selectmyNetworkFile.ContinueWith(task => {
+            string path = SelectTxtFile("Plik z siecią początkową");
+            try
+            {
+                if (Path.GetExtension(path) == ".txt")
+                {
+                    myNetwork = new NeuralNetwork(path);
+                }
+                else if(Path.GetExtension(path) == ".json")
+                {
+                    StreamReader sr = new StreamReader(path);
+                    string json = sr.ReadToEnd();
+                    myNetwork = JsonConvert.DeserializeObject<NeuralNetwork>(json);
+                    sr.Close();
+                }
+                else
+                {
+                    throw new Exception("Cannot read Network from file");
+                }
                 NeuralNetworkStructure.Dispatcher.Invoke(() => DrawNeuralNetwork());
-            });
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void SelectFileToSaveTrainedNeuralNetwork_Click(object sender, RoutedEventArgs e)
         {
-            string path = SelectTxtFile("Plik zapisu do sieci");
-            if (path != null)
+            savingFilePath = SelectTxtFile("Plik zapisu do sieci");
+        }
+        private void EndingConditionClick(object sender, RoutedEventArgs e)
+        {
+            if(TimerCondition.IsChecked == true)
             {
-                savingFile = new StreamWriter(path);
+                TBCondition.Text = "Oczekiwany czas treningu (s)";
+            }
+            else if(MistakesCondition.IsChecked == true)
+            {
+                TBCondition.Text = "Oczekiwany prog bledow";
+            }
+            else if(EpochCondition.IsChecked == true)
+            {
+                TBCondition.Text = "Liczba epoch";
             }
         }
-
         private void DrawNeuralNetwork()
         {
             if (myNetwork.mLayers.Count > 0)
@@ -156,59 +166,80 @@ namespace NeuralNetworkBase
             pauseEvent.Set();
             StopBtn.Content = "Stop";
         }
-        void Timer(int seconds)
+        private bool IsSigmoidChecked()
         {
-            int mSeconds = 0;
-            while (mSeconds != seconds && !cancelTokenTraining.IsCancellationRequested)
-            {
-                Thread.Sleep(1000);
-                mSeconds++;
-                TrainingProgressBar.Dispatcher.Invoke(() =>
-                {
-                    TrainingProgressBar.Value = (double)mSeconds / (double)seconds * 100;
-                });
-                pauseEvent.Wait();
-            }
-        }
-        private bool isSigmoidChecked()
-        {
-            bool isSigmoidChecked = false;
             if (Sigmoid.IsChecked == true)
             {
-                isSigmoidChecked = true;
+                return true;
             }
-            return isSigmoidChecked;
+            return false;
         }
 
-        private bool isReluChecked()
+        private bool IsReluChecked()
         {
-            bool isReluChecked = false;
             if (Relu.IsChecked == true)
             {
-                isReluChecked = true;
+                return true;
             }
-            return isReluChecked;
+            return false;
+        }
+        private bool IsZeroOneChecked()
+        {
+            if(ZeroOne.IsChecked == true)
+            {
+                return true;
+            }
+            return false;
+        }
+        void Timer(int totalSeconds,int actualSeconds)
+        {
+                TrainingProgressBar.Dispatcher.Invoke(() =>
+                {
+                    TrainingProgressBar.Value = (double)actualSeconds / (double)totalSeconds * 100;
+                });
+        }
+        private void StartTimer()
+        {
+            int timerSeconds = 0;
+            int totalSeconds = 0;
+            ExpectedTrainingTime.Dispatcher.Invoke(() => { int.TryParse(ExpectedTrainingTime.Text, out totalSeconds); });
+            Task setTimer = Task.Run(async () =>
+            {
+                while (timerSeconds < totalSeconds && !cancelTokenTraining.IsCancellationRequested)
+                {
+                    pauseEvent.Wait();
+                    Timer(totalSeconds, timerSeconds);
+                    timerSeconds++;
+                    await Task.Delay(1000);
+                }
+                Timer(1, 1);
+                cancelTokenTraining.Cancel();
+            });
         }
 
         private void SetActivationFunction()
         {
-            isSigmoidChecked();
-            if (isSigmoidChecked())
+            IsSigmoidChecked();
+            if (IsSigmoidChecked())
             {
                 myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.sigmoid;
             }
-            else if (isReluChecked())
+            else if (IsReluChecked())
             {
                 myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.relu;
+            }
+            else if(IsZeroOneChecked())
+            {
+                myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.zeroOne;
             }
         }
 
         private int Training()
         {
             int mistakes = 0;
-            for (int i = 0; i < trainingData.Count; i++)
+            for (int i = 0; i < trainingData.inputData.Count; i++)
             {
-                if (!myNetwork.NetworkTraining(trainingData[i], trainingResults[i], 0.1))
+                if (!myNetwork.NetworkTraining(trainingData.inputData[i], trainingData.trainingResults[i], 0.1))
                 {
                     mistakes++;
                 }
@@ -222,15 +253,29 @@ namespace NeuralNetworkBase
                 textBlock.Text = text;
             });
         }
-
-        private void TrainNetwork()
+        private void SetInformation()
         {
-            int seconds = 5;                                                 // TUTAJ DODAC POBIERANIE OKRESLONEGO CZASU Z OKIENKA
-            ExpectedTrainingTime.Dispatcher.Invoke(() =>
+            if (cancelTokenTraining.IsCancellationRequested)
             {
-                 int.TryParse(ExpectedTrainingTime.Text, out seconds);
-            });
-            Task setTimer = Task.Run(() => Timer(seconds));
+                SetTextOnTextBlock(InformationStatus, "Przerwano nauczanie");
+            }
+            else
+            {
+                SetTextOnTextBlock(InformationStatus, "Zakończono nauczanie");
+                cancelTokenTraining.Cancel();
+            }
+            isTrainingCompleted = true;
+        }
+        private void StartProgressBar()
+        {
+            if(endingCondition == WhatEndingCondition.timer)
+            {
+                StartTimer();
+            }
+        }
+        private void TrainNetwork(int totalSeconds)
+        {
+            StartProgressBar();
             int mistakes = 1;
             Task ShowErrors = null;
             while (mistakes != 0 && !cancelTokenTraining.IsCancellationRequested)
@@ -242,31 +287,19 @@ namespace NeuralNetworkBase
                 }
                 if (ShowErrors == null || ShowErrors.IsCompleted)
                 {
-                    ShowErrors = Task.Run(() =>
+                    ShowErrors = Task.Run(async () =>
                     {
-                        Thread.Sleep(1000);
+                        SetTextOnTextBlock(MistakesNumber, mistakes.ToString());
+                        await Task.Delay(1000);
                     });
-                    SetTextOnTextBlock(MistakesNumber, mistakes.ToString());
                 }
             }
             ShowErrors.Wait();
             SetTextOnTextBlock(MistakesNumber, mistakes.ToString());
-            if (!cancelTokenTraining.IsCancellationRequested)
-            {
-                setTimer.Wait();
-            }
-            if(cancelTokenTraining.IsCancellationRequested)
-            {
-                SetTextOnTextBlock(InformationStatus, "Przerwano nauczanie");
-            }
-            else
-            {
-                SetTextOnTextBlock(InformationStatus, "Zakończono nauczanie");
-            }
-            isTrainingCompleted = true;
+            SetInformation();
         }
 
-        private void setSettings()
+        private void SetSettings()
         {
             isTrainingCompleted = false;
             Resume();
@@ -275,40 +308,48 @@ namespace NeuralNetworkBase
             SetActivationFunction();
             TrainingProgressBar.Value = 0;
         }
+        private bool IsSetCorrectly()
+        {
+            if (myNetwork != null && trainingData!=null)
+            {
+                if (trainingData.inputData != null && trainingData.trainingResults!= null && trainingData.inputData.Count > 0 && myNetwork.mLayers[0].mNeurons[0].getWeights().Count - 1 == trainingData.inputData[0].Length && trainingData.inputData.Count == trainingData.trainingResults.Count)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        private int GetSecondTimer()
+        {
+            int totalSeconds = 0;
+            int.TryParse(ExpectedTrainingTime.Text, out totalSeconds);
+            return totalSeconds;
+        }
         private void StartTrainingButton_Click(object sender, RoutedEventArgs e)
         {
-            if (myNetwork != null)
+            if (IsSetCorrectly())
             {
-                 if (trainingData.Count > 0 && myNetwork.mLayers[0].mNeurons[0].weights.Count-1 == trainingData[0].Length)
-                 {
-                    Task trainingNetworkTask = new Task(() =>
-                        {
-                            TrainNetwork();
-                        });
-                    if(isTrainingCompleted)
+                int totalSeconds = GetSecondTimer();
+                Task trainingNetworkTask = new Task(() =>
                     {
-                        setSettings();
-                        try
+                        TrainNetwork(totalSeconds);
+                    });
+                if(isTrainingCompleted)
+                {
+                    SetSettings();
+                    try
+                    {
+                        trainingNetworkTask.Start();
+                    }
+                    catch(AggregateException ae)
+                    {
+                        foreach(var element in ae.InnerExceptions)
                         {
-                            trainingNetworkTask.Start();
-                        }
-                        catch(AggregateException ae)
-                        {
-                            foreach(var element in ae.InnerExceptions)
-                            {
-                                MessageBox.Show(element.ToString());
-                            }
+                            MessageBox.Show(element.ToString());
                         }
                     }
-                    else
-                    {
-                        MessageBox.Show("Aby rozpoczac trenowanie sieci musisz poczekać aż aktualne trenowanie zostanie zakończone. Możesz również anulować aktualny trening");
-                    }
-                 }
-                 else
-                 {
-                    MessageBox.Show("Dane nauczania nie zostały wybrane lub nie są zgodne ze strukturą sieci");
-                 }
+                }
             }
             else
             {
@@ -338,20 +379,35 @@ namespace NeuralNetworkBase
             {
                 lock (mLayersLock)
                 {
-                    if (savingFile != null)
+                    if (savingFilePath != "")
                     {
-                        savingFile.Write(myNetwork.GetWholeStructure());
+                        StreamWriter savingFile = new StreamWriter(savingFilePath);
+                        if (Path.GetExtension(savingFilePath) == ".txt")
+                        {
+                            savingFile.Write(myNetwork.GetWholeStructure());
+                        }
+                        else if(Path.GetExtension(savingFilePath) == ".json")
+                        {
+                            string json = JsonConvert.SerializeObject(myNetwork, Newtonsoft.Json.Formatting.Indented);
+                            savingFile.Write(json);
+                        }
+                        else
+                        {
+                            throw new Exception("Bledne rozszerzenie pliku");
+                        }
+                        savingFile.Close();
                     }
                     else
                     {
-                        MessageBox.Show("Aby moc zapisac siec musisz najpierw wybrac plik w ktorym ma zostac zapisana");
+                        throw new Exception("Aby moc zapisac siec musisz najpierw wybrac plik w ktorym ma zostac zapisana");
                     }
+
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
-            }            
+            }      
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -361,7 +417,6 @@ namespace NeuralNetworkBase
                 DrawNeuralNetwork();
             }
         }
+
     }
 }
-
-//myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.relu;
