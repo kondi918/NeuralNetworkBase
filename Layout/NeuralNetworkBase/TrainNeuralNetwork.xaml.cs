@@ -8,6 +8,8 @@ using System.Windows.Controls;
 using System.Xml;
 using Newtonsoft.Json;
 using System.Runtime.Remoting.Messaging;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace NeuralNetworkBase
 {
@@ -25,6 +27,12 @@ namespace NeuralNetworkBase
         bool isTrainingCompleted = true;
         private ManualResetEventSlim pauseEvent = new ManualResetEventSlim(true);
         private readonly object mLayersLock = new object();
+        private List<double[]> trainingDataSet = new List<double[]>();
+        private List<double[]> trainingTestDataSet = new List<double[]>();
+        private List<int> trainingResultSet = new List<int>();
+        private List<int> trainingTestResultSet = new List<int>();
+
+
         private enum WhatEndingCondition
         {
             timer,
@@ -236,15 +244,35 @@ namespace NeuralNetworkBase
 
         private int Training()
         {
-            int mistakes = 0;
-            for (int i = 0; i < trainingData.inputData.Count; i++)
+            if (trainingDataSet.Count > 0)
             {
-                if (!myNetwork.NetworkTraining(trainingData.inputData[i], trainingData.trainingResults[i], 0.1))
+                int mistakes = 0;
+                for (int i = 0; i < trainingDataSet.Count; i++)
                 {
-                    mistakes++;
+                    myNetwork.NetworkTraining(trainingDataSet[i], trainingResultSet[i], 0.1);
                 }
+                for(int i =0; i < trainingTestDataSet.Count; i++)
+                {
+                    if (myNetwork.CalculateSmallNetworkResult(trainingTestDataSet[i]) != trainingTestResultSet[i])
+                    {
+                        mistakes++;
+                    }
+                }
+                return mistakes;
             }
-            return mistakes;
+            else
+            {
+                int mistakes = 0;
+                for (int i = 0; i < trainingData.inputData.Count; i++)
+                {
+                    if (!myNetwork.NetworkTraining(trainingData.inputData[i], trainingData.trainingResults[i], 0.1))
+                    {
+                        mistakes++;
+                    }
+                }
+
+                return mistakes;
+            }
         }
         private void SetTextOnTextBlock(TextBlock textBlock, string text)
         {
@@ -273,9 +301,50 @@ namespace NeuralNetworkBase
                 StartTimer();
             }
         }
+        private void SetTrainingData()
+        {
+            List<double[]> allDataList = trainingData.inputData;
+            List<int> allResultList = trainingData.trainingResults;
+            trainingDataSet.Clear();
+            trainingTestDataSet.Clear();
+            trainingResultSet.Clear();
+            trainingTestResultSet.Clear();
+            Random rnd = new Random();
+            for(int i = 0; i < allResultList.Max(); i++)
+            {
+                for(int j=0; j < allResultList.Count; j++)
+                {
+                    if (allResultList[j] == i)
+                    {
+                        trainingTestResultSet.Add(allResultList[j]);
+                        trainingTestDataSet.Add(allDataList[j]);
+                        allResultList.RemoveAt(j);
+                        allDataList.RemoveAt(j);
+                        break;
+                    }
+                }
+            }
+            for(int i=0; i < allResultList.Count * 0.3; i++)
+            {
+                int index = rnd.Next(0, allResultList.Count);
+                trainingTestResultSet.Add(allResultList[index]);
+                trainingTestDataSet.Add(allDataList[index]);
+                allResultList.RemoveAt(index);
+                allDataList.RemoveAt(index);
+            }
+            for(int i=0; i < allResultList.Count;i++)
+            {
+                trainingDataSet.Add(allDataList[i]);
+                trainingResultSet.Add(allResultList[i]);
+            }
+        }
         private void TrainNetwork(int totalSeconds)
         {
             StartProgressBar();
+            if (trainingData.inputData.Count > 50)      // Dziele na dane treningowe i testowe dla duzego zbioru
+            {
+                SetTrainingData();
+            }
             int mistakes = 1;
             Task ShowErrors = null;
             while (mistakes != 0 && !cancelTokenTraining.IsCancellationRequested)

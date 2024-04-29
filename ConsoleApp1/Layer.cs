@@ -9,24 +9,24 @@ namespace ConsoleApp1
     internal class Layer
     {
         public List<Neuron> mNeurons = new List<Neuron>();
-        public void addNeuron(Neuron neuron)
+        public void AddNeuron(Neuron neuron)
         {
             mNeurons.Add(neuron);
         }
-        public void removeNeuron(int neuronNumber)
+        public void RemoveNeuron(int neuronNumber)
         {
             mNeurons.RemoveAt(neuronNumber);
         }
         public Layer(Neuron[] neurons)
         {
-            for(int i=0; i<neurons.Length; i++)
+            for (int i = 0; i < neurons.Length; i++)
             {
                 this.mNeurons.Add(neurons[i]);
             }
         }
         public Layer(List<Neuron> neurons)
         {
-            for(int i =0; i< neurons.Count; i++)
+            for (int i = 0; i < neurons.Count; i++)
             {
                 this.mNeurons.Add(neurons[i]);
             }

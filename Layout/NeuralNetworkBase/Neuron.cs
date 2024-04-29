@@ -12,6 +12,7 @@ namespace NeuralNetworkBase
         public double predictedResult {  get; set; }
         public double mistake { get; set; }
         public bool shouldBeIncreased { get; set; }
+        public double sum { get; set; }
         public Neuron(double[] weights)
         {
             this.weights.Clear();

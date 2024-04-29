@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -66,13 +67,17 @@ namespace NeuralNetworkBase
                     data.Clear();
                     line = sr.ReadLine();
                 }
+                sr.Close();
             }
         }
-        private void ReadFromJSON(string path)
+        private NeuralNetworkInputData ReadFromJSON(string path)
         {
             StreamReader sr = new StreamReader(path);
             string json = sr.ReadToEnd();
-
+            NeuralNetworkInputData inputDataList = JsonConvert.DeserializeObject<NeuralNetworkInputData>(json);
+            inputDataList.inputData = NormalizeData(inputDataList.inputData);
+            sr.Close();
+            return inputDataList;
         }
         public NeuralNetworkInputData GetInputData(string path)
         {
@@ -84,9 +89,16 @@ namespace NeuralNetworkBase
             }
             else if(System.IO.Path.GetExtension(path) == ".json")
             {
-                //ReadFromJSON(trainingData, trainingResults, path);
+                return ReadFromJSON(path);
             }
               return new NeuralNetworkInputData(NormalizeData(trainingData), trainingResults);
+        }
+        public void AddJSONTrainingData(string path, NeuralNetworkInputData trainingData)
+        {
+            StreamWriter savingFile = new StreamWriter(path, true);
+            string json = JsonConvert.SerializeObject(trainingData, Formatting.Indented);
+            savingFile.Write(json);
+            savingFile.Close();
         }
     }
 }
