@@ -13,12 +13,11 @@ namespace ConsoleApp1
     {
         public enum WhatActivationFunction
         {
-            sigmoid,
             relu,
+            sigmoid,
             zeroOne
         }
-        WhatActivationFunction whatActivationFunction = WhatActivationFunction.sigmoid;
-        // public List<List<double>> layersValues = new List<List<double>>();
+        public WhatActivationFunction whatActivationFunction = WhatActivationFunction.relu;
         public List<Layer> mLayers = new List<Layer>();
 
         //
@@ -26,67 +25,84 @@ namespace ConsoleApp1
         //  Tworzenie sieci
         //
         //
+        private void ReadFromTxt(string path)
+        {
+            List<Neuron> neuronSet = new List<Neuron>();
+            if (path != null)
+            {
+                StreamReader sr = new StreamReader(path);           //Obsluga odczytywania struktury sieci z tekstu
+                string line = "";
+                List<double> weights = new List<double>();
+                while (line != null)
+                {
+                    line = sr.ReadLine();
+                    if (line != null)
+                    {
+                        if (line.Contains("/Layer"))               //Znajduje koniec Layeru i dodaje nowy set Neuronow do Listy oraz zwieksza sie numberofLayers
+                        {
+                            mLayers.Add(new Layer(neuronSet));
+                            neuronSet.Clear();
+                        }
+                        else if (line.Contains("/Neuron"))              //Znajduje koniec neurona i dodaje go do aktualnego setu
+                        {
+                            neuronSet.Add(new Neuron(weights));
+                        }
+                        else if (line.Contains("Neuron"))
+                        {
+                            weights.Clear();
+                        }
+                        else if (line.Contains(';'))                //Zczytywanie wag do aktualnego neurona
+                        {
+                            line = line.Trim();
+                            string[] weightsString = line.Split(';');
+                            for (int i = 0; i < weightsString.Length; i++)
+                            {
+                                if (weightsString[i].Contains("."))
+                                {
+                                    weightsString[i] = weightsString[i].Replace(".", ",");
+                                }
+                                weights.Add(double.Parse(weightsString[i]));
+                            }
+                        }
+                    }
+
+                }
+                sr.Close();
+            }
+        }
         public void ReadFromFile(string path)
         {
             mLayers.Clear();
-            List<Neuron> neuronSet = new List<Neuron>();
             //
             //WAZNE!! W PLIKU TEKSTOWYM PIERWSZA WAGA KTORA PODAMY (w0) odpowiada za BIAS
             //
-
-            StreamReader sr = new(path);             //Obsluga odczytywania struktury sieci z tekstu
-            string line = "";
-            List<double> weights = new List<double>();
-            while (line != null)
-            {
-                line = sr.ReadLine();
-                if (line != null)
-                {
-                    if (line.Contains("/Layer"))               //Znajduje koniec Layeru i dodaje nowy set Neuronow do Listy oraz zwieksza sie numberofLayers
-                    {
-                        mLayers.Add(new Layer(neuronSet));
-                        neuronSet.Clear();
-                    }
-                    else if (line.Contains("/Neuron"))              //Znajduje koniec neurona i dodaje go do aktualnego setu
-                    {
-                        neuronSet.Add(new Neuron(weights));
-                    }
-                    else if (line.Contains("Neuron"))
-                    {
-                        weights.Clear();
-                    }
-                    else if (line.Contains(';'))                //Zczytywanie wag do aktualnego neurona
-                    {
-                        line = line.Trim();
-                        string[] weightsString = line.Split(';');
-                        for (int i = 0; i < weightsString.Length; i++)
-                        {
-                            if (weightsString[i].Contains("."))
-                            {
-                                weightsString[i] = weightsString[i].Replace(".", ",");
-                            }
-                            weights.Add(double.Parse(weightsString[i]));
-                        }
-                    }
-                }
-
-            }
-
-            sr.Close();
+            ReadFromTxt(path);
+        }
+        public void RemoveWeightsFromNeuron(int layerNumber, int neuronNumber)
+        {
+            mLayers[layerNumber].mNeurons[neuronNumber].RemoveWeights();
+        }
+        public void SetNeuronWeights(int layerNumber, int neuronNumber, List<double> weights)
+        {
+            mLayers[layerNumber].mNeurons[neuronNumber].setWeights(weights);
         }
         public void RemoveNeuron(int layerNumber, int neuronNumber)
         {
-            mLayers[layerNumber].removeNeuron(neuronNumber);
+            mLayers[layerNumber].RemoveNeuron(neuronNumber);
         }
 
         //Dodawanie pojedycznego neuronu do Layera
         public void AddNeuron(List<double> weights, int layerNumber)
         {
-            mLayers[layerNumber].addNeuron(new Neuron(weights));
+            mLayers[layerNumber].AddNeuron(new Neuron(weights));
         }
         public void AddNeuron(double[] weights, int layerNumber)
         {
-            mLayers[layerNumber].addNeuron(new Neuron(weights));
+            mLayers[layerNumber].AddNeuron(new Neuron(weights));
+        }
+        public void AddNeuron(int layerNumber)
+        {
+            mLayers[layerNumber].AddNeuron(new Neuron());
         }
         public void RemoveLayer(int layerNumber)
         {
@@ -107,7 +123,7 @@ namespace ConsoleApp1
         }
         // Tutaj przekazujemy neurony oraz podajemy numer layeru (0 to pierwszy numer) 
         // neurons to tablica klasy Neuron
-        public void SetLayer(Neuron[] neurons, int number_of_layer) 
+        public void SetLayer(Neuron[] neurons, int number_of_layer)
         {
             mLayers[number_of_layer] = new Layer(neurons);
         }
@@ -220,80 +236,107 @@ namespace ConsoleApp1
             return GetNetworkResult();
         }
 
+
         //                          UCZENIE SIECI                             // 
-
-
-
-        private double getZeroOneLoss(double neuronResult, int predictedResult)
+        private double GetDerivativeSigmoid(double sum, double output)
         {
-            double threshold = 0.5;
-            if (neuronResult >= threshold)
+            return sum * output * (1 - output);
+        }
+        private void SetOutputMistakes(List<Neuron> neurons)
+        {
+            foreach (var neuron in neurons)
             {
-                return predictedResult == 1 ? 0 : 1;
-            }
-            else
-            {
-                return predictedResult == 0 ? 0 : 1;
+                neuron.mistake = neuron.neuronResult - neuron.predictedResult;
             }
         }
-        private void IncreaseWeights(Neuron neuron, double loss, double learningSpeed)
+        private void SetHiddenLayersMistakes()
+        {
+            for (int layers = mLayers.Count - 1; layers > 0; layers--)
+            {
+                for (int i = 0; i < mLayers[layers - 1].mNeurons.Count; i++)
+                {
+                    double sum = 0;
+                    foreach (var neuron in mLayers[layers].mNeurons)
+                    {
+                        sum += neuron.mistake * neuron.weights[i + 1];        // +1 bo bias ma index 0
+                    }
+                    mLayers[layers - 1].mNeurons[i].mistake = GetDerivativeSigmoid(sum, mLayers[layers - 1].mNeurons[i].neuronResult);
+                }
+            }
+        }
+        private void SetMistakes()
+        {
+            SetOutputMistakes(mLayers[mLayers.Count - 1].mNeurons);
+            SetHiddenLayersMistakes();
+        }
+        private void ChangeWeightsLargeNetwork(Neuron neuron, double learningSpeed)
         {
             for (int i = 1; i < neuron.weights.Count; i++)
             {
-                double input = neuron.inputData[i - 1];
-                double weight = Math.Abs(neuron.weights[i]);
-                double gradient = learningSpeed * loss * input;
-                double delta = weight * gradient;
-                neuron.weights[i] += Math.Sign(neuron.weights[i]) * delta;
+                double newWeight = neuron.weights[i] - learningSpeed * neuron.inputData[i - 1] * neuron.mistake;
+                if (!double.IsNaN(newWeight) && !double.IsInfinity(newWeight))
+                {
+                    neuron.weights[i] = newWeight;
+                }
             }
-            neuron.weights[0] += loss * learningSpeed;
+            neuron.weights[0] += neuron.mistake * learningSpeed;
         }
-        private void ReduceWeights(Neuron neuron, double loss, double learningSpeed)
+        private void BackpropagationMultiNeuronOutput(double learningSpeed)
+        {
+            SetMistakes();
+            for (int i = mLayers.Count - 1; i >= 0; i--)
+            {
+                foreach (var neuron in mLayers[i].mNeurons)
+                {
+                    ChangeWeightsLargeNetwork(neuron, learningSpeed);
+                }
+            }
+        }
+        private void ChangeWeight(Neuron neuron, double mistake, double learningSpeed)
         {
             for (int i = 1; i < neuron.weights.Count; i++)
             {
-                double input = neuron.inputData[i - 1];
-                double weight = Math.Abs(neuron.weights[i]);
-                double gradient = learningSpeed * loss * input;
-                double delta = weight * gradient;
-                neuron.weights[i] -= Math.Sign(neuron.weights[i]) * delta;
+                double newWeight = neuron.weights[i] - learningSpeed * neuron.inputData[i - 1] * mistake;
+                if (!double.IsNaN(newWeight) && !double.IsInfinity(newWeight))
+                {
+                    neuron.weights[i] = newWeight;
+                }
             }
-            neuron.weights[0] -= loss * learningSpeed;
+            neuron.weights[0] += mistake * learningSpeed;
         }
-        private void Backpropagation(Neuron neuron, int predictedResult, double learningSpeed)
+        private void BackpropagationSingleOutput(Neuron neuron, int predictedResult, double learningSpeed)
         {
-            double loss = getZeroOneLoss(neuron.neuronResult, predictedResult);
-            if (predictedResult == 1)
-            {
-                IncreaseWeights(neuron, loss, learningSpeed);
-            }
-            else
-            {
-                ReduceWeights(neuron, loss, learningSpeed);
-            }
+            double mistake = neuron.neuronResult - predictedResult;
+            ChangeWeight(neuron, mistake, learningSpeed);
         }
         public bool NetworkTraining(double[] inputData, int predictedResult, double learningSpeed)
         {
             double networkResult = CalculateSmallNetworkResult(inputData);
-            if (mLayers[mLayers.Count-1].mNeurons.Count == 1)
+            if (mLayers[mLayers.Count - 1].mNeurons.Count == 1)
             {
                 if (predictedResult == 1 && networkResult > 0.5 || predictedResult == 0 && networkResult <= 0.5)
                 {
                     return true;
                 }
+                for (int i = mLayers.Count - 1; i >= 0; i--)
+                {
+                    foreach (var neuron in mLayers[i].mNeurons)
+                    {
+                        BackpropagationSingleOutput(neuron, predictedResult, learningSpeed);
+                    }
+                }
             }
             else
             {
+                foreach (var neuron in mLayers[mLayers.Count - 1].mNeurons)          //przekazywany parametr predicted result to index tego neuronu na ostatniej warstwie, ktory powinien wyjsc
+                {
+                    neuron.predictedResult = 0;
+                }
+                mLayers[mLayers.Count - 1].mNeurons[predictedResult].predictedResult = 1;
+                BackpropagationMultiNeuronOutput(learningSpeed);
                 if (predictedResult == networkResult)
                 {
                     return true;
-                }
-            }
-            for (int i = mLayers.Count - 1; i >= 0; i--)
-            {
-                foreach (var neuron in mLayers[i].mNeurons)
-                {
-                    Backpropagation(neuron, predictedResult, learningSpeed);
                 }
             }
             return false;
@@ -304,16 +347,14 @@ namespace ConsoleApp1
         //      Konstruktory
         //
         //
-        public NeuralNetwork()
-        {
-        }
+        public NeuralNetwork() { }
         public NeuralNetwork(string path)
         {
             ReadFromFile(path);
         }
         public NeuralNetwork(int number_of_layers)
         {
-            for(int i=0; i<number_of_layers; i++)
+            for (int i = 0; i < number_of_layers; i++)
             {
                 mLayers.Add(new Layer());
             }
@@ -337,8 +378,9 @@ namespace ConsoleApp1
                     result += "<Neuron>\n";
                     foreach (var weight in neuron.weights)
                     {
-                        result += weight +";";
+                        result += weight + ";";
                     }
+                    result = result.Remove(result.Length - 1);
                     result += "\n</Neuron>\n";
                 }
                 result += "</Layer>\n";

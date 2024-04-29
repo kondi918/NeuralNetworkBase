@@ -4,9 +4,8 @@ using System;
 using System.Diagnostics.Tracing;
 using System.IO;
 
-CancellationTokenSource cancelTokenTraining = new CancellationTokenSource();
-StreamWriter logFile = new("plikiTekstowe/rozpoznawanieZdan/logiNauczania.txt", true);    // Tworzymy plik do logowania
 NeuralNetwork myNetwork = new NeuralNetwork("plikiTekstowe/dlugopisObraczka/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
+CancellationTokenSource cancelTokenTraining = new CancellationTokenSource();
 List<double[]> trainingData = new List<double[]>();
 List<int> trainingResults = new List<int>();
 
@@ -88,6 +87,7 @@ Task trainingNetworkTask = new Task(() =>
 });
 trainingNetworkTask.Start();
 */
+
 while (1==1)
 {
     Console.WriteLine("Podaj X");

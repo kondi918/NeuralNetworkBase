@@ -166,6 +166,7 @@ namespace NeuralNetworkBase
             {
                 result += neuron.weights[i] * neuron.inputData[i - 1];  // input data ma indeks o 1 mniejszy, poniewaz w wagach waga o indeksie 0 to bias
             }
+            neuron.sum = result;
             if (whatActivationFunction == WhatActivationFunction.relu)
             {
                 neuron.neuronResult = ActivationFunctionRelu(result);
@@ -260,6 +261,7 @@ namespace NeuralNetworkBase
                 }
             }
         }
+   
         private void SetMistakes()
         {
             SetOutputMistakes(mLayers[mLayers.Count - 1].mNeurons);
