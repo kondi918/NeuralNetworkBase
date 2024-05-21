@@ -13,7 +13,7 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width="1.5*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
@@ -35,14 +35,14 @@
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="4" Grid.Column="4" Margin="5" Grid.RowSpan="4" Grid.ColumnSpan="2">
             <Canvas Background="White" Name="mCanvas" MouseMove="Drawing" MouseLeftButtonDown="StartDraw" MouseLeave="EndDraw" MouseLeftButtonUp="EndDraw"></Canvas>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Grid.Column="5" Margin="5" Grid.RowSpan="4" Grid.ColumnSpan="2" Width="10" Height="7">
-            <Canvas Background="White" Name="secondCanvas" Width="10" Height="7"></Canvas>
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="5" Grid.Column="6" Width="28" Height="28">
+            <Canvas Background="White" Name="secondCanvas" Width="28" Height="28"></Canvas>
         </Border>
         <TextBox Grid.Column="1" Grid.Row="5" TextAlignment="Center" Name="expectedResultText"> </TextBox>
         <Button Grid.Column="1" Grid.Row="6" Click="AddDataBtnClick" Name="AddDataBtn">Dodaj Dane</Button>
         <Button Grid.Column="3" Grid.Row="6" Click="ClearBtn_Click" Name="ClearBtn">Wyczyść</Button>
         <TextBlock Grid.Row="4" Grid.Column="1" FontSize="15" TextAlignment="Center">Liczba</TextBlock>
         <TextBlock Grid.Row="4" Grid.Column="7" FontSize="15"  TextAlignment="Center" Grid.ColumnSpan="2">Przewidziana liczba</TextBlock>
-        <TextBlock Grid.Row="5" Grid.Column="7" FontSize="15" Name="networkResultText" TextAlignment="Center" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">2</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="7" FontSize="45" Name="networkResultText" TextAlignment="Center" Grid.ColumnSpan="2" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">2</TextBlock>
     </Grid>
 </Window>

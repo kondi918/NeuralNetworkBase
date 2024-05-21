@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Runtime.Remoting.Messaging;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace NeuralNetworkBase
 {
@@ -73,13 +74,41 @@ namespace NeuralNetworkBase
             }
             return path;
         }
+        private string SelectTxtFileOrFolder(string typeOfSelectingFile)
+        {
+            cancelTokenTraining.Cancel();
+            string path = null;
+            bool isFolderPicker = true;
+            if (MessageBox.Show("Chcesz zaznaczyc pojedynczy plik?", "Rodzaj Danych", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                isFolderPicker = false;
+            }
+            try
+            {
+                CommonOpenFileDialog selectingTxtFile = new CommonOpenFileDialog();
+                selectingTxtFile.InitialDirectory = Directory.GetCurrentDirectory();
+                selectingTxtFile.IsFolderPicker = isFolderPicker;
+                selectingTxtFile.Title = typeOfSelectingFile;
+
+                if (selectingTxtFile.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    path = selectingTxtFile.FileName;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            return path;
+        }
 
 
-        private void ChooseTrainingData_Click(object sender, RoutedEventArgs e)  
+        private async void ChooseTrainingData_Click(object sender, RoutedEventArgs e)  
         {
             try
             {
-                trainingData = fileManager.GetInputData(SelectTxtFile("Dane treningowe"));
+                string path = SelectTxtFileOrFolder("Dane treningowe");
+                trainingData = await fileManager.GetInputData(path);
             }
             catch(Exception ex)
             {
@@ -341,10 +370,12 @@ namespace NeuralNetworkBase
         private void TrainNetwork(int totalSeconds)
         {
             StartProgressBar();
+            /*
             if (trainingData.inputData.Count > 50)      // Dziele na dane treningowe i testowe dla duzego zbioru
             {
                 SetTrainingData();
             }
+            */
             int mistakes = 1;
             Task ShowErrors = null;
             while (mistakes != 0 && !cancelTokenTraining.IsCancellationRequested)

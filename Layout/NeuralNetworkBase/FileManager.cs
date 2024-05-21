@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -13,6 +14,9 @@ namespace NeuralNetworkBase
 {
     internal class FileManager
     {
+        public NeuralNetworkInputData neuralNetworkInputData;
+        public int directoriesLeft = 0;
+        public int foldersLeft = 0;
         [assembly: InternalsVisibleTo("NeuralNetworkUnitTests")]
         public List<double[]> NormalizeData(List<double[]> trainingData)
         {
@@ -79,7 +83,101 @@ namespace NeuralNetworkBase
             sr.Close();
             return inputDataList;
         }
-        public NeuralNetworkInputData GetInputData(string path)
+        private NeuralNetworkInputData MixData(List<SingleImageData> imageData)
+        {
+            List<double[]> mixedData = new List<double[]>(imageData.Count);
+            List<int> mixedResults = new List<int>(imageData.Count);
+            Random rnd = new Random();
+            while (imageData.Count > 0)
+            {
+                int randomIndex = rnd.Next(0, imageData.Count);
+                mixedData.Add(imageData[randomIndex].imageData.ToArray());
+                mixedResults.Add(imageData[randomIndex].result);
+                imageData.RemoveAt(randomIndex);
+            }
+            return new NeuralNetworkInputData(mixedData, mixedResults);
+        }
+
+        private List<double> GetSingleDataFromFile(string file)
+        {
+            List<double> singleData = new List<double>();
+            using (Bitmap bitmap = new Bitmap(file))
+            {
+                for (int i = 0; i < bitmap.Width; i++)
+                {
+                    for (int j = 0; j < bitmap.Height; j++)
+                    {
+                        Color color = bitmap.GetPixel(i, j);
+                        if (color.A == 255 && color.G == 255 && color.B == 255)
+                        {
+                            singleData.Add(0);
+                        }
+                        else
+                        {
+                            singleData.Add(1);
+                        }
+                    }
+                }
+            }
+            return singleData;
+        }
+        async Task<List<SingleImageData>> AddImagesToListAsync(string[] files, int resultNumber)
+        {
+            List<SingleImageData> imageData = new List<SingleImageData>();
+            object listLock = new object();
+
+            var tasks = files.Select(async file =>
+            {
+                List<double> singleData = new List<double>();
+                using (Bitmap bitmap = new Bitmap(file))
+                {
+                    for (int i = 0; i < bitmap.Width; i++)
+                    {
+                        for (int j = 0; j < bitmap.Height; j++)
+                        {
+                            Color color = bitmap.GetPixel(i, j);
+                            if (color.A == 255 && color.G == 255 && color.B == 255)
+                            {
+                                singleData.Add(0);
+                            }
+                            else
+                            {
+                                singleData.Add(1);
+                            }
+                        }
+                    }
+                }
+                lock (listLock)
+                {
+                    imageData.Add(new SingleImageData(singleData, resultNumber));
+                }
+            });
+            await Task.WhenAll(tasks);
+            return imageData;
+        }
+        private async void ReadImagesFromDirectories(string path)
+        {
+            string[] directories = Directory.GetDirectories(path);
+            List<Task<List<SingleImageData>>> tasks = new List<Task<List<SingleImageData>>>();
+            int numberOfFiles = 0;
+
+            foreach (var directory in directories)
+            {
+                string[] files = Directory.GetFiles(directory, "*.png");
+                tasks.Add(AddImagesToListAsync(files, numberOfFiles));
+                numberOfFiles++;
+            }
+
+            // Czekaj na zakończenie wszystkich zadań
+            var results = await Task.WhenAll(tasks);
+
+            // Połącz wyniki z wszystkich katalogów
+            List<SingleImageData> allImageData = results.SelectMany(x => x).ToList();
+
+            neuralNetworkInputData = MixData(allImageData);
+        }
+
+        public async Task<NeuralNetworkInputData> GetInputData(string path)
         {
             List<double[]> trainingData = new List<double[]>();
             List<int> trainingResults = new List<int>();
@@ -90,6 +188,13 @@ namespace NeuralNetworkBase
             else if(System.IO.Path.GetExtension(path) == ".json")
             {
                 return ReadFromJSON(path);
+            }
+            else
+            {
+                if(Directory.GetDirectories(path).Length > 0)
+                {
+                    return await ReadImagesFromDirectories(path);
+                }
             }
               return new NeuralNetworkInputData(NormalizeData(trainingData), trainingResults);
         }

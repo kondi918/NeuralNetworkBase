@@ -100,3 +100,5 @@ E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\Newtonsof
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\Newtonsoft.Json.xml
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\obj\Debug\TestNetworkWindow.g.cs
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\obj\Debug\TestNetworkWindow.baml
+E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\Microsoft.WindowsAPICodePack.dll
+E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll

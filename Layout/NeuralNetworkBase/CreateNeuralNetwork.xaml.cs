@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,6 +26,7 @@ namespace NeuralNetworkBase
         StreamWriter savingFile = null;
         NeuralNetwork myNetwork = new NeuralNetwork();
         Random random = new Random();
+        string savingPath;
         public CreateNeuralNetwork()
         {
             InitializeComponent();
@@ -69,7 +71,7 @@ namespace NeuralNetworkBase
             {
                 OpenFileDialog selectingTxtFile = new OpenFileDialog();
                 selectingTxtFile.InitialDirectory = Directory.GetCurrentDirectory();
-                selectingTxtFile.Filter = "Text files (*.txt)|*.txt";
+                selectingTxtFile.Filter = "Text files (*.txt)|*.txt|JSON files (*.json)|*.json|All Files (*)|*.*";
                 selectingTxtFile.Title = typeOfSelectingFile;
 
                 if (selectingTxtFile.ShowDialog() == true)
@@ -85,11 +87,7 @@ namespace NeuralNetworkBase
         }
         private void ChooseTrainingData_Click(object sender, RoutedEventArgs e)
         {
-            string path = SelectTxtFile("Plik zapisu do sieci");
-            if(path != null)
-            {
-                savingFile = new StreamWriter(path);
-            }
+            savingPath = SelectTxtFile("Plik zapisu do sieci");
         }
         private void AddLayerButton_Click(object sender, RoutedEventArgs e)
         {
@@ -266,9 +264,23 @@ namespace NeuralNetworkBase
 
         private void SaveNeuralNetworkButton_Click(object sender, RoutedEventArgs e)
         {
-            if(savingFile !=null)
+            if (savingPath != "")
             {
-                savingFile.Write(myNetwork.GetWholeStructure());
+                StreamWriter savingFile = new StreamWriter(savingPath);
+                if (System.IO.Path.GetExtension(savingPath) == ".txt")
+                {
+                    savingFile.Write(myNetwork.GetWholeStructure());
+                }
+                else if (System.IO.Path.GetExtension(savingPath) == ".json")
+                {
+                    string json = JsonConvert.SerializeObject(myNetwork, Newtonsoft.Json.Formatting.Indented);
+                    savingFile.Write(json);
+                }
+                else
+                {
+                    throw new Exception("Bledne rozszerzenie pliku");
+                }
+                savingFile.Close();
             }
             else
             {

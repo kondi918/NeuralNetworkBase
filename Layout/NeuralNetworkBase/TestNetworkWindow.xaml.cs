@@ -1,11 +1,10 @@
-﻿using Microsoft.Win32;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -21,7 +20,8 @@ namespace NeuralNetworkBase
     public partial class TestNetworkWindow : Window
     {
         private bool isDrawing = false;
-        private System.Windows.Point startPoint;
+        System.Windows.Point startPoint;
+        List<List<System.Windows.Point>> points = new List<List<System.Windows.Point>>();
         NeuralNetworkInputData inputData;
         NeuralNetwork myNetwork;
 
@@ -49,7 +49,7 @@ namespace NeuralNetworkBase
         {
             try
             {
-                StreamReader sr = new StreamReader("NetworkTest/54-20-10FirstNetwork.json");
+                StreamReader sr = new StreamReader("NetworkTest/784-100-10STARTING.json");
                 string json = sr.ReadToEnd();
                 myNetwork = JsonConvert.DeserializeObject<NeuralNetwork>(json);
                 sr.Close();
@@ -63,6 +63,7 @@ namespace NeuralNetworkBase
         {
             if (isDrawing)
             {
+                List<System.Windows.Point> currentPoints = new List<System.Windows.Point>();
                 System.Windows.Point currentPoint = e.GetPosition(mCanvas);
 
                 // Pierwsza linia
@@ -78,13 +79,22 @@ namespace NeuralNetworkBase
                     line1.Y2 = currentPoint.Y;
                     mCanvas.Children.Add(line1);
                 }
+    
+                    currentPoints.Add(startPoint);
+                    currentPoints.Add(currentPoint);
+                    points.Add(currentPoints);
+
+                
                 startPoint = currentPoint;
 
+                RecognizeAndDrawCharacter();
 
             }
+
         }
         private List<double> ReadCanvasPixels()
         {
+
             RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)secondCanvas.ActualWidth, (int)secondCanvas.ActualHeight, 96, 96, PixelFormats.Default);
             renderBitmap.Render(secondCanvas);
 
@@ -96,16 +106,17 @@ namespace NeuralNetworkBase
             BitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
             List<System.Drawing.Color> colorList = new List<System.Drawing.Color>();
+            Bitmap testMap = new Bitmap(28, 28);
             using (MemoryStream ms = new MemoryStream())
             {
                 encoder.Save(ms);
                 Bitmap bitmap = new Bitmap(ms);
-                for (int y=1; y<bitmap.Height; y++)
+                for (int y=0; y<bitmap.Width; y++)
                 {
-                    for(int x=1; x<bitmap.Width;x++)
+                    for(int x=0; x<bitmap.Height;x++)
                     {
                         {
-
+                            testMap.SetPixel(y,x,bitmap.GetPixel(y,x));
                            colorList.Add(bitmap.GetPixel(x, y));
 
                         }
@@ -113,6 +124,7 @@ namespace NeuralNetworkBase
                 }
 
             }
+            testMap.Save("myTestMap.png", ImageFormat.Png);
             List<double> pixelList = new List<double>();
             foreach(var element in colorList)
             {
@@ -135,7 +147,7 @@ namespace NeuralNetworkBase
         }
         private void ShowNetworkResult()
         {
-            RecognizeAndDrawCharacter();
+            //RecognizeAndDrawCharacter();
             List<double> pixels = ReadCanvasPixels();
             networkResultText.Text = myNetwork.CalculateSmallNetworkResult(pixels.ToArray()).ToString();
         }
@@ -153,7 +165,7 @@ namespace NeuralNetworkBase
         }
         private void AddDataBtnClick(object sender, RoutedEventArgs e)
         {
-            RecognizeAndDrawCharacter();
+            //RecognizeAndDrawCharacter();
             List<double> pixels = ReadCanvasPixels();
             if (pixels != null && pixels.Count == 54)
             {
@@ -172,73 +184,113 @@ namespace NeuralNetworkBase
         }
         private void RecognizeAndDrawCharacter()
         {
+            // Usuń wszystkie obecne linie z secondCanvas
             secondCanvas.Children.Clear();
-            secondCanvas.Width = 10;
-            secondCanvas.Height = 7;
-            List<System.Windows.Point> characterPoints = GetCharacterPoints(); // Pobierz punkty, które reprezentują kształt
+
+            // Następnie rysuj nowy kształt na secondCanvas
+            secondCanvas.Width = 28;
+            secondCanvas.Height = 28;
+            // List<System.Windows.Point> characterPoints = GetCharacterPoints(); // Pobierz punkty, które reprezentują kształt
 
             // Jeśli punkty reprezentują kształt, narysuj go na secondCanvas
-            if (characterPoints.Count > 0)
+            if (points.Count > 0)
             {
+                double minX = points[0].Min(p => p.X);
+                double maxX = points[0].Max(p => p.X);
+                double minY = points[0].Min(p => p.Y);
+                double maxY = points[0].Max(p => p.Y);
                 // Znajdź minimalne i maksymalne współrzędne punktów, aby obliczyć rozmiar kształtu
-                double minX = characterPoints.Min(p => p.X);
-                double maxX = characterPoints.Max(p => p.X);
-                double minY = characterPoints.Min(p => p.Y);
-                double maxY = characterPoints.Max(p => p.Y);
-
+                foreach (var point in points)
+                {
+                    if(point.Min(p => p.X) < minX)
+                    {
+                        minX = point.Min(p => p.X);
+                    }
+                    if(point.Max(p => p.X) > maxX)
+                    {
+                        maxX = point.Max(p => p.X);
+                    }
+                    if(point.Min(p => p.Y) < minY)
+                    {
+                        minY = point.Min(p => p.Y);
+                    }
+                    if (point.Max(p => p.Y) > maxY)
+                    {
+                        maxY = point.Max(p => p.Y);
+                    }
+                }
                 // Oblicz wymiary kształtu
                 double shapeWidth = maxX - minX;
                 double shapeHeight = maxY - minY;
 
                 // Przelicz współczynniki skalowania, aby przeskalować kształt do wymiaru 10x7 pikseli
-                double scaleX = 10.0 / shapeWidth;
-                double scaleY = 7.0 / shapeHeight;
+                double scaleX = 20 / shapeWidth;
+                double scaleY = 20 / shapeHeight;
 
                 // Wybierz mniejszy współczynnik skalowania, aby zachować proporcje
                 double scale = Math.Min(scaleX, scaleY);
 
                 // Oblicz przesunięcie, aby wyśrodkować kształt na kanwie
-                double offsetX = (10 - shapeWidth * scale) / 2;
-                double offsetY = (7 - shapeHeight * scale) / 2;
-
-                // Narysuj przeskalowany kształt
-                for (int i = 0; i < characterPoints.Count - 1; i++)
+                double offsetX = (28 - shapeWidth * scale) / 2;
+                double offsetY = (28 - shapeHeight * scale) / 2;
+                foreach (var point in points)
                 {
-                    Line line = new Line();
-                    line.Stroke = System.Windows.Media.Brushes.Black;
-                    line.StrokeThickness = 1; // Grubość linii może być dostosowana
-                    line.X1 = (characterPoints[i].X - minX) * scale + offsetX;
-                    line.Y1 = (characterPoints[i].Y - minY) * scale + offsetY;
-                    line.X2 = (characterPoints[i + 1].X - minX) * scale + offsetX;
-                    line.Y2 = (characterPoints[i + 1].Y - minY) * scale + offsetY;
+                    // Narysuj przeskalowany kształt
+                    for (int i = 0; i < point.Count - 1; i++)
+                    {
+                        Line line = new Line();
+                        line.Stroke = System.Windows.Media.Brushes.Black;
+                        line.StrokeThickness = 4; // Grubość linii może być dostosowana
+                        line.X1 = (point[i].X - minX) * scale + offsetX;
+                        line.Y1 = (point[i].Y - minY) * scale + offsetY;
+                        line.X2 = (point[i + 1].X - minX) * scale + offsetX;
+                        line.Y2 = (point[i + 1].Y - minY) * scale + offsetY;
 
-                    secondCanvas.Children.Add(line);
+                        secondCanvas.Children.Add(line);
+
+                    }
                 }
             }
             secondCanvas.UpdateLayout();
         }
-
-        private List<System.Windows.Point> GetCharacterPoints()
+        private void CopyAndScaleCanvasContent()
         {
-            List<System.Windows.Point> points = new List<System.Windows.Point>();
+            int targetWidth = 28;
+            int targetHeight = 28;
 
-            foreach (var child in mCanvas.Children)
-            {
-                if (child is Line)
-                {
-                    Line line = (Line)child;
-                    points.Add(new System.Windows.Point(line.X1, line.Y1));
-                    points.Add(new System.Windows.Point(line.X2, line.Y2));
-                }
-            }
+            // Aktualizacja układu sourceCanvas, aby uzyskać rzeczywiste wymiary
+            mCanvas.Measure(new System.Windows.Size(mCanvas.ActualWidth, mCanvas.ActualHeight));
+            mCanvas.Arrange(new Rect(new System.Windows.Size(mCanvas.ActualWidth, mCanvas.ActualHeight)));
 
-            return points;
+            // Renderowanie zawartości sourceCanvas jako obrazu
+            RenderTargetBitmap rtb = new RenderTargetBitmap((int)mCanvas.ActualWidth, (int)mCanvas.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+            rtb.Render(mCanvas);
+
+            // Tworzenie obrazu ze źródłowego RenderTargetBitmap
+            System.Windows.Controls.Image image = new System.Windows.Controls.Image();
+            image.Source = rtb;
+            image.Width = mCanvas.ActualWidth;
+            image.Height = mCanvas.ActualHeight;
+
+            // Skalowanie obrazu
+            ScaleTransform scaleTransform = new ScaleTransform((double)targetWidth / mCanvas.ActualWidth, (double)targetHeight / mCanvas.ActualHeight);
+            image.RenderTransform = scaleTransform;
+            image.RenderTransformOrigin = new System.Windows.Point(0, 0);
+
+            // Dodanie przeskalowanego obrazu do targetCanvas
+            secondCanvas.Children.Clear(); // Wyczyść docelowy Canvas, jeśli jest taka potrzeba
+            secondCanvas.Children.Add(image);
+
+            // Aktualizacja układu targetCanvas
+            secondCanvas.Width = targetWidth;
+            secondCanvas.Height = targetHeight;
+            secondCanvas.UpdateLayout();
         }
-
         private void ClearBtn_Click(object sender, RoutedEventArgs e)
         {
             mCanvas.Children.Clear();
             secondCanvas.Children.Clear();
+            points.Clear();
         }
     }
 
