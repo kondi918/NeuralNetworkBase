@@ -49,7 +49,7 @@ namespace NeuralNetworkBase
         {
             try
             {
-                StreamReader sr = new StreamReader("NetworkTest/784-100-10STARTING.json");
+                StreamReader sr = new StreamReader("NetworkTest/784-100-10LEARNING.json");
                 string json = sr.ReadToEnd();
                 myNetwork = JsonConvert.DeserializeObject<NeuralNetwork>(json);
                 sr.Close();

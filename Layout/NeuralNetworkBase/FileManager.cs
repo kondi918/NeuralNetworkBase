@@ -14,9 +14,11 @@ namespace NeuralNetworkBase
 {
     internal class FileManager
     {
-        public NeuralNetworkInputData neuralNetworkInputData;
-        public int directoriesLeft = 0;
-        public int foldersLeft = 0;
+        public NeuralNetworkInputData neuralInputData;
+        public int numberOfDirectiory = 0;
+        public int totalNumberOfDirectories = 0;
+        public bool isReadingComplete = false;
+        public bool isGettingFilesDone { get; set; } = false;
         [assembly: InternalsVisibleTo("NeuralNetworkUnitTests")]
         public List<double[]> NormalizeData(List<double[]> trainingData)
         {
@@ -97,30 +99,6 @@ namespace NeuralNetworkBase
             }
             return new NeuralNetworkInputData(mixedData, mixedResults);
         }
-
-        private List<double> GetSingleDataFromFile(string file)
-        {
-            List<double> singleData = new List<double>();
-            using (Bitmap bitmap = new Bitmap(file))
-            {
-                for (int i = 0; i < bitmap.Width; i++)
-                {
-                    for (int j = 0; j < bitmap.Height; j++)
-                    {
-                        Color color = bitmap.GetPixel(i, j);
-                        if (color.A == 255 && color.G == 255 && color.B == 255)
-                        {
-                            singleData.Add(0);
-                        }
-                        else
-                        {
-                            singleData.Add(1);
-                        }
-                    }
-                }
-            }
-            return singleData;
-        }
         async Task<List<SingleImageData>> AddImagesToListAsync(string[] files, int resultNumber)
         {
             List<SingleImageData> imageData = new List<SingleImageData>();
@@ -155,14 +133,16 @@ namespace NeuralNetworkBase
             await Task.WhenAll(tasks);
             return imageData;
         }
-        private async void ReadImagesFromDirectories(string path)
+        private async Task ReadImagesFromDirectories(string path)
         {
             string[] directories = Directory.GetDirectories(path);
+            totalNumberOfDirectories = directories.Length;
             List<Task<List<SingleImageData>>> tasks = new List<Task<List<SingleImageData>>>();
             int numberOfFiles = 0;
 
             foreach (var directory in directories)
             {
+                numberOfDirectiory++;
                 string[] files = Directory.GetFiles(directory, "*.png");
                 tasks.Add(AddImagesToListAsync(files, numberOfFiles));
                 numberOfFiles++;
@@ -174,10 +154,10 @@ namespace NeuralNetworkBase
             // Połącz wyniki z wszystkich katalogów
             List<SingleImageData> allImageData = results.SelectMany(x => x).ToList();
 
-            neuralNetworkInputData = MixData(allImageData);
+            neuralInputData = MixData(allImageData);
         }
 
-        public async Task<NeuralNetworkInputData> GetInputData(string path)
+        public  NeuralNetworkInputData GetInputData(string path)
         {
             List<double[]> trainingData = new List<double[]>();
             List<int> trainingResults = new List<int>();
@@ -189,14 +169,15 @@ namespace NeuralNetworkBase
             {
                 return ReadFromJSON(path);
             }
-            else
+            return new NeuralNetworkInputData(NormalizeData(trainingData), trainingResults);
+        }
+        public async Task GetInputDataFromFiles(string path)
+        {
+            if (Directory.GetDirectories(path).Length > 0)
             {
-                if(Directory.GetDirectories(path).Length > 0)
-                {
-                    return await ReadImagesFromDirectories(path);
-                }
+                await ReadImagesFromDirectories(path);
+                isReadingComplete = true;
             }
-              return new NeuralNetworkInputData(NormalizeData(trainingData), trainingResults);
         }
         public void AddJSONTrainingData(string path, NeuralNetworkInputData trainingData)
         {

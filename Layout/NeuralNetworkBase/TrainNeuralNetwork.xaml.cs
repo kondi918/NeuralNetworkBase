@@ -19,13 +19,14 @@ namespace NeuralNetworkBase
     /// </summary>
     public partial class TrainNeuralNetwork : Window
     {
-        CancellationTokenSource cancelTokenTraining = new CancellationTokenSource();                           //TU ZMIANA NA NULLE UWAGA KURWA TU ZMIANA NA NULLE
+        CancellationTokenSource cancelTokenTraining = new CancellationTokenSource();                          
         StreamWriter logFile = null;    // Tworzymy plik do logowania
         string savingFilePath = "";  // Tworzymy plik do zapisu
         NeuralNetwork myNetwork = null;             //NULL BO WYBIERAM SAM PLIK Z SIECIĄ POCZĄTKOWĄ  // new NeuralNetwork("plikiTekstowe/dlugopisObraczka/siecPoczatkowa.txt");    //pobieram dane sieci z pliku
         FileManager fileManager = new FileManager();
         NeuralNetworkInputData trainingData;
         bool isTrainingCompleted = true;
+        bool isFolderPicker = true;
         private ManualResetEventSlim pauseEvent = new ManualResetEventSlim(true);
         private readonly object mLayersLock = new object();
         private List<double[]> trainingDataSet = new List<double[]>();
@@ -78,7 +79,7 @@ namespace NeuralNetworkBase
         {
             cancelTokenTraining.Cancel();
             string path = null;
-            bool isFolderPicker = true;
+            isFolderPicker = true;
             if (MessageBox.Show("Chcesz zaznaczyc pojedynczy plik?", "Rodzaj Danych", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 isFolderPicker = false;
@@ -108,7 +109,27 @@ namespace NeuralNetworkBase
             try
             {
                 string path = SelectTxtFileOrFolder("Dane treningowe");
-                trainingData = await fileManager.GetInputData(path);
+                if(!isFolderPicker)
+                {
+                    trainingData = fileManager.GetInputData(path);
+                }
+                else
+                {
+                    fileManager.isReadingComplete = false;
+                    Task readingTask = Task.Run(async () => await fileManager.GetInputDataFromFiles(path));
+                    while (!fileManager.isReadingComplete)
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            SetTextOnTextBlock(InformationStatus, "Wczytywanie katalogow: " + fileManager.numberOfDirectiory + " / " + fileManager.totalNumberOfDirectories + " katalogów");
+                        });
+                        await Task.Delay(1000);
+                    }
+
+                    trainingData = fileManager.neuralInputData;
+                    SetTextOnTextBlock(InformationStatus, "Wczytywanie zakończone");
+
+                }
             }
             catch(Exception ex)
             {
@@ -328,43 +349,6 @@ namespace NeuralNetworkBase
             if(endingCondition == WhatEndingCondition.timer)
             {
                 StartTimer();
-            }
-        }
-        private void SetTrainingData()
-        {
-            List<double[]> allDataList = trainingData.inputData;
-            List<int> allResultList = trainingData.trainingResults;
-            trainingDataSet.Clear();
-            trainingTestDataSet.Clear();
-            trainingResultSet.Clear();
-            trainingTestResultSet.Clear();
-            Random rnd = new Random();
-            for(int i = 0; i < allResultList.Max(); i++)
-            {
-                for(int j=0; j < allResultList.Count; j++)
-                {
-                    if (allResultList[j] == i)
-                    {
-                        trainingTestResultSet.Add(allResultList[j]);
-                        trainingTestDataSet.Add(allDataList[j]);
-                        allResultList.RemoveAt(j);
-                        allDataList.RemoveAt(j);
-                        break;
-                    }
-                }
-            }
-            for(int i=0; i < allResultList.Count * 0.3; i++)
-            {
-                int index = rnd.Next(0, allResultList.Count);
-                trainingTestResultSet.Add(allResultList[index]);
-                trainingTestDataSet.Add(allDataList[index]);
-                allResultList.RemoveAt(index);
-                allDataList.RemoveAt(index);
-            }
-            for(int i=0; i < allResultList.Count;i++)
-            {
-                trainingDataSet.Add(allDataList[i]);
-                trainingResultSet.Add(allResultList[i]);
             }
         }
         private void TrainNetwork(int totalSeconds)
