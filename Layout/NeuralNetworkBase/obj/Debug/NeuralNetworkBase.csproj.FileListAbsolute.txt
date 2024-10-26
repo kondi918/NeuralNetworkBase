@@ -86,7 +86,6 @@ E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\System.Th
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\System.Buffers.dll
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
-E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\obj\Debug\NeuralNetworkBase.csproj.CopyComplete
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\System.Buffers.xml
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\System.Memory.xml
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\System.Numerics.Vectors.xml
@@ -102,3 +101,4 @@ E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\obj\Debug\TestNetwo
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\obj\Debug\TestNetworkWindow.baml
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\Microsoft.WindowsAPICodePack.dll
 E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
+E:\C#\GitProjects\NeuralNetworkBase\Layout\NeuralNetworkBase\obj\Debug\NeuralNe.48B90A9E.Up2Date

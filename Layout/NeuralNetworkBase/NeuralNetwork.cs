@@ -235,9 +235,9 @@ namespace NeuralNetworkBase
 
 
         //                          UCZENIE SIECI                             // 
-        private double GetDerivativeSigmoid(double sum, double output)
+        private double GetDerivativeSigmoid(double output)
         {
-            return sum * output * (1 - output);
+            return output * (1 - output);
         }
         private void SetOutputMistakes(List<Neuron> neurons)
         {
@@ -257,7 +257,7 @@ namespace NeuralNetworkBase
                     {
                         sum += neuron.mistake * neuron.weights[i+1];        // +1 bo bias ma index 0
                     }
-                    mLayers[layers - 1].mNeurons[i].mistake = GetDerivativeSigmoid(sum, mLayers[layers - 1].mNeurons[i].neuronResult);
+                    mLayers[layers - 1].mNeurons[i].mistake = sum * GetDerivativeSigmoid(mLayers[layers - 1].mNeurons[i].neuronResult);
                 }
             }
         }

@@ -36,8 +36,9 @@
             <Canvas Background="White" Name="mCanvas" MouseMove="Drawing" MouseLeftButtonDown="StartDraw" MouseLeave="EndDraw" MouseLeftButtonUp="EndDraw"></Canvas>
         </Border>
         <Border BorderBrush="Black" BorderThickness="1" Grid.Row="5" Grid.Column="6" Width="28" Height="28">
-            <Canvas Background="White" Name="secondCanvas" Width="28" Height="28"></Canvas>
+            <Canvas Background="White" Name="secondCanvas" Width="12" Height="12"></Canvas>
         </Border>
+        <Canvas Background="White" Name="clonnedCanvas" Width="12" Height="12" Grid.Row="5" Grid.Column="6" Visibility="Hidden"></Canvas>
         <TextBox Grid.Column="1" Grid.Row="5" TextAlignment="Center" Name="expectedResultText"> </TextBox>
         <Button Grid.Column="1" Grid.Row="6" Click="AddDataBtnClick" Name="AddDataBtn">Dodaj Dane</Button>
         <Button Grid.Column="3" Grid.Row="6" Click="ClearBtn_Click" Name="ClearBtn">Wyczyść</Button>

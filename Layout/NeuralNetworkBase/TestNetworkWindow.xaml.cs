@@ -6,7 +6,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -49,7 +48,7 @@ namespace NeuralNetworkBase
         {
             try
             {
-                StreamReader sr = new StreamReader("NetworkTest/784-100-10LEARNING.json");
+                StreamReader sr = new StreamReader("NetworkTest/256-50-10LEARNED.json");
                 string json = sr.ReadToEnd();
                 myNetwork = JsonConvert.DeserializeObject<NeuralNetwork>(json);
                 sr.Close();
@@ -92,11 +91,40 @@ namespace NeuralNetworkBase
             }
 
         }
+        private void ClonningCanvas()
+        {
+            clonnedCanvas.Visibility = Visibility.Visible;
+            clonnedCanvas.Children.Clear();
+
+            foreach (UIElement element in secondCanvas.Children)
+            {
+                if (element is Line line)
+                {
+                    Line clonedLine = new Line
+                    {
+                        X1 = line.X1,
+                        Y1 = line.Y1,
+                        X2 = line.X2,
+                        Y2 = line.Y2,
+                        Stroke = line.Stroke,
+                        StrokeThickness = line.StrokeThickness,
+                        StrokeDashArray = new DoubleCollection(line.StrokeDashArray),
+                        StrokeStartLineCap = line.StrokeStartLineCap,
+                        StrokeEndLineCap = line.StrokeEndLineCap,
+                        StrokeLineJoin = line.StrokeLineJoin
+                    };
+
+                    clonnedCanvas.Children.Add(clonedLine);
+                }
+            }
+            clonnedCanvas.Measure(new System.Windows.Size(Double.PositiveInfinity, Double.PositiveInfinity));
+            clonnedCanvas.Arrange(new Rect(0, 0, clonnedCanvas.ActualWidth, clonnedCanvas.ActualHeight));
+        }
         private List<double> ReadCanvasPixels()
         {
-
-            RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)secondCanvas.ActualWidth, (int)secondCanvas.ActualHeight, 96, 96, PixelFormats.Default);
-            renderBitmap.Render(secondCanvas);
+            ClonningCanvas();
+            RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)clonnedCanvas.ActualWidth, (int)clonnedCanvas.ActualHeight, 96, 96, PixelFormats.Default);
+            renderBitmap.Render(clonnedCanvas);
 
             // Utwórz obraz z renderBitmap jako Image control
             System.Windows.Controls.Image imageControl = new System.Windows.Controls.Image();
@@ -106,7 +134,7 @@ namespace NeuralNetworkBase
             BitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
             List<System.Drawing.Color> colorList = new List<System.Drawing.Color>();
-            Bitmap testMap = new Bitmap(28, 28);
+            Bitmap testMap = new Bitmap(16, 16);
             using (MemoryStream ms = new MemoryStream())
             {
                 encoder.Save(ms);
@@ -116,7 +144,7 @@ namespace NeuralNetworkBase
                     for(int x=0; x<bitmap.Height;x++)
                     {
                         {
-                            testMap.SetPixel(y,x,bitmap.GetPixel(y,x));
+                           testMap.SetPixel(y,x,bitmap.GetPixel(y,x));
                            colorList.Add(bitmap.GetPixel(x, y));
 
                         }
@@ -137,7 +165,7 @@ namespace NeuralNetworkBase
                     pixelList.Add(1);       // 1 to inny kolor
                 }
             }
-            
+            clonnedCanvas.Visibility = Visibility.Hidden;
             return pixelList;
         }
         public void StartDraw(object sender, MouseButtonEventArgs e)
@@ -165,9 +193,9 @@ namespace NeuralNetworkBase
         }
         private void AddDataBtnClick(object sender, RoutedEventArgs e)
         {
-            //RecognizeAndDrawCharacter();
+            
             List<double> pixels = ReadCanvasPixels();
-            if (pixels != null && pixels.Count == 54)
+            if (pixels != null && pixels.Count == 256)
             {
                 try
                 {
@@ -175,6 +203,7 @@ namespace NeuralNetworkBase
                     inputData.inputData.Add(pixels.ToArray());
                     inputData.trainingResults.Add(expectedResult);
                     SaveTestData();
+                    ClearFields();
                 }
                 catch (Exception ex)
                 {
@@ -188,8 +217,10 @@ namespace NeuralNetworkBase
             secondCanvas.Children.Clear();
 
             // Następnie rysuj nowy kształt na secondCanvas
-            secondCanvas.Width = 28;
-            secondCanvas.Height = 28;
+            secondCanvas.Width = 16;
+            secondCanvas.Height = 16;
+            clonnedCanvas.Height = 16;
+            clonnedCanvas.Width = 16;
             // List<System.Windows.Point> characterPoints = GetCharacterPoints(); // Pobierz punkty, które reprezentują kształt
 
             // Jeśli punkty reprezentują kształt, narysuj go na secondCanvas
@@ -224,15 +255,15 @@ namespace NeuralNetworkBase
                 double shapeHeight = maxY - minY;
 
                 // Przelicz współczynniki skalowania, aby przeskalować kształt do wymiaru 10x7 pikseli
-                double scaleX = 20 / shapeWidth;
-                double scaleY = 20 / shapeHeight;
+                double scaleX = 16 / shapeWidth;
+                double scaleY = 16 / shapeHeight;
 
                 // Wybierz mniejszy współczynnik skalowania, aby zachować proporcje
                 double scale = Math.Min(scaleX, scaleY);
 
                 // Oblicz przesunięcie, aby wyśrodkować kształt na kanwie
-                double offsetX = (28 - shapeWidth * scale) / 2;
-                double offsetY = (28 - shapeHeight * scale) / 2;
+                double offsetX = (16 - shapeWidth * scale) / 2;
+                double offsetY = (16 - shapeHeight * scale) / 2;
                 foreach (var point in points)
                 {
                     // Narysuj przeskalowany kształt
@@ -255,8 +286,8 @@ namespace NeuralNetworkBase
         }
         private void CopyAndScaleCanvasContent()
         {
-            int targetWidth = 28;
-            int targetHeight = 28;
+            int targetWidth = 16;
+            int targetHeight = 16;
 
             // Aktualizacja układu sourceCanvas, aby uzyskać rzeczywiste wymiary
             mCanvas.Measure(new System.Windows.Size(mCanvas.ActualWidth, mCanvas.ActualHeight));
@@ -286,11 +317,16 @@ namespace NeuralNetworkBase
             secondCanvas.Height = targetHeight;
             secondCanvas.UpdateLayout();
         }
+        private void ClearFields()
+        {
+            secondCanvas.Children.Clear();
+            clonnedCanvas.Children.Clear();
+            mCanvas.Children.Clear();
+            points.Clear();
+        }
         private void ClearBtn_Click(object sender, RoutedEventArgs e)
         {
-            mCanvas.Children.Clear();
-            secondCanvas.Children.Clear();
-            points.Clear();
+            ClearFields();
         }
     }
 

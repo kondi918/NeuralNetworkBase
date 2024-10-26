@@ -33,6 +33,7 @@ namespace NeuralNetworkBase
         private List<double[]> trainingTestDataSet = new List<double[]>();
         private List<int> trainingResultSet = new List<int>();
         private List<int> trainingTestResultSet = new List<int>();
+        private int epoch;
 
 
         private enum WhatEndingCondition
@@ -274,6 +275,22 @@ namespace NeuralNetworkBase
                 cancelTokenTraining.Cancel();
             });
         }
+        private void StartTimerEpoch()
+        {
+            int totalEpoch = 0;
+            ExpectedTrainingTime.Dispatcher.Invoke(() => { int.TryParse(ExpectedTrainingTime.Text, out totalEpoch); });
+            Task setTimer = Task.Run(async () =>
+            {
+                while (epoch < totalEpoch && !cancelTokenTraining.IsCancellationRequested)
+                {
+                    pauseEvent.Wait();
+                    Timer(totalEpoch, epoch);
+                    await Task.Delay(1000);
+                }
+                Timer(1, 1);
+                cancelTokenTraining.Cancel();
+            });
+        }
 
         private void SetActivationFunction()
         {
@@ -291,7 +308,25 @@ namespace NeuralNetworkBase
                 myNetwork.whatActivationFunction = NeuralNetwork.WhatActivationFunction.zeroOne;
             }
         }
-
+        private void GetDataReadyForTraining(NeuralNetworkInputData trainingData)
+        {
+            trainingTestDataSet.Clear();
+            trainingTestResultSet.Clear();
+            Random rnd = new Random();
+            for (int x = 0; x < 10; x++)
+            {
+                for (int i = 0; i < trainingData.inputData.Count; i++)
+                {
+                    int index = rnd.Next(0, trainingData.inputData.Count);
+                    var holderInputData = trainingData.inputData[i];
+                    var holderResult = trainingData.trainingResults[i];
+                    trainingData.inputData[i] = trainingData.inputData[index];
+                    trainingData.trainingResults[i] = trainingData.trainingResults[index];
+                    trainingData.inputData[index] = holderInputData;
+                    trainingData.trainingResults[index] = holderResult;
+                }
+            }
+        }
         private int Training()
         {
             if (trainingDataSet.Count > 0)
@@ -320,7 +355,6 @@ namespace NeuralNetworkBase
                         mistakes++;
                     }
                 }
-
                 return mistakes;
             }
         }
@@ -350,10 +384,13 @@ namespace NeuralNetworkBase
             {
                 StartTimer();
             }
+            else if(endingCondition == WhatEndingCondition.epoch)
+            {
+                StartTimerEpoch();
+            }
         }
         private void TrainNetwork(int totalSeconds)
         {
-            StartProgressBar();
             /*
             if (trainingData.inputData.Count > 50)      // Dziele na dane treningowe i testowe dla duzego zbioru
             {
@@ -362,20 +399,46 @@ namespace NeuralNetworkBase
             */
             int mistakes = 1;
             Task ShowErrors = null;
-            while (mistakes != 0 && !cancelTokenTraining.IsCancellationRequested)
+            if(endingCondition == WhatEndingCondition.timer)
             {
-                pauseEvent.Wait();
-                lock (mLayersLock)
+                StartProgressBar();
+                while (mistakes != 0 && !cancelTokenTraining.IsCancellationRequested)
                 {
-                    mistakes = Training();
-                }
-                if (ShowErrors == null || ShowErrors.IsCompleted)
-                {
-                    ShowErrors = Task.Run(async () =>
+                    pauseEvent.Wait();
+                    lock (mLayersLock)
                     {
-                        SetTextOnTextBlock(MistakesNumber, mistakes.ToString());
-                        await Task.Delay(1000);
-                    });
+                        mistakes = Training();
+                    }
+                    if (ShowErrors == null || ShowErrors.IsCompleted)
+                    {
+                        ShowErrors = Task.Run(async () =>
+                        {
+                            SetTextOnTextBlock(MistakesNumber, mistakes.ToString());
+                            await Task.Delay(1000);
+                        });
+                    }
+                }
+            }
+            else if (endingCondition == WhatEndingCondition.epoch)
+            {
+                epoch = 0;
+                int maxEpochNumer = Int32.Parse(ExpectedTrainingTime.Text);
+                while(epoch < maxEpochNumer)
+                {
+                    pauseEvent.Wait();
+                    lock (mLayersLock)
+                    {
+                        mistakes = Training();
+                        epoch++;
+                    }
+                    if (ShowErrors == null || ShowErrors.IsCompleted)
+                    {
+                        ShowErrors = Task.Run(async () =>
+                        {
+                            SetTextOnTextBlock(MistakesNumber, mistakes.ToString());
+                            await Task.Delay(1000);
+                        });
+                    }
                 }
             }
             ShowErrors.Wait();
@@ -414,6 +477,7 @@ namespace NeuralNetworkBase
         {
             if (IsSetCorrectly())
             {
+                GetDataReadyForTraining(trainingData);
                 int totalSeconds = GetSecondTimer();
                 Task trainingNetworkTask = new Task(() =>
                     {
