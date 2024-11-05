@@ -140,9 +140,32 @@ namespace NeuralNetworkBase
         {
             return Math.Max(0, x);
         }
+        private double ActivationFunctionLeakyRelu(double x)
+        {
+            return x > 0 ? x : 0.01 * x;
+        }
         private double ActivationFunctionSigmoid(double x)
         {
             return 1 / (1 + Math.Exp(-x));
+        }
+        private List<double> ActivationFunctionSoftmax(List<double> neuronResults)
+        {
+            //Do stabilizacji numerycznej
+            double maxResult = neuronResults.Max();
+            //wykladnicze
+            List<double> exponentials = new List<double>();
+            double sum = 0;
+            foreach(var element in neuronResults)
+            {
+                exponentials.Add(Math.Exp(element - maxResult));
+                sum += exponentials.Last();
+            }
+            List<double> results = new List<double>();
+            foreach(var element in exponentials)
+            {
+                results.Add(element / sum);
+            }
+            return results;
         }
         private double ActivationFunctionZeroOne(double x)
         {
@@ -169,7 +192,7 @@ namespace NeuralNetworkBase
             neuron.sum = result;
             if (whatActivationFunction == WhatActivationFunction.relu)
             {
-                neuron.neuronResult = ActivationFunctionRelu(result);
+                neuron.neuronResult = ActivationFunctionLeakyRelu(result);
             }
             else if (whatActivationFunction == WhatActivationFunction.sigmoid)
             {
@@ -188,40 +211,73 @@ namespace NeuralNetworkBase
                 neuron.setInputData(neuronResults);
             }
         }
+        private List<double> AddLastLayerResultsSoftmax(Layer layer)
+        {
+            List<double> neuronResults = new List<double>();
+            foreach(var neuron in layer.mNeurons)
+            {
+                double result = -neuron.weights[0];      //Przypisuje liczbe bias
+                for (int i = 1; i < neuron.weights.Count; i++)
+                {
+                    result += neuron.weights[i] * neuron.inputData[i - 1];  // input data ma indeks o 1 mniejszy, poniewaz w wagach waga o indeksie 0 to bias
+                }
+                neuron.sum = result;
+                neuronResults.Add(result);
+            }
+            neuronResults = ActivationFunctionSoftmax(neuronResults);
+            for(int i=0; i<neuronResults.Count; i++)
+            {
+                layer.mNeurons[i].neuronResult = neuronResults[i];
+            }
+            return neuronResults;
+        }
         private List<double> CalculateNeuronsResults(Layer layer, int nextLayerIndex)
         {
             List<double> neuronsResults = new List<double>();
-            foreach (var neuron in layer.mNeurons)
+            if (nextLayerIndex == mLayers.Count && whatActivationFunction == WhatActivationFunction.relu)
             {
-                neuronsResults.Add(CalculateSingleNeuronResult(neuron));
+                neuronsResults.AddRange(AddLastLayerResultsSoftmax(layer));
             }
-            if (nextLayerIndex < mLayers.Count)
+            else
             {
-                AddNextLayerInputs(neuronsResults, nextLayerIndex);
+                foreach (var neuron in layer.mNeurons)
+                {
+                    neuronsResults.Add(CalculateSingleNeuronResult(neuron));
+                }
+                if (nextLayerIndex < mLayers.Count)
+                {
+                    AddNextLayerInputs(neuronsResults, nextLayerIndex);
+                }
             }
             return neuronsResults;
         }
-        private double GetNetworkResult()
+        private NeuralNetworkResult GetNetworkResult()
         {
+            NeuralNetworkResult result = new NeuralNetworkResult();
             if (mLayers[mLayers.Count - 1].mNeurons.Count == 1)
             {
-                return mLayers[mLayers.Count - 1].mNeurons[0].neuronResult;
+                result.result = mLayers[mLayers.Count - 1].mNeurons[0].neuronResult;
             }
             else
             {
                 int index = 0;
-                double max = double.Parse(mLayers[mLayers.Count - 1].mNeurons[0].neuronResult.ToString("N0"));
-                for (int i = 0; i < mLayers[mLayers.Count - 1].mNeurons.Count; i++)
+                double max = mLayers[mLayers.Count - 1].mNeurons[0].neuronResult;
+                result.resultList.Add(max);
+
+                for (int i = 1; i < mLayers[mLayers.Count - 1].mNeurons.Count; i++) 
                 {
-                    if (max < double.Parse(mLayers[mLayers.Count - 1].mNeurons[i].neuronResult.ToString("N0")))
+                    result.resultList.Add(mLayers[mLayers.Count - 1].mNeurons[i].neuronResult);
+                    if (mLayers[mLayers.Count - 1].mNeurons[i].neuronResult > max)
                     {
-                        index = i;
+                        max = mLayers[mLayers.Count - 1].mNeurons[i].neuronResult; 
+                        index = i; 
                     }
                 }
-                return index;
+                result.result = index;
             }
+            return result;
         }
-        public double CalculateSmallNetworkResult(double[] inputData)
+        public NeuralNetworkResult CalculateSmallNetworkResult(double[] inputData)
         {
             SetInputs(inputData);
             int nextLayerIndex = 1;
@@ -239,11 +295,20 @@ namespace NeuralNetworkBase
         {
             return output * (1 - output);
         }
+        private double GetDerivativeReLU(double output)
+        {
+            return output > 0 ? 1 : 0;
+        }
+        private double GetDerivativeLeakyReLU(double output)
+        {
+            return output > 0 ? 1 : 0.01;
+        }
         private void SetOutputMistakes(List<Neuron> neurons)
         {
             foreach(var neuron in neurons)
             {
-               neuron.mistake = neuron.neuronResult - neuron.predictedResult;
+                neuron.mistake = neuron.neuronResult - neuron.predictedResult;
+                neuron.mistake = Math.Max(-1.0, Math.Min(neuron.mistake, 1.0)); 
             }
         }
         private void SetHiddenLayersMistakes()
@@ -257,7 +322,14 @@ namespace NeuralNetworkBase
                     {
                         sum += neuron.mistake * neuron.weights[i+1];        // +1 bo bias ma index 0
                     }
-                    mLayers[layers - 1].mNeurons[i].mistake = sum * GetDerivativeSigmoid(mLayers[layers - 1].mNeurons[i].neuronResult);
+                    if (whatActivationFunction == WhatActivationFunction.sigmoid)
+                    {
+                        mLayers[layers - 1].mNeurons[i].mistake = sum * GetDerivativeSigmoid(mLayers[layers - 1].mNeurons[i].neuronResult);
+                    }
+                    else if(whatActivationFunction == WhatActivationFunction.relu)
+                    {
+                        mLayers[layers - 1].mNeurons[i].mistake = sum * GetDerivativeLeakyReLU(mLayers[layers - 1].mNeurons[i].neuronResult);
+                    }
                 }
             }
         }
@@ -290,11 +362,16 @@ namespace NeuralNetworkBase
                 }
             }
         }
+        private double ClipWeight(double weight, double minValue, double maxValue)
+        {
+            return Math.Max(minValue, Math.Min(weight, maxValue));
+        }
         private void ChangeWeight(Neuron neuron, double mistake, double learningSpeed)
         {
             for (int i = 1; i < neuron.weights.Count; i++)
             {
                 double newWeight = neuron.weights[i] - learningSpeed * neuron.inputData[i - 1] * mistake;
+                //newWeight = ClipWeight(newWeight, -1.0, 1.0);
                 if (!double.IsNaN(newWeight) && !double.IsInfinity(newWeight))
                 {
                     neuron.weights[i] = newWeight;
@@ -309,10 +386,10 @@ namespace NeuralNetworkBase
         }
         public bool NetworkTraining(double[] inputData, int predictedResult, double learningSpeed)
         {
-            double networkResult = CalculateSmallNetworkResult(inputData);
+            NeuralNetworkResult networkResult = CalculateSmallNetworkResult(inputData);
             if (mLayers[mLayers.Count - 1].mNeurons.Count == 1)
             {
-                if (predictedResult == 1 && networkResult > 0.5 || predictedResult == 0 && networkResult <= 0.5)
+                if (predictedResult == 1 && networkResult.result > 0.5 || predictedResult == 0 && networkResult.result <= 0.5)
                 {
                     return true;
                 }
@@ -332,7 +409,7 @@ namespace NeuralNetworkBase
                 }
                 mLayers[mLayers.Count-1].mNeurons[predictedResult].predictedResult = 1;
                 BackpropagationMultiNeuronOutput(learningSpeed);
-                if(predictedResult == networkResult)
+                if(predictedResult == networkResult.result && networkResult.resultList.ElementAt((int)networkResult.result) > 0.8)
                 {
                     return true;
                 }

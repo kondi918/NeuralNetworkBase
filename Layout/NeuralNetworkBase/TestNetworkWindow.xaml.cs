@@ -29,6 +29,10 @@ namespace NeuralNetworkBase
             InitializeComponent();
             ReadTestData();
             GetNetwork();
+            clonnedCanvas.Visibility = Visibility.Visible;
+            clonnedCanvas.Measure(new System.Windows.Size(Double.PositiveInfinity, Double.PositiveInfinity));
+            clonnedCanvas.Arrange(new Rect(0, 0, clonnedCanvas.ActualWidth, clonnedCanvas.ActualHeight));
+            clonnedCanvas.Visibility = Visibility.Hidden;
         }
         private void ReadTestData()
         {
@@ -48,7 +52,7 @@ namespace NeuralNetworkBase
         {
             try
             {
-                StreamReader sr = new StreamReader("NetworkTest/256-50-10LEARNED.json");
+                StreamReader sr = new StreamReader("NetworkTest/256-50-10LEARNEDVERSION2.json");
                 string json = sr.ReadToEnd();
                 myNetwork = JsonConvert.DeserializeObject<NeuralNetwork>(json);
                 sr.Close();
@@ -139,12 +143,12 @@ namespace NeuralNetworkBase
             {
                 encoder.Save(ms);
                 Bitmap bitmap = new Bitmap(ms);
-                for (int y=0; y<bitmap.Width; y++)
+                for (int y=0; y<bitmap.Height; y++)
                 {
-                    for(int x=0; x<bitmap.Height;x++)
+                    for(int x=0; x<bitmap.Width;x++)
                     {
                         {
-                           testMap.SetPixel(y,x,bitmap.GetPixel(y,x));
+                           testMap.SetPixel(x,y,bitmap.GetPixel(x,y));
                            colorList.Add(bitmap.GetPixel(x, y));
 
                         }
@@ -177,7 +181,16 @@ namespace NeuralNetworkBase
         {
             //RecognizeAndDrawCharacter();
             List<double> pixels = ReadCanvasPixels();
-            networkResultText.Text = myNetwork.CalculateSmallNetworkResult(pixels.ToArray()).ToString();
+            FileManager fm = new FileManager();
+            pixels = fm.NormalizeData(new List<double[]> { pixels.ToArray() }).First().ToList();
+            var result = myNetwork.CalculateSmallNetworkResult(pixels.ToArray());
+            networkResultText.Text = result.result.ToString();
+            string allResultsText = "";
+            for(int i=0; i<result.resultList.Count; i++)
+            {
+                allResultsText += $"[{i}] : {result.resultList.ElementAt(i)}\n";
+            }
+            AllResultsTB.Text = allResultsText;
         }
         public void EndDraw(object sender, MouseEventArgs e)
         {
@@ -191,11 +204,22 @@ namespace NeuralNetworkBase
             savingFile.Write(json);
             savingFile.Close();
         }
+        private bool PixelsNotEmpty(List<double> pixels)
+        {
+            foreach(var element in pixels)
+            {
+                if(element == 1)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         private void AddDataBtnClick(object sender, RoutedEventArgs e)
         {
             
             List<double> pixels = ReadCanvasPixels();
-            if (pixels != null && pixels.Count == 256)
+            if (pixels != null && pixels.Count == 256 && PixelsNotEmpty(pixels))
             {
                 try
                 {
@@ -209,6 +233,10 @@ namespace NeuralNetworkBase
                 {
                     MessageBox.Show(ex.Message);
                 }
+            }
+            else
+            {
+                MessageBox.Show("Couldn't add testData");
             }
         }
         private void RecognizeAndDrawCharacter()
@@ -255,8 +283,8 @@ namespace NeuralNetworkBase
                 double shapeHeight = maxY - minY;
 
                 // Przelicz współczynniki skalowania, aby przeskalować kształt do wymiaru 10x7 pikseli
-                double scaleX = 16 / shapeWidth;
-                double scaleY = 16 / shapeHeight;
+                double scaleX = 14 / shapeWidth;
+                double scaleY = 14 / shapeHeight;
 
                 // Wybierz mniejszy współczynnik skalowania, aby zachować proporcje
                 double scale = Math.Min(scaleX, scaleY);

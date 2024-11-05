@@ -105,6 +105,7 @@
     <Compile Include="NeuralNetwork.cs" />
     <Compile Include="NeuralNetworkInputData.cs" />
     <Compile Include="NeuralNetworkDrawer.cs" />
+    <Compile Include="NeuralNetworkResult.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="SingleImageData.cs" />
     <Compile Include="TestNetworkWindow.xaml.cs">

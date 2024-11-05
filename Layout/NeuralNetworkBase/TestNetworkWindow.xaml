@@ -45,5 +45,7 @@
         <TextBlock Grid.Row="4" Grid.Column="1" FontSize="15" TextAlignment="Center">Liczba</TextBlock>
         <TextBlock Grid.Row="4" Grid.Column="7" FontSize="15"  TextAlignment="Center" Grid.ColumnSpan="2">Przewidziana liczba</TextBlock>
         <TextBlock Grid.Row="5" Grid.Column="7" FontSize="45" Name="networkResultText" TextAlignment="Center" Grid.ColumnSpan="2" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">2</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="7" FontSize="15"  TextAlignment="Center" Grid.ColumnSpan="2" Grid.RowSpan="4" Name="AllResultsTB"></TextBlock>
+
     </Grid>
 </Window>

@@ -3,40 +3,64 @@
   "WorkspaceRootPath": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|e:\\c#\\gitprojects\\neuralnetworkbase\\layout\\neuralnetworkbase\\trainneuralnetwork.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\neuralnetworkbase\\neuralnetwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\neuralnetwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\neuralnetworkbase\\testnetworkwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\testnetworkwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\neuralnetworkbase\\filemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\filemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|e:\\c#\\gitprojects\\neuralnetworkbase\\layout\\neuralnetworkbase\\neuralnetworkresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\neuralnetworkresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\neuralnetworkbase\\trainneuralnetwork.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\trainneuralnetwork.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|e:\\c#\\gitprojects\\neuralnetworkbase\\layout\\neuralnetworkbase\\trainneuralnetwork.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\trainneuralnetwork.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\bin\\Debug\\NetworkTest\\256-50-10LEARNEDVERSION2.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:NeuralNetworkBase\\bin\\Debug\\NetworkTest\\256-50-10LEARNEDVERSION2.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|e:\\c#\\gitprojects\\neuralnetworkbase\\layout\\neuralnetworkbase\\neuralnetwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\neuralnetwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\bin\\Debug\\NetworkTest\\RELUTRAININGDEFAULT.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:NeuralNetworkBase\\bin\\Debug\\NetworkTest\\RELUTRAININGDEFAULT.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|e:\\c#\\gitprojects\\neuralnetworkbase\\layout\\neuralnetworkbase\\neuron.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\neuron.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\neuralnetworkbase\\neuralnetworkdrawer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\neuralnetworkdrawer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|e:\\c#\\gitprojects\\neuralnetworkbase\\layout\\neuralnetworkbase\\createneuralnetwork.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\createneuralnetwork.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\bin\\Debug\\NetworkTest\\256-50-10LEARNED.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:NeuralNetworkBase\\bin\\Debug\\NetworkTest\\256-50-10LEARNED.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|e:\\c#\\gitprojects\\neuralnetworkbase\\layout\\neuralnetworkbase\\testnetworkwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\testnetworkwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|e:\\c#\\gitprojects\\neuralnetworkbase\\layout\\neuralnetworkbase\\neuralnetworkdrawer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\neuralnetworkdrawer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|e:\\c#\\gitprojects\\neuralnetworkbase\\layout\\neuralnetworkbase\\neuralnetworkinputdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\neuralnetworkinputdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\neuralnetworkbase\\testnetworkwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\testnetworkwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\bin\\Debug\\NetworkTest\\testData.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:NeuralNetworkBase\\bin\\Debug\\NetworkTest\\testData.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\neuralnetworkbase\\testnetworkwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\testnetworkwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\neuralnetworkbase\\trainneuralnetwork.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\trainneuralnetwork.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\neuralnetworkbase\\neuralnetworkinputdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28820002-31B1-496E-8B71-FDD8B0B05860}|NeuralNetworkBase\\NeuralNetworkBase.csproj|solutionrelative:neuralnetworkbase\\neuralnetworkinputdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,7 +70,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 1157,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -58,71 +82,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "TrainNeuralNetwork.xaml",
-              "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\TrainNeuralNetwork.xaml",
-              "RelativeDocumentMoniker": "NeuralNetworkBase\\TrainNeuralNetwork.xaml",
-              "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\TrainNeuralNetwork.xaml",
-              "RelativeToolTip": "NeuralNetworkBase\\TrainNeuralNetwork.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-10-23T22:19:02.785Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "NeuralNetworkInputData.cs",
-              "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\NeuralNetworkInputData.cs",
-              "RelativeDocumentMoniker": "NeuralNetworkBase\\NeuralNetworkInputData.cs",
-              "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\NeuralNetworkInputData.cs",
-              "RelativeToolTip": "NeuralNetworkBase\\NeuralNetworkInputData.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-23T19:46:30.371Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "NeuralNetworkDrawer.cs",
-              "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\NeuralNetworkDrawer.cs",
-              "RelativeDocumentMoniker": "NeuralNetworkBase\\NeuralNetworkDrawer.cs",
-              "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\NeuralNetworkDrawer.cs",
-              "RelativeToolTip": "NeuralNetworkBase\\NeuralNetworkDrawer.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-23T19:46:29.547Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "NeuralNetwork.cs",
               "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\NeuralNetwork.cs",
               "RelativeDocumentMoniker": "NeuralNetworkBase\\NeuralNetwork.cs",
               "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\NeuralNetwork.cs",
               "RelativeToolTip": "NeuralNetworkBase\\NeuralNetwork.cs",
-              "ViewState": "AgIAAO0AAAAAAAAAAAAxwKYAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAA0BAAAAAAAAAAAAACIBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-23T19:46:27.124Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "TrainNeuralNetwork.xaml.cs",
               "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\TrainNeuralNetwork.xaml.cs",
               "RelativeDocumentMoniker": "NeuralNetworkBase\\TrainNeuralNetwork.xaml.cs",
               "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\TrainNeuralNetwork.xaml.cs",
               "RelativeToolTip": "NeuralNetworkBase\\TrainNeuralNetwork.xaml.cs",
-              "ViewState": "AgIAAE8BAAAAAAAAAAAwwGMBAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAAGsAAAAAAAAAAAAAAEgBAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-23T19:36:03.187Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 10,
               "Title": "256-50-10LEARNED.json",
               "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\bin\\Debug\\NetworkTest\\256-50-10LEARNED.json",
               "RelativeDocumentMoniker": "NeuralNetworkBase\\bin\\Debug\\NetworkTest\\256-50-10LEARNED.json",
@@ -135,26 +121,39 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "testData.json",
-              "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\bin\\Debug\\NetworkTest\\testData.json",
-              "RelativeDocumentMoniker": "NeuralNetworkBase\\bin\\Debug\\NetworkTest\\testData.json",
-              "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\bin\\Debug\\NetworkTest\\testData.json",
-              "RelativeToolTip": "NeuralNetworkBase\\bin\\Debug\\NetworkTest\\testData.json",
-              "ViewState": "AgIAABKRAwAAAAAAAAAAAJiRAwAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-10-23T14:10:11.59Z",
+              "DocumentIndex": 2,
+              "Title": "FileManager.cs",
+              "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\FileManager.cs",
+              "RelativeDocumentMoniker": "NeuralNetworkBase\\FileManager.cs",
+              "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\FileManager.cs",
+              "RelativeToolTip": "NeuralNetworkBase\\FileManager.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAABYAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-29T09:47:43.799Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
+              "Title": "NeuralNetworkResult.cs",
+              "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\NeuralNetworkResult.cs",
+              "RelativeDocumentMoniker": "NeuralNetworkBase\\NeuralNetworkResult.cs",
+              "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\NeuralNetworkResult.cs",
+              "RelativeToolTip": "NeuralNetworkBase\\NeuralNetworkResult.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T22:06:53.74Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "TestNetworkWindow.xaml.cs",
               "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\TestNetworkWindow.xaml.cs",
               "RelativeDocumentMoniker": "NeuralNetworkBase\\TestNetworkWindow.xaml.cs",
               "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\TestNetworkWindow.xaml.cs",
               "RelativeToolTip": "NeuralNetworkBase\\TestNetworkWindow.xaml.cs",
-              "ViewState": "AgIAAKYAAAAAAAAAAAApwLMAAABKAAAAAAAAAA==",
+              "ViewState": "AgIAAKcAAAAAAAAAAAAAALgAAABfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-02-18T14:16:00.769Z",
               "EditorCaption": ""
@@ -162,6 +161,71 @@
             {
               "$type": "Document",
               "DocumentIndex": 8,
+              "Title": "NeuralNetworkDrawer.cs",
+              "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\NeuralNetworkDrawer.cs",
+              "RelativeDocumentMoniker": "NeuralNetworkBase\\NeuralNetworkDrawer.cs",
+              "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\NeuralNetworkDrawer.cs",
+              "RelativeToolTip": "NeuralNetworkBase\\NeuralNetworkDrawer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-23T19:46:29.547Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "RELUTRAININGDEFAULT.json",
+              "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\bin\\Debug\\NetworkTest\\RELUTRAININGDEFAULT.json",
+              "RelativeDocumentMoniker": "NeuralNetworkBase\\bin\\Debug\\NetworkTest\\RELUTRAININGDEFAULT.json",
+              "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\bin\\Debug\\NetworkTest\\RELUTRAININGDEFAULT.json",
+              "RelativeToolTip": "NeuralNetworkBase\\bin\\Debug\\NetworkTest\\RELUTRAININGDEFAULT.json",
+              "ViewState": "AgIAALMaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-11-05T00:21:17.143Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "256-50-10LEARNEDVERSION2.json",
+              "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\bin\\Debug\\NetworkTest\\256-50-10LEARNEDVERSION2.json",
+              "RelativeDocumentMoniker": "NeuralNetworkBase\\bin\\Debug\\NetworkTest\\256-50-10LEARNEDVERSION2.json",
+              "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\bin\\Debug\\NetworkTest\\256-50-10LEARNEDVERSION2.json",
+              "RelativeToolTip": "NeuralNetworkBase\\bin\\Debug\\NetworkTest\\256-50-10LEARNEDVERSION2.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-11-05T00:31:16.23Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CreateNeuralNetwork.xaml.cs",
+              "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\CreateNeuralNetwork.xaml.cs",
+              "RelativeDocumentMoniker": "NeuralNetworkBase\\CreateNeuralNetwork.xaml.cs",
+              "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\CreateNeuralNetwork.xaml.cs",
+              "RelativeToolTip": "NeuralNetworkBase\\CreateNeuralNetwork.xaml.cs",
+              "ViewState": "AgIAAJwAAAAAAAAAAAAAAKYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T23:29:33.483Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Neuron.cs",
+              "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\Neuron.cs",
+              "RelativeDocumentMoniker": "NeuralNetworkBase\\Neuron.cs",
+              "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\Neuron.cs",
+              "RelativeToolTip": "NeuralNetworkBase\\Neuron.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-04T23:13:29.635Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "TestNetworkWindow.xaml",
               "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\TestNetworkWindow.xaml",
               "RelativeDocumentMoniker": "NeuralNetworkBase\\TestNetworkWindow.xaml",
@@ -170,6 +234,42 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2024-02-18T14:54:56.377Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "NeuralNetworkInputData.cs",
+              "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\NeuralNetworkInputData.cs",
+              "RelativeDocumentMoniker": "NeuralNetworkBase\\NeuralNetworkInputData.cs",
+              "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\NeuralNetworkInputData.cs",
+              "RelativeToolTip": "NeuralNetworkBase\\NeuralNetworkInputData.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-23T19:46:30.371Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "testData.json",
+              "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\bin\\Debug\\NetworkTest\\testData.json",
+              "RelativeDocumentMoniker": "NeuralNetworkBase\\bin\\Debug\\NetworkTest\\testData.json",
+              "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\bin\\Debug\\NetworkTest\\testData.json",
+              "RelativeToolTip": "NeuralNetworkBase\\bin\\Debug\\NetworkTest\\testData.json",
+              "ViewState": "AgIAABXQCgAAAAAAAAAAAA4AAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-10-23T14:10:11.59Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "TrainNeuralNetwork.xaml",
+              "DocumentMoniker": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\TrainNeuralNetwork.xaml",
+              "RelativeDocumentMoniker": "NeuralNetworkBase\\TrainNeuralNetwork.xaml",
+              "ToolTip": "E:\\C#\\GitProjects\\NeuralNetworkBase\\Layout\\NeuralNetworkBase\\TrainNeuralNetwork.xaml",
+              "RelativeToolTip": "NeuralNetworkBase\\TrainNeuralNetwork.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-10-23T22:19:02.785Z"
             }
           ]
         },

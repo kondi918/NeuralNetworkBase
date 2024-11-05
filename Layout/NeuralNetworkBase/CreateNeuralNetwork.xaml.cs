@@ -168,7 +168,8 @@ namespace NeuralNetworkBase
             List<double> weights = new List<double>();
             for (int i = 0; i <= numberOfWeights; i++)
             {
-                weights.Add(Math.Round(0.001 * random.NextDouble(), 5));
+                double weight = random.NextDouble() * 2 - 1;
+                weights.Add(weight * Math.Sqrt(1.0 / numberOfWeights)); 
 
             }
             return weights;

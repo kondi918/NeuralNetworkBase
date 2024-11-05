@@ -148,7 +148,6 @@ namespace NeuralNetworkBase
                 numberOfFiles++;
             }
 
-            // Czekaj na zakończenie wszystkich zadań
             var results = await Task.WhenAll(tasks);
 
             // Połącz wyniki z wszystkich katalogów

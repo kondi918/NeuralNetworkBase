@@ -338,7 +338,8 @@ namespace NeuralNetworkBase
                 }
                 for(int i =0; i < trainingTestDataSet.Count; i++)
                 {
-                    if (myNetwork.CalculateSmallNetworkResult(trainingTestDataSet[i]) != trainingTestResultSet[i])
+                    NeuralNetworkResult result = myNetwork.CalculateSmallNetworkResult(trainingTestDataSet[i]);
+                    if (result.result != trainingTestResultSet[i])
                     {
                         mistakes++;
                     }
@@ -350,7 +351,7 @@ namespace NeuralNetworkBase
                 int mistakes = 0;
                 for (int i = 0; i < trainingData.inputData.Count; i++)
                 {
-                    if (!myNetwork.NetworkTraining(trainingData.inputData[i], trainingData.trainingResults[i], 0.1))
+                    if (!myNetwork.NetworkTraining(trainingData.inputData[i], trainingData.trainingResults[i], 0.001))
                     {
                         mistakes++;
                     }
